@@ -9,7 +9,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private int mapWidth;
     [SerializeField] private int mapHeight;
     private int mapSize;
-
+    
     private List<GameObject> mapTiles = new List<GameObject>();
     private List<GameObject> pathTiles = new List<GameObject>();
 
@@ -42,6 +42,27 @@ public class MapGenerator : MonoBehaviour
         return edgeTiles;
     }
 
+    //Creates lists to hold top and bottom tiles and fills them
+    private void GenerateStartEndPoints()
+    {
+        List<GameObject> topEdgeTiles = getTopEdgeTiles();
+        List<GameObject> bottomEdgeTiles = getBottomEdgeTiles();
+
+        //handle beginning and end tiles setup
+        GameObject startTile;
+        GameObject endTile;
+
+        //Determine indexes
+        int rand1 = Random.Range(0, mapWidth);
+        int rand2 = Random.Range(0, mapWidth);
+
+        //Apply indexes to set start and end tile
+        startTile = topEdgeTiles[rand1];
+        endTile = bottomEdgeTiles[rand2];
+        Destroy(startTile);
+        Destroy(endTile);
+    }
+
     //Generates a rectangular map of tiles
     private void generateMap()
     {
@@ -57,22 +78,11 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        //Creates list to hold top and bottom tiles and fills them
+        
         List<GameObject> topEdgeTiles = getTopEdgeTiles();
         List<GameObject> bottomEdgeTiles = getBottomEdgeTiles();
 
-        //handle beginning and end tiles setup
-        GameObject startTile;
-        GameObject endTile;
-
-        //Determine indexes
-        int rand1= Random.Range(0, mapWidth);
-        int rand2 = Random.Range(0, mapWidth);
-
-        //Apply indexes to set start and end tile
-        startTile = topEdgeTiles[rand1];
-        endTile = bottomEdgeTiles[rand2];
-        Destroy(startTile);
-        Destroy(endTile);
+        //handle start end point generation
+        GenerateStartEndPoints();
     }
 }
