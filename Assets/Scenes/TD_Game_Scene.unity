@@ -176,7 +176,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 18
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -200,7 +200,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -260,6 +260,50 @@ PrefabInstance:
     - target: {fileID: 9027299037721847473, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: endColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: endColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: endColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: endColor.r
+      value: 0.3584906
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: pathColor.b
+      value: 0.76882744
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: pathColor.g
+      value: 0.746262
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: pathColor.r
+      value: 0.8113208
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: startColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: startColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: startColor.g
+      value: 0.359398
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: startColor.r
+      value: 0.6886792
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5312f4dfef1be340b904c0791200f03, type: 3}

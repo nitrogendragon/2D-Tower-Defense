@@ -5,8 +5,8 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     public GameObject mapTile;
-    private GameObject startTile;
-    private GameObject endTile;
+    public static GameObject startTile;
+    public static GameObject endTile;
     private GameObject currentTile;
 
     [SerializeField] private int mapWidth;
@@ -16,12 +16,14 @@ public class MapGenerator : MonoBehaviour
     private int currentIndex;
     private int nextIndex;
     
-    private List<GameObject> mapTiles = new List<GameObject>();
-    private List<GameObject> pathTiles = new List<GameObject>();
+    public static List<GameObject> mapTiles = new List<GameObject>();
+    public static List<GameObject> pathTiles = new List<GameObject>();
     private List<GameObject> topEdgeTiles;
     private List<GameObject> bottomEdgeTiles;
 
     public Color pathColor;
+    public Color startColor;
+    public Color endColor;
 
     //for path generation, have we reached x or y end points?
     private bool reachedX,reachedY = false;
@@ -158,11 +160,14 @@ public class MapGenerator : MonoBehaviour
                 break;
             }
         }
-        //for now destroy the tiles to show its a pathTile
+
         foreach (GameObject tile in pathTiles)
         {
             tile.GetComponent<SpriteRenderer>().color = pathColor;
         }
+
+        startTile.GetComponent<SpriteRenderer>().color = startColor;
+        endTile.GetComponent<SpriteRenderer>().color = endColor;
     }
 
     //Generates a rectangular map of tiles
