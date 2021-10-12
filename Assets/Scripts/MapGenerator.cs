@@ -5,6 +5,8 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     public GameObject mapTile;
+    private GameObject startTile;
+    private GameObject endTile;
 
     [SerializeField] private int mapWidth;
     [SerializeField] private int mapHeight;
@@ -12,11 +14,12 @@ public class MapGenerator : MonoBehaviour
     
     private List<GameObject> mapTiles = new List<GameObject>();
     private List<GameObject> pathTiles = new List<GameObject>();
+    private List<GameObject> topEdgeTiles;
+    private List<GameObject> bottomEdgeTiles;
 
     private void Start()
     {
         generateMap();
-        
     }
 
     //Grabs the top row of tiles
@@ -45,12 +48,8 @@ public class MapGenerator : MonoBehaviour
     //Creates lists to hold top and bottom tiles and fills them
     private void GenerateStartEndPoints()
     {
-        List<GameObject> topEdgeTiles = getTopEdgeTiles();
-        List<GameObject> bottomEdgeTiles = getBottomEdgeTiles();
-
-        //handle beginning and end tiles setup
-        GameObject startTile;
-        GameObject endTile;
+        topEdgeTiles = getTopEdgeTiles();
+        bottomEdgeTiles = getBottomEdgeTiles();
 
         //Determine indexes
         int rand1 = Random.Range(0, mapWidth);
