@@ -11,10 +11,15 @@ public class Enemy : MonoBehaviour
     private float distance;
 
     private int killReward; //amount of money gained when enemy is killed
-    private int damage; // The amount of damage the enemy does when it reaches the end
+    private int fortressdamage; // The amount of damage the enemy does when it reaches the end/a fortress
     private int currentIndex;// index for what tile the enemy is on/was on
 
     private GameObject targetTile;
+
+    private void Awake()
+    {
+        Enemies.enemies.Add(gameObject);// add to active enemies
+    }
 
     private void Start()
     {
@@ -37,6 +42,7 @@ public class Enemy : MonoBehaviour
 
     private void die()
     {
+        Enemies.enemies.Remove(gameObject);//get rid of this enemy from the enemies list
         Destroy(transform.gameObject);
     }
 
