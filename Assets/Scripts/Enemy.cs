@@ -48,7 +48,8 @@ public class Enemy : MonoBehaviour
 
     private void moveEnemy()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetTile.transform.position, movementSpeed * Time.deltaTime);
+        transform.position = targetTile ? 
+            Vector3.MoveTowards(transform.position, targetTile.transform.position, movementSpeed * Time.deltaTime) : transform.position;
     }
 
     private void checkPosition()
@@ -67,7 +68,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        takeDamage(0);
         checkPosition();
         moveEnemy();
     }

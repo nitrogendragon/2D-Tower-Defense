@@ -12,7 +12,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private float timeBetweenAttacks;//attack delay
     private float timeToNextAttack;//actual time checkpoint to determine when the next attack will happen
 
-    private GameObject currentTarget;
+    public GameObject currentTarget;
     private GameObject currentNearestEnemy;
 
     private void Start()
@@ -42,14 +42,13 @@ public class Unit : MonoBehaviour
             
         }
     }
-
-    private void attack()
+    
+    //protected will only let this class and classes that inherit/derive from it(its children) use it
+    //virtual will allow us to override in the children too
+    protected virtual void attack()
     {
-        
-        
             enemyScript = currentTarget.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
             enemyScript.takeDamage(damage);
-        
     }
 
     private void Update()

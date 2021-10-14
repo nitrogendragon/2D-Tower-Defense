@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1385048058531860828}
   - component: {fileID: 1385048058531860831}
   - component: {fileID: 1053906331}
+  - component: {fileID: 8143945241131226442}
   m_Layer: 0
   m_Name: Unit
   m_TagString: Untagged
@@ -96,9 +97,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecd242a798090764a97a72de0a60e0b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 10
+  range: 7
   damage: 5
   timeBetweenAttacks: 0.3
+  currentTarget: {fileID: 0}
+  projectile: {fileID: 5658519426457431506, guid: 6ce857e8f969f994e9cc098712d9aac9, type: 3}
+  unit: {fileID: 1385048058531860828}
+  weapon: {fileID: 8052073049074054310}
+--- !u!114 &8143945241131226442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385048058531860830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b524ba12845b498458575b5f75367ac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weapon: {fileID: 8052073049074054310}
+  unit: {fileID: 1053906331}
 --- !u!1 &2148385732651527919
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,7 +129,7 @@ GameObject:
   - component: {fileID: 8052073049074054310}
   - component: {fileID: 6488612557116355142}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
