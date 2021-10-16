@@ -6,7 +6,7 @@ public class Unit : MonoBehaviour
 {
     Enemy enemyScript;//reference to the Enemy script for easy access
     [SerializeField] private float range;//attack range
-    [SerializeField] private float damage;//dmg we deal to enemies
+    //[SerializeField] private float damage;//dmg we deal to enemies
     private float distance;//distance to enemy/currentNearestEnemy, starts at infinity so first check always lower;
     private float newDistance;//new distance to enemy, for checking distance and if a new enemy is closer than another/current target
     [SerializeField] private float timeBetweenAttacks;//attack delay
@@ -47,18 +47,26 @@ public class Unit : MonoBehaviour
     //virtual will allow us to override in the children too
     protected virtual void attack()
     {
-            enemyScript = currentTarget.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
-            enemyScript.takeDamage(damage);
+            //enemyScript = currentTarget.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
+            //enemyScript.takeDamage(damage);//deal damage 
+    }
+
+    public void dealRangedDamage(float damage, GameObject enemy)
+    {
+        enemyScript = enemy.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
+        enemyScript.takeDamage(damage);
+        Debug.Log("we got to the end of ranged dmg");
     }
 
     private void Update()
     {
         updateNearestEnemy();
-        if(Time.time >= timeToNextAttack && currentTarget)
+        if (Time.time >= timeToNextAttack && currentTarget)
         {
             attack();
             timeToNextAttack = Time.time + timeBetweenAttacks;//update our next time checkpoint to attack
         }
-        
+       
+
     }
 }

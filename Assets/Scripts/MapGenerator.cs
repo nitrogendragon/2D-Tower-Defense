@@ -150,7 +150,7 @@ public class MapGenerator : MonoBehaviour
                 reachedY = true;
                 Debug.Log(endTile.transform.position);
                 pathTiles.Add(endTile);
-                Debug.Log(pathTiles[(pathTiles.Count-1)].transform.position);
+                //Debug.Log(pathTiles[(pathTiles.Count-1)].transform.position);
 
             }
             if (loopCount == mapWidth)
