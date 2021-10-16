@@ -63,7 +63,7 @@ public class MapGenerator : MonoBehaviour
         currentIndex = mapTiles.IndexOf(currentTile);
         nextIndex = currentIndex-mapWidth;//need to go down a row so we need to remove a row's worth of tiles from the index
         currentTile = mapTiles[nextIndex];
-        Debug.Log(currentTile);
+        //Debug.Log(currentTile);
     }
 
     //Add currentTile to pathTiles list, set currentIndex to the mapTiles list index for the current Tile, set the next index to be 1 less, 
@@ -74,7 +74,7 @@ public class MapGenerator : MonoBehaviour
         currentIndex = mapTiles.IndexOf(currentTile);
         nextIndex = currentIndex-1;
         currentTile = mapTiles[nextIndex];
-        Debug.Log(currentIndex.ToString());
+        //Debug.Log(currentIndex.ToString());
     }
     
     private void movePathRight()
@@ -83,7 +83,7 @@ public class MapGenerator : MonoBehaviour
         currentIndex = mapTiles.IndexOf(currentTile);
         nextIndex = currentIndex+1;
         currentTile = mapTiles[nextIndex];
-        Debug.Log(currentIndex.ToString());
+        //Debug.Log(currentIndex.ToString());
     }
 
     private void movePathUp()
@@ -148,7 +148,7 @@ public class MapGenerator : MonoBehaviour
             else
             {
                 reachedY = true;
-                Debug.Log(endTile.transform.position);
+                //Debug.Log(endTile.transform.position);
                 pathTiles.Add(endTile);
                 //Debug.Log(pathTiles[(pathTiles.Count-1)].transform.position);
 

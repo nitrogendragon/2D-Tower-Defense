@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3789438286658029541}
   - component: {fileID: 8802108471361447450}
   - component: {fileID: 4307607551034881920}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BasicProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -18786185
-  m_SortingLayer: 1
+  m_SortingLayerID: 585155353
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
   m_Color: {r: 0.8962264, g: 0.45742255, b: 0.10568706, a: 1}
@@ -98,6 +98,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 0.05
+  expirationTime: 1
+  attackPower: 0
+  myUnit: {fileID: 0}
 --- !u!61 &8802108471361447450
 BoxCollider2D:
   m_ObjectHideFlags: 0

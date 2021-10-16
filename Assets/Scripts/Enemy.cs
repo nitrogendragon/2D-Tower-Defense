@@ -54,16 +54,27 @@ public class Enemy : MonoBehaviour
 
     private void checkPosition()
     {
-        if(targetTile != null && targetTile != MapGenerator.endTile)
+        if(targetTile != null)
         {
             distance = (transform.position - targetTile.transform.position).magnitude;//get distance to targetTile from enemy
-            if (distance < 0.001f)
-            {
-                currentIndex = MapGenerator.pathTiles.IndexOf(targetTile);
-
-                targetTile = MapGenerator.pathTiles[currentIndex + 1];
-            }
         }
+        if(targetTile != MapGenerator.endTile && distance < 0.001f)
+        {
+                currentIndex = MapGenerator.pathTiles.IndexOf(targetTile);
+                targetTile = MapGenerator.pathTiles[currentIndex + 1];
+        }
+        else if(distance < 0.001f)
+        {
+            damageFortress();
+        }
+        
+    }
+
+    private void damageFortress()
+    {
+        //to do : Add fortresses or at least a health bar for the player to deal dmg to so you can lose towers,fortresses, and the game
+
+        die();
     }
 
     private void Update()

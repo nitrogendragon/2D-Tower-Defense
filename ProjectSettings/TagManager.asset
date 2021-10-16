@@ -12,9 +12,9 @@ TagManager:
   - units
   - Water
   - UI
-  - 
-  - 
-  - 
+  - projectiles
+  - enemies
+  - abilities
   - 
   - 
   - 
@@ -42,6 +42,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: ground
+    uniqueID: 2744102061
+    locked: 0
   - name: units
     uniqueID: 4276181111
+    locked: 0
+  - name: projectiles
+    uniqueID: 585155353
+    locked: 0
+  - name: enemies
+    uniqueID: 1569879681
+    locked: 0
+  - name: structure
+    uniqueID: 530307165
+    locked: 0
+  - name: abilities
+    uniqueID: 1803700741
     locked: 0
