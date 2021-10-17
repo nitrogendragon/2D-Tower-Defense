@@ -15,6 +15,7 @@ public class RoundController : MonoBehaviour
     public int round;
     private int i = 0;
 
+
     private void Start()
     {
         isRoundGoing = false;
@@ -22,6 +23,58 @@ public class RoundController : MonoBehaviour
         isStartOfRound = true;
         timeVariable = 0;
         round = 1;//always start with the first round
+        manageRounds();
+    }
+
+    private void manageRounds()
+    {
+        StartCoroutine("ImanageRounds");
+    }
+
+    IEnumerator ImanageRounds()
+    {
+        while (true)//this should be fine since it's an enumerator/coRoutine and runs independently/side by side with the other scripts
+        {
+            
+            Debug.Log(timeVariable);
+            if (isStartOfRound && timeVariable >= timeBeforeRoundStarts)
+            {
+                Debug.Log("The first round has started");
+                isStartOfRound = false;
+                isIntermission = false;
+                isRoundGoing = true;
+                timeVariable = 0;
+                SpawnEnemies();
+                //yield return new WaitForSeconds(1f);//don't check others and delay reruns for 1 second
+
+            }
+            else if (isIntermission && timeVariable >= timeBeforeRoundStarts)
+            {
+                Debug.Log("Round " + round + " has started.");
+                isStartOfRound = false;
+                isIntermission = false;
+                isRoundGoing = true;
+                timeVariable = 0;
+                SpawnEnemies();
+                //yield return new WaitForSeconds(1f);//stop and delay reruns for 1 second
+            }
+            else if (isRoundGoing && timeVariable >= timeBetweenWaves)
+            {
+                if (Enemies.enemies.Count > 0)
+                {
+                    //do nothing-don't try starting next round
+                }
+                else
+                {
+                    Debug.Log("Round " + round + " has ended.");
+                    isIntermission = true;
+                    isRoundGoing = false;
+                    timeVariable = 0;
+                    round += 1;
+                }
+            }
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     private void SpawnEnemies()
@@ -38,44 +91,9 @@ public class RoundController : MonoBehaviour
         }
     }
 
+
     private void Update()
     {
-        timeVariable += Time.deltaTime;
-        if (isStartOfRound && timeVariable >= timeBeforeRoundStarts)
-        {
-            Debug.Log("The first round has started");
-            isStartOfRound = false;
-            isIntermission = false;
-            isRoundGoing = true;
-            timeVariable = 0;
-            SpawnEnemies();
-            return;//don't check others
-            
-        }
-        else if (isIntermission && timeVariable >= timeBeforeRoundStarts)
-        {
-            Debug.Log("Round " + round + " has started.");
-            isStartOfRound = false;
-            isIntermission = false;
-            isRoundGoing = true;
-            timeVariable = 0;
-            SpawnEnemies();
-            return;
-        }
-        else if (isRoundGoing && timeVariable >= timeBetweenWaves)
-        {
-            if (Enemies.enemies.Count > 0)
-            {
-                //do nothing-don't try starting next round
-            }
-            else
-            {
-                Debug.Log("Round " + round + " has ended.");
-                isIntermission = true;
-                isRoundGoing = false;
-                timeVariable = 0;
-                round += 1;
-            }
-        }
+        timeVariable += Time.deltaTime;//run here outside of manageRounds for now since deltaTime doesn't work in coRoutine like it does here.
     }
 }

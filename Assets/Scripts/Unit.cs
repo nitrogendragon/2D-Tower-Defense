@@ -6,19 +6,12 @@ public class Unit : MonoBehaviour
 {
     Enemy enemyScript;//reference to the Enemy script for easy access
     [SerializeField] private float range;//attack range
-    //[SerializeField] private float damage;//dmg we deal to enemies
     private float distance;//distance to enemy/currentNearestEnemy, starts at infinity so first check always lower;
     private float newDistance;//new distance to enemy, for checking distance and if a new enemy is closer than another/current target
-    [SerializeField] private float timeBetweenAttacks;//attack delay
-    private float timeToNextAttack;//actual time checkpoint to determine when the next attack will happen
-
+    [SerializeField] private float timeBetweenAttacks = 1f;//attack delay, set in editor otw 1f
+    private float timeSinceLastAttack;// keep track of how long it's been since an attack occured
     public GameObject currentTarget;
     private GameObject currentNearestEnemy;
-
-    private void Start()
-    {
-        timeToNextAttack = Time.time;
-    }
 
     private void updateNearestEnemy()
     {
@@ -51,21 +44,28 @@ public class Unit : MonoBehaviour
             //enemyScript.takeDamage(damage);//deal damage 
     }
 
+    protected virtual void decideIfShouldAttack()
+    {
+        timeSinceLastAttack += Time.deltaTime;
+        if (timeSinceLastAttack >= timeBetweenAttacks && currentTarget)
+        {
+            attack();
+            timeSinceLastAttack = 0;//reset time
+        }
+    }
+
     public void dealRangedDamage(float damage, GameObject enemy)
     {
         enemyScript = enemy.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
         enemyScript.takeDamage(damage);
-        Debug.Log("we got to the end of ranged dmg");
+        
     }
 
     private void Update()
     {
         updateNearestEnemy();
-        if (Time.time >= timeToNextAttack && currentTarget)
-        {
-            attack();
-            timeToNextAttack = Time.time + timeBetweenAttacks;//update our next time checkpoint to attack
-        }
+        //timeSinceLastAttack += Time.deltaTime;
+        decideIfShouldAttack();
        
 
     }
