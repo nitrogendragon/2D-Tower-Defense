@@ -15,7 +15,7 @@ public class BasicUnit : Unit
         GameObject newProjectile = Instantiate(projectile, weapon.position, unit.rotation);
         newProjectile.GetComponent<Projectile>().expirationTime = 3f; // will be determined by unit stats and specific abilities later
         newProjectile.GetComponent<Projectile>().attackPower = 5f;// will update this to be based on unit stats later
-        newProjectile.GetComponent<Projectile>().speed = 3f; // will be determined by unit stat and or specific abilities later
+        newProjectile.GetComponent<Projectile>().speed = 5f; // will be determined by unit stat and or specific abilities later
         newProjectile.GetComponent<Projectile>().myUnit = this;
     }
 

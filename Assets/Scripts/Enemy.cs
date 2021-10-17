@@ -91,12 +91,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (limitedUpdatesChecker(60))
-        {
-            //Debug.Log("its been a 60th of a second at least");
-            checkPosition();
-            moveEnemy();
-        }
+        checkPosition();
+        moveEnemy();
     }
 
 }
