@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] public float speed;
+    public float speed = 1f;//typically will be set elsewhere such as BasicUnit.cs attack() function, otw 1f
     public float expirationTime = 1f; //will be set when instantiated otw 1f
     public float attackPower = 0; // will be set when instantiated otw 0
     public Unit myUnit;// will be assigned when instantiated
@@ -24,6 +24,6 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        transform.position += transform.right * speed;
+        transform.position += transform.right * speed*Time.deltaTime;
     }
 }

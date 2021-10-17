@@ -14,6 +14,8 @@ public class RoundController : MonoBehaviour
     public bool isStartOfRound;
     public int round;
     private int i = 0;
+    private WaitForSeconds manageRoundsWaiter;
+    private WaitForSeconds spawnEnemiesWaiter;
 
 
     private void Start()
@@ -23,6 +25,8 @@ public class RoundController : MonoBehaviour
         isStartOfRound = true;
         timeVariable = 0;
         round = 1;//always start with the first round
+        manageRoundsWaiter = new WaitForSeconds(1f);
+        spawnEnemiesWaiter = new WaitForSeconds(1f);
         manageRounds();
     }
 
@@ -35,11 +39,9 @@ public class RoundController : MonoBehaviour
     {
         while (true)//this should be fine since it's an enumerator/coRoutine and runs independently/side by side with the other scripts
         {
-            
-            Debug.Log(timeVariable);
             if (isStartOfRound && timeVariable >= timeBeforeRoundStarts)
             {
-                Debug.Log("The first round has started");
+                //Debug.Log("The first round has started");
                 isStartOfRound = false;
                 isIntermission = false;
                 isRoundGoing = true;
@@ -50,7 +52,7 @@ public class RoundController : MonoBehaviour
             }
             else if (isIntermission && timeVariable >= timeBeforeRoundStarts)
             {
-                Debug.Log("Round " + round + " has started.");
+                //Debug.Log("Round " + round + " has started.");
                 isStartOfRound = false;
                 isIntermission = false;
                 isRoundGoing = true;
@@ -66,14 +68,14 @@ public class RoundController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Round " + round + " has ended.");
+                    //Debug.Log("Round " + round + " has ended.");
                     isIntermission = true;
                     isRoundGoing = false;
                     timeVariable = 0;
                     round += 1;
                 }
             }
-            yield return new WaitForSeconds(1f);
+            yield return manageRoundsWaiter;
         }
     }
 
@@ -87,7 +89,7 @@ public class RoundController : MonoBehaviour
         for (i = 0; i < round; i++)
         {
             GameObject newEnemy = Instantiate(basicEnemy, MapGenerator.startTile.transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(1f);
+            yield return spawnEnemiesWaiter;
         }
     }
 

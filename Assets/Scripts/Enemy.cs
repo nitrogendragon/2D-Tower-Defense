@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private float movementSpeed;
     private float distance;
-
+    private float timePassed;//for frameChecker() keeps track of time passed 
     private int killReward; //amount of money gained when enemy is killed
     private int fortressdamage; // The amount of damage the enemy does when it reaches the end/a fortress
     private int currentIndex;// index for what tile the enemy is on/was on
@@ -70,6 +70,18 @@ public class Enemy : MonoBehaviour
         
     }
 
+    //takes in a limit to updates per second and checks if enough time has passed so we don't do something more than x times per second
+    private bool limitedUpdatesChecker(int maxUpdatesPerSecond)
+    {
+        timePassed += Time.deltaTime;
+        if(1f/maxUpdatesPerSecond <= timePassed)//if a x fraction of a second has passed 
+        {
+            timePassed = 0;
+            return true;
+        }
+        return false;
+    }
+
     private void damageFortress()
     {
         //to do : Add fortresses or at least a health bar for the player to deal dmg to so you can lose towers,fortresses, and the game
@@ -79,8 +91,12 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        checkPosition();
-        moveEnemy();
+        if (limitedUpdatesChecker(60))
+        {
+            //Debug.Log("its been a 60th of a second at least");
+            checkPosition();
+            moveEnemy();
+        }
     }
 
 }
