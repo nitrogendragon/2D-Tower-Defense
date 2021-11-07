@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlacementManager : MonoBehaviour
 {
+    public ShopManager shopManager;//reference to the shopManager script
+
     public GameObject basicUnitObject;
 
     public GameObject validPlacementTileObject;//for referencing the validtile prefab
@@ -79,13 +81,18 @@ public class PlacementManager : MonoBehaviour
     public void PlaceUnit()
     {
         //make sure we have a tile, it doesn't have a unit on it and it's not a pathTile
-        if (hoverTile && !CheckForUnit() && !MapGenerator.pathTiles.Contains(hoverTile))
+        if (hoverTile && !CheckForUnit() && !MapGenerator.pathTiles.Contains(hoverTile) && shopManager.canBuyUnit(basicUnitObject) == true)
         {
             GameObject newUnitObject = Instantiate(basicUnitObject);
             newUnitObject.layer = LayerMask.NameToLayer("unit");
             newUnitObject.transform.position = hoverTile.transform.position;
 
+            shopManager.buyUnit(basicUnitObject);
             endDeploying();
+        }
+        else
+        {
+            Debug.Log("probably insufficient funds or maybe something else is stopping us from placing the unit here.");
         }
     }
 
@@ -129,6 +136,7 @@ public class PlacementManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1"))
         {
+            
             PlaceUnit();
         }
     }
