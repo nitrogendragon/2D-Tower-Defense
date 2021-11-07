@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlacementManager : MonoBehaviour
 {
+    public UnitManager unitManager;
+
     public ShopManager shopManager;//reference to the shopManager script
 
     public GameObject basicUnitObject;
@@ -24,11 +26,11 @@ public class PlacementManager : MonoBehaviour
 
     public LayerMask UnitMask;// specify layer of units for detecting places we can't place a new unit
 
-    public bool isDeploying;
+    public bool isDeploying = false;
 
     private void Start()
     {
-        startDeploying();   
+        //startDeploying();   
     }
 
     /*gets our mouse position, creates a 2D raycast which hits wherever our mouse is and checks for appropriate conditions to determine if we 
@@ -66,14 +68,23 @@ public class PlacementManager : MonoBehaviour
     {
         bool UnitOnSlot = false;
 
-        Vector2 mousePosition = GetMousePosition();
-
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition, new Vector2(0, 0), UnitMask, -100, 100);
-
-        if (hit.collider)
-        {
-            UnitOnSlot = true;
+        //Vector2 mousePosition = GetMousePosition();
+        if (isDeploying) {
+            foreach (GameObject unit in unitManager.activeUnits)
+            {
+                if (unit.transform.position == dummyPlacement.transform.position)
+                {
+                    UnitOnSlot = true;
+                }
+            }
         }
+        //RaycastHit2D hit = Physics2D.Raycast(mousePosition, new Vector2(0, 0), UnitMask, -100, 100);
+
+        //if (hit.collider)
+        //{
+        //    Debug.Log("We are hitting another unit");
+        //    UnitOnSlot = true;
+        //}
         return UnitOnSlot;
 
     }
@@ -86,7 +97,7 @@ public class PlacementManager : MonoBehaviour
             GameObject newUnitObject = Instantiate(basicUnitObject);
             newUnitObject.layer = LayerMask.NameToLayer("unit");
             newUnitObject.transform.position = hoverTile.transform.position;
-
+            unitManager.addToActiveUnits(newUnitObject);
             shopManager.buyUnit(basicUnitObject);
             endDeploying();
         }
@@ -116,7 +127,7 @@ public class PlacementManager : MonoBehaviour
             {
                 dummyPlacement.transform.position = hoverTile.transform.position;//update dummyPlacement objects position
                 
-                if ((MapGenerator.pathTiles.Contains(hoverTile) || CheckForUnit()))
+                if (MapGenerator.pathTiles.Contains(hoverTile) || CheckForUnit())
                 {
                     Destroy(placementTile);
                     placementTile = Instantiate(invalidPlacementTileObject);
@@ -141,6 +152,20 @@ public class PlacementManager : MonoBehaviour
         }
     }
 
+    public void checkForUnitSelection()
+    {
+        if(!isDeploying && Input.GetKeyDown(KeyCode.Alpha1)){
+            isDeploying = true;
+            Debug.Log("we started attempting to deploy our unit 1.");
+            startDeploying();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("we stopped attempting to deploy our unit 1.");
+            endDeploying();
+        }
+    }
+
     public Vector2 GetMousePosition()
     {
         return cam.ScreenToWorldPoint(Input.mousePosition);
@@ -150,6 +175,7 @@ public class PlacementManager : MonoBehaviour
     public void Update()
     {
         updateDummyPositionAndPlacementTile();
+        checkForUnitSelection();
         checkforDeploymentInput();
     }
 }

@@ -154,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8052073049074054310}
   - component: {fileID: 6488612557116355142}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -235,7 +235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4957365453822920707}
-  m_Layer: 3
+  m_Layer: 8
   m_Name: Pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

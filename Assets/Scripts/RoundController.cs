@@ -47,7 +47,7 @@ public class RoundController : MonoBehaviour
                 isRoundGoing = true;
                 timeVariable = 0;
                 SpawnEnemies();
-                //yield return new WaitForSeconds(1f);//don't check others and delay reruns for 1 second
+                
 
             }
             else if (isIntermission && timeVariable >= timeBeforeRoundStarts)
@@ -58,7 +58,7 @@ public class RoundController : MonoBehaviour
                 isRoundGoing = true;
                 timeVariable = 0;
                 SpawnEnemies();
-                //yield return new WaitForSeconds(1f);//stop and delay reruns for 1 second
+                
             }
             else if (isRoundGoing && timeVariable >= timeBetweenWaves)
             {
