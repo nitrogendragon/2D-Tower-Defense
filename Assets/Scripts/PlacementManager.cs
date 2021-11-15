@@ -16,6 +16,8 @@ public class PlacementManager : MonoBehaviour
 
     private GameObject placementTile;//our actual placementTile that will be instantiated and moved around
 
+    private GameObject currentUnitDeploying;//the current unit we are deploying
+
     private GameObject dummyPlacement;
 
     public Camera cam;
@@ -47,12 +49,14 @@ public class PlacementManager : MonoBehaviour
     }
 
     //tell the game we are deploying and instantiate a unit but remove its scripts so its just a placeholder sprite/gameobject
-    public void startDeploying()
+    public void startDeploying(GameObject UnitToDeploy)
     {
         isDeploying = true;
+
+        currentUnitDeploying = UnitToDeploy;
         placementTile = Instantiate(validPlacementTileObject);
-        dummyPlacement = Instantiate(basicUnitObject);
-        Debug.Log(dummyPlacement);
+        dummyPlacement = Instantiate(UnitToDeploy);
+        //Debug.Log(dummyPlacement);
 
         if (dummyPlacement.GetComponent<Unit>())
         {
@@ -92,13 +96,13 @@ public class PlacementManager : MonoBehaviour
     public void PlaceUnit()
     {
         //make sure we have a tile, it doesn't have a unit on it and it's not a pathTile
-        if (hoverTile && !CheckForUnit() && !MapGenerator.pathTiles.Contains(hoverTile) && shopManager.canBuyUnit(basicUnitObject) == true)
+        if (hoverTile && !CheckForUnit() && !MapGenerator.pathTiles.Contains(hoverTile) && shopManager.canBuyUnit(currentUnitDeploying) == true)
         {
-            GameObject newUnitObject = Instantiate(basicUnitObject);
+            GameObject newUnitObject = Instantiate(currentUnitDeploying);
             newUnitObject.layer = LayerMask.NameToLayer("unit");
             newUnitObject.transform.position = hoverTile.transform.position;
             unitManager.addToActiveUnits(newUnitObject);
-            shopManager.buyUnit(basicUnitObject);
+            shopManager.buyUnit(currentUnitDeploying);
             endDeploying();
         }
         else
@@ -157,7 +161,7 @@ public class PlacementManager : MonoBehaviour
         if(!isDeploying && Input.GetKeyDown(KeyCode.Alpha1)){
             isDeploying = true;
             Debug.Log("we started attempting to deploy our unit 1.");
-            startDeploying();
+            startDeploying(currentUnitDeploying);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {

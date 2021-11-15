@@ -6,6 +6,9 @@ public class ShopManager : MonoBehaviour
 {
     public MoneyManager moneyManager;
     public GameObject basicUnitPrefab;
+    public GameObject costText;
+    public GameObject nameText;
+    public GameObject unitIcon;
     public int basicUnitCost;
 
     public int getUnitCost(GameObject unitPrefab)
@@ -16,6 +19,11 @@ public class ShopManager : MonoBehaviour
             cost = basicUnitCost;
         }
         return cost;
+    }
+
+    public void getUnitName(GameObject unitPrefab)
+    {
+
     }
 
     public void buyUnit(GameObject unitPrefab)
