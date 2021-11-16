@@ -160,6 +160,7 @@ public class PlacementManager : MonoBehaviour
     {
         if(!isDeploying && Input.GetKeyDown(KeyCode.Alpha1)){
             isDeploying = true;
+            currentUnitDeploying = basicUnitObject;//temp code for now
             Debug.Log("we started attempting to deploy our unit 1.");
             startDeploying(currentUnitDeploying);
         }

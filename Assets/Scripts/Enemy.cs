@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
+    private float enemyMaxHealth;
     private float enemyHealth;
     [SerializeField]
     private float movementSpeed;
@@ -13,6 +14,7 @@ public class Enemy : MonoBehaviour
     private int killReward; //amount of money gained when enemy is killed
     private int fortressdamage; // The amount of damage the enemy does when it reaches the end/a fortress
     private int currentIndex;// index for what tile the enemy is on/was on
+    public HealthBar healthBar;//reference to our health bar script
 
     private GameObject targetTile;
 
@@ -20,20 +22,29 @@ public class Enemy : MonoBehaviour
     {
         Enemies.enemies.Add(gameObject);// add to active enemies
     }
+    
 
     private void Start()
     {
         initializeEnemy();
     }
 
+    public float getHealth()
+    {
+        return enemyHealth;
+    }
+
     private void initializeEnemy()
     {
         targetTile = MapGenerator.startTile;
+        enemyHealth = enemyMaxHealth;
+        healthBar.setHealth(enemyHealth, enemyMaxHealth);
     }
 
     public void takeDamage(float amount)
     {
         enemyHealth -= amount;
+        healthBar.setHealth(enemyHealth,enemyMaxHealth);
         if(enemyHealth <= 0)
         {
             die();

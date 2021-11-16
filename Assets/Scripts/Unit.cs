@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour
     private WaitForSeconds decideIfShouldAttackWaiter;
     public GameObject currentTarget;
     private GameObject currentNearestEnemy;
-
+ 
     private void Start()
     {
         nearestEnemyWaiter = new WaitForSeconds(.1f);
@@ -89,8 +89,5 @@ public class Unit : MonoBehaviour
         
     }
 
-    private void Update()
-    {
-     
-    }
+    
 }
