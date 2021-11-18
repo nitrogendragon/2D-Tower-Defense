@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &9027299037721847472
+--- !u!1 &1680518322971258430
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 9027299037721847473}
-  - component: {fileID: 9027299037721847486}
+  - component: {fileID: 1680518322971258428}
+  - component: {fileID: 1680518322971258431}
   m_Layer: 0
-  m_Name: MapGenerator
+  m_Name: GuildManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &9027299037721847473
+--- !u!4 &1680518322971258428
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9027299037721847472}
+  m_GameObject: {fileID: 1680518322971258430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 333.56, y: 235.19, z: 0.45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9027299037721847486
+--- !u!114 &1680518322971258431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9027299037721847472}
+  m_GameObject: {fileID: 1680518322971258430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c08096f55ef96a345938e8e9e10639dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d05ef022b556ec4e9915ca67e10e788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapTile: {fileID: 9196398092927610712, guid: cd55cf87906897e469653337139f9f42, type: 3}
-  guild: {fileID: 3393725295934973868, guid: 317768377cd452a409746949eed4be70, type: 3}
-  mapWidth: 60
-  mapHeight: 40
-  pathColor: {r: 0.9254902, g: 0.05490196, b: 0.35686275, a: 1}
-  startColor: {r: 0, g: 0, b: 0, a: 0}
-  endColor: {r: 0, g: 0, b: 0, a: 0}

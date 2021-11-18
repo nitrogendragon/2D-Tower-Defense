@@ -12,12 +12,11 @@ public class Enemy : MonoBehaviour
     private float distance;
     private float timePassed;//for frameChecker() keeps track of time passed 
     private int killReward; //amount of money gained when enemy is killed
-    private int fortressdamage; // The amount of damage the enemy does when it reaches the end/a fortress
+    private int fortressDamage = 1; // The amount of damage the enemy does when it reaches the end/a fortress
     private int currentIndex;// index for what tile the enemy is on/was on
     public HealthBar healthBar;//reference to our health bar script
-
     private GameObject targetTile;
-
+    public GameObject guildManager;
     private void Awake()
     {
         Enemies.enemies.Add(gameObject);// add to active enemies
@@ -77,6 +76,7 @@ public class Enemy : MonoBehaviour
         else if(distance < 0.001f)
         {
             damageFortress();
+            
         }
         
     }
@@ -96,7 +96,13 @@ public class Enemy : MonoBehaviour
     private void damageFortress()
     {
         //to do : Add fortresses or at least a health bar for the player to deal dmg to so you can lose towers,fortresses, and the game
-
+        GameObject targetGuild = guildManager.GetComponent<GuildManager>().GrabGuild();
+        Debug.Log(targetGuild);
+        if (targetGuild)
+        {
+            targetGuild.GetComponent<Guild>().TakeDamage(fortressDamage);
+            Debug.Log(targetGuild);
+        }
         die();
     }
 

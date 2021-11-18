@@ -8,7 +8,8 @@ public class MapGenerator : MonoBehaviour
     public static GameObject startTile;
     public static GameObject endTile;
     private GameObject currentTile;
-
+    public GameObject guild;
+    private GameObject guildClone;
     [SerializeField] private int mapWidth;
     [SerializeField] private int mapHeight;
 
@@ -30,6 +31,7 @@ public class MapGenerator : MonoBehaviour
 
     private void Start()
     {
+        guildClone = null;
         generateMap();
     }
 
@@ -107,6 +109,7 @@ public class MapGenerator : MonoBehaviour
         //Apply indexes to set start and end tile
         startTile = topEdgeTiles[rand1];
         endTile = bottomEdgeTiles[rand2];
+        Debug.Log("endTile position: " + endTile.transform.position);
     }
 
     //called within generateMap() to create a path for enemies to follow
@@ -148,9 +151,8 @@ public class MapGenerator : MonoBehaviour
             else
             {
                 reachedY = true;
-                //Debug.Log(endTile.transform.position);
                 pathTiles.Add(endTile);
-                //Debug.Log(pathTiles[(pathTiles.Count-1)].transform.position);
+                
 
             }
             if (loopCount == mapWidth)
@@ -170,6 +172,9 @@ public class MapGenerator : MonoBehaviour
         endTile.GetComponent<SpriteRenderer>().color = endColor;
     }
 
+    
+
+    
     //Generates a rectangular map of tiles
     private void generateMap()
     {
@@ -189,6 +194,14 @@ public class MapGenerator : MonoBehaviour
         GenerateStartEndPoints();
         //make a path for enemies to move across
         createPath();
+
+        //update guild position
+        guildClone = Instantiate(guild);
+        guildClone.transform.position = endTile.transform.position;
+        
+
+        
+        
         
     }
 }

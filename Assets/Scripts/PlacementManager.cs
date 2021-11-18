@@ -46,6 +46,7 @@ public class PlacementManager : MonoBehaviour
         {
             hoverTile = hit.collider.gameObject;//set the hoverTile to the one our raycast hit
         }
+        else { hoverTile = null; }
     }
 
     //tell the game we are deploying and instantiate a unit but remove its scripts so its just a placeholder sprite/gameobject
@@ -95,8 +96,9 @@ public class PlacementManager : MonoBehaviour
 
     public void PlaceUnit()
     {
-        //make sure we have a tile, it doesn't have a unit on it and it's not a pathTile
-        if (hoverTile && !CheckForUnit() && !MapGenerator.pathTiles.Contains(hoverTile) && shopManager.canBuyUnit(currentUnitDeploying) == true)
+        //make sure we have a tile, it doesn't have a unit on it and it's not a pathTile and we have enough money and we are trying to deploy
+        if (hoverTile && !CheckForUnit() && !MapGenerator.pathTiles.Contains(hoverTile) && 
+            shopManager.canBuyUnit(currentUnitDeploying) == true && isDeploying)
         {
             GameObject newUnitObject = Instantiate(currentUnitDeploying);
             newUnitObject.layer = LayerMask.NameToLayer("unit");
