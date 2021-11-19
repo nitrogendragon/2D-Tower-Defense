@@ -109,7 +109,7 @@ public class MapGenerator : MonoBehaviour
         //Apply indexes to set start and end tile
         startTile = topEdgeTiles[rand1];
         endTile = bottomEdgeTiles[rand2];
-        Debug.Log("endTile position: " + endTile.transform.position);
+        //Debug.Log("endTile position: " + endTile.transform.position);
     }
 
     //called within generateMap() to create a path for enemies to follow

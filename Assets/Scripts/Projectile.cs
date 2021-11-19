@@ -6,7 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 1f;//typically will be set elsewhere such as BasicUnit.cs attack() function, otw 1f
     public float expirationTime = 1f; //will be set when instantiated otw 1f
-    public float attackPower = 0; // will be set when instantiated otw 0
+    public int attackPower = 0; // will be set when instantiated otw 0
     public Unit myUnit;// will be assigned when instantiated
     private void Start()
     {

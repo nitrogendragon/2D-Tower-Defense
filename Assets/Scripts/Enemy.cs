@@ -5,21 +5,31 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
-    private float enemyMaxHealth;
-    private float enemyHealth;
+    protected int enemyMaxHealth;
+    private int enemyHealth;
     [SerializeField]
-    private float movementSpeed;
+    protected float movementSpeed;
     private float distance;
     private float timePassed;//for frameChecker() keeps track of time passed 
-    private int killReward; //amount of money gained when enemy is killed
-    private int fortressDamage = 1; // The amount of damage the enemy does when it reaches the end/a fortress
+    protected int killReward; //amount of money gained when enemy is killed
+    protected int fortressDamage = 1; // The amount of damage the enemy does when it reaches the end/a fortress
+    protected int defense; // basic damage resistance stat
+    protected int attack; // basic damage stat for attacking units
+    protected int agility; // basic evasion and speed modifier stat
+    protected int rank; // the rank of the enemy which will have a huge effect on stats and in the future available abilities
+    protected string enemyName; //the name of the enemy
+    protected string type; // the type of the enemy for bonus resistances and damage modifiers
+    protected Color spriteColor; // a simple way to represent the rank of the enemy and differentiate them
     private int currentIndex;// index for what tile the enemy is on/was on
     public HealthBar healthBar;//reference to our health bar script
+    public GameObject enemyVariants;// reference to our EnemyVariants script
     private GameObject targetTile;
     public GameObject guildManager;
+    
+    
     private void Awake()
     {
-        Enemies.enemies.Add(gameObject);// add to active enemies
+        EnemiesManager.enemies.Add(gameObject);// add to active enemies
     }
     
 
@@ -36,11 +46,15 @@ public class Enemy : MonoBehaviour
     private void initializeEnemy()
     {
         targetTile = MapGenerator.startTile;
+
+        enemyVariants.GetComponent<EnemyVariants>().DetermineStats(ref enemyMaxHealth,ref fortressDamage,ref agility,ref defense,
+            ref attack,ref movementSpeed,ref killReward,ref spriteColor);
         enemyHealth = enemyMaxHealth;
         healthBar.setHealth(enemyHealth, enemyMaxHealth);
+        
     }
 
-    public void takeDamage(float amount)
+    public void takeDamage(int amount)
     {
         enemyHealth -= amount;
         healthBar.setHealth(enemyHealth,enemyMaxHealth);
@@ -52,7 +66,7 @@ public class Enemy : MonoBehaviour
 
     private void die()
     {
-        Enemies.enemies.Remove(gameObject);//get rid of this enemy from the enemies list
+        EnemiesManager.enemies.Remove(gameObject);//get rid of this enemy from the enemies list
         Destroy(transform.gameObject);
     }
 
@@ -97,11 +111,11 @@ public class Enemy : MonoBehaviour
     {
         //to do : Add fortresses or at least a health bar for the player to deal dmg to so you can lose towers,fortresses, and the game
         GameObject targetGuild = guildManager.GetComponent<GuildManager>().GrabGuild();
-        Debug.Log(targetGuild);
+        
         if (targetGuild)
         {
             targetGuild.GetComponent<Guild>().TakeDamage(fortressDamage);
-            Debug.Log(targetGuild);
+            
         }
         die();
     }

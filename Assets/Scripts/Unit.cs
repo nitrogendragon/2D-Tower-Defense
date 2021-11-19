@@ -36,7 +36,7 @@ public class Unit : MonoBehaviour
         {
             distance = Mathf.Infinity;//reset each time to make sure we will choose a new target if one is available
                                       //go through all the enemies and check distance to determine current target if any are in range
-            foreach (GameObject enemy in Enemies.enemies)
+            foreach (GameObject enemy in EnemiesManager.enemies)
             {
                 if (enemy != null)//make sure the enemy exists
                 {
@@ -82,7 +82,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void dealRangedDamage(float damage, GameObject enemy)
+    public void dealRangedDamage(int damage, GameObject enemy)
     {
         enemyScript = enemy.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
         enemyScript.takeDamage(damage);

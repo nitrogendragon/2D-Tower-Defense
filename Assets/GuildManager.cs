@@ -19,7 +19,7 @@ public class GuildManager : MonoBehaviour
     public GameObject GrabGuild()
     {
         GameObject guild = GameObject.Find("Guild(Clone)");
-        Debug.Log(guild.name);
+        
         if (guild)
         {
             return guild;

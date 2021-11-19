@@ -62,7 +62,7 @@ public class RoundController : MonoBehaviour
             }
             else if (isRoundGoing && timeVariable >= timeBetweenWaves)
             {
-                if (Enemies.enemies.Count > 0)
+                if (EnemiesManager.enemies.Count > 0)
                 {
                     //do nothing-don't try starting next round
                 }

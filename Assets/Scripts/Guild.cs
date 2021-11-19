@@ -32,7 +32,7 @@ public class Guild : MonoBehaviour
     {
         int tempHealth = healthRemaining - damage;
         healthRemaining = tempHealth;
-        Debug.Log(healthRemaining);
+        
         healthBar.setHealth(healthRemaining, maxHealth);
         if (healthRemaining <= 0)
         {
