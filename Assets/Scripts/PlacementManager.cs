@@ -109,7 +109,7 @@ public class PlacementManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("probably insufficient funds or maybe something else is stopping us from placing the unit here.");
+            //Debug.Log("probably insufficient funds or maybe something else is stopping us from placing the unit here.");
         }
     }
 

@@ -6,8 +6,7 @@ public class Projectile : MonoBehaviour
 {
     public float speed = 1f;//typically will be set elsewhere such as BasicUnit.cs attack() function, otw 1f
     public float expirationTime = 1f; //will be set when instantiated otw 1f
-    public int attackPower = 0; // will be set when instantiated otw 0
-    public Unit myUnit;// will be assigned when instantiated
+    public BasicUnit myUnit;// will be assigned when instantiated
     private void Start()
     {
         Destroy(gameObject, expirationTime);//remove from game after x period of time of not hitting something
@@ -17,7 +16,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            myUnit.dealRangedDamage(attackPower,collision.gameObject);   
+            myUnit.dealRangedDamage(collision.gameObject);   
             Destroy(gameObject);
         }
     }

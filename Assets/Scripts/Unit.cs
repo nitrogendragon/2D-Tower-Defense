@@ -4,28 +4,29 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    Enemy enemyScript;//reference to the Enemy script for easy access
-    [SerializeField] private float range;//attack range
+    protected Enemy enemyScript;//reference to the Enemy script for easy access
+    protected float range;//attack range
     private float distance;//distance to enemy/currentNearestEnemy, starts at infinity so first check always lower;
     private float newDistance;//new distance to enemy, for checking distance and if a new enemy is closer than another/current target
-    [SerializeField] private float timeBetweenAttacks = 1f;//attack delay, set in editor otw 1f
-    private float maxAttackSpeed = 0.05f;//we will never allow more than 20 attacks a second per unit
+    protected float timeBetweenAttacks = 1f;//attack delay, set in editor otw 1f
+    protected float maxAttackSpeed = 0.05f;//we will never allow more than 20 attacks a second per unit
     //private float timeSinceLastAttack;// keep track of how long it's been since an attack occured
     private float lastAttackTime;//keeps track of the time when the last attack happened;
-    private WaitForSeconds nearestEnemyWaiter;
-    private WaitForSeconds decideIfShouldAttackWaiter;
+    private int level;
+    protected WaitForSeconds nearestEnemyWaiter;
+    protected WaitForSeconds decideIfShouldAttackWaiter;
     public GameObject currentTarget;
     private GameObject currentNearestEnemy;
  
-    private void Start()
-    {
-        nearestEnemyWaiter = new WaitForSeconds(.1f);
-        decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
-        decideIfShouldAttack();//only need to run once then co-routine will manage updates
-        updateNearesetEnemy();//only need to run once then coRoutine will manage updates 
-    }
+    //private void Start()
+    //{
+    //    nearestEnemyWaiter = new WaitForSeconds(.1f);
+    //    decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
+    //    decideIfShouldAttack();//only need to run once then co-routine will manage updates
+    //    updateNearesetEnemy();//only need to run once then coRoutine will manage updates 
+    //}
 
-    private void updateNearesetEnemy()
+    protected void updateNearesetEnemy()
     {
         StartCoroutine("IupdateNearestEnemy");
     }
@@ -81,13 +82,5 @@ public class Unit : MonoBehaviour
             yield return decideIfShouldAttackWaiter;//note that this will limit attack speed to 20 attacks a second.. probably a good thing though
         }
     }
-
-    public void dealRangedDamage(int damage, GameObject enemy)
-    {
-        enemyScript = enemy.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
-        enemyScript.takeDamage(damage);
-        
-    }
-
     
 }

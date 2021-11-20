@@ -10,7 +10,7 @@ public class MoneyManager : MonoBehaviour
     private void Awake()
     {
         addMoney(starterMoney);
-        Debug.Log(currentPlayerMoney);
+        //Debug.Log(currentPlayerMoney);
     }
 
     public int getCurrentMoney()
@@ -26,6 +26,6 @@ public class MoneyManager : MonoBehaviour
     public void removeMoney(int amount)
     {
         currentPlayerMoney = currentPlayerMoney - amount;
-        Debug.Log("Removed " + amount + " from player's money. Player has $" + currentPlayerMoney + " left.");
+        //Debug.Log("Removed " + amount + " from player's money. Player has $" + currentPlayerMoney + " left.");
     }
 }

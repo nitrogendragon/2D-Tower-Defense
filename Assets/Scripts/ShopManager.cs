@@ -29,18 +29,18 @@ public class ShopManager : MonoBehaviour
     public bool canBuyUnit(GameObject unitPrefab)
     {
         int cost = getUnitCost(unitPrefab);
-        Debug.Log(cost);
-        Debug.Log("current Money " + moneyManager.getCurrentMoney());
+        //Debug.Log(cost);
+        //Debug.Log("current Money " + moneyManager.getCurrentMoney());
         bool canBuy = false;
         if( moneyManager.getCurrentMoney() - cost >= 0)
         {
             canBuy = true;
-            Debug.Log("We have enough money");
+            //Debug.Log("We have enough money");
         }
         else
         {
 
-            Debug.Log("We don't have enough money for some reason " + moneyManager.getCurrentMoney());
+            //Debug.Log("We don't have enough money for some reason " + moneyManager.getCurrentMoney());
         }
         return canBuy;
     }
