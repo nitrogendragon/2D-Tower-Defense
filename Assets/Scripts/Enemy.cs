@@ -25,6 +25,7 @@ public class Enemy : MonoBehaviour
     public GameObject enemyVariants;// reference to our EnemyVariants script
     private GameObject targetTile;
     public GameObject guildManager;
+    SpriteRenderer sprite;
     
     
     private void Awake()
@@ -49,6 +50,10 @@ public class Enemy : MonoBehaviour
 
         enemyVariants.GetComponent<EnemyVariants>().DetermineStats(ref enemyMaxHealth,ref fortressDamage,ref agility,ref defense,
             ref attack,ref movementSpeed,ref killReward,ref spriteColor);
+        Debug.Log(spriteColor);
+        sprite = GetComponent<SpriteRenderer>();
+        sprite.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b);
+        
         enemyHealth = enemyMaxHealth;
         healthBar.setHealth(enemyHealth, enemyMaxHealth);
         
