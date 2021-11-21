@@ -19,7 +19,8 @@ public class BasicUnit : Unit
 
     private int damage;
     private int dmgResistance;
-    private int hp;
+    private int unitMaxHp;
+    private int remainingUnitHp;
     private int baseHp = 10;
     private int mana;
     private int dodgeRate;
@@ -32,16 +33,24 @@ public class BasicUnit : Unit
     private float movementSpeed;
     private float rangedAttackSpeedMod;
 
+    public HealthBar healthBar;//reference to our health bar script
 
-    
+    private void Awake()
+    {
+        isUnit = true;
+        UnitManager.activeUnits.Add(gameObject);
+        Debug.Log(UnitManager.activeUnits.Count);
+    }
+
     private void Start()
     {
+        
         nearestEnemyWaiter = new WaitForSeconds(.1f);
         decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
         decideIfShouldAttack();//only need to run once then co-routine will manage updates
         updateNearesetEnemy();//only need to run once then coRoutine will manage updates 
-        hp = strength * 20 + baseHp;
-        damage = strength * 30;
+        unitMaxHp = strength * 20 + baseHp;
+        damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
         dodgeRate = charm * 2 + luck + dodgeRate * 2;
         hitChance = baseHitChance + agility + wisdom * 2 + luck;
@@ -51,6 +60,9 @@ public class BasicUnit : Unit
         rangedAttackSpeedMod = Mathf.Sqrt(agility);
         timeBetweenAttacks = 1.0f /rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
         range = 1.1f + (agility + .6f*(strength + intelligence + wisdom) / 10);
+
+        remainingUnitHp = unitMaxHp;
+        healthBar.setHealth(remainingUnitHp, unitMaxHp);
         //Debug.Log("we finished everything in here");
     }
 
@@ -69,6 +81,43 @@ public class BasicUnit : Unit
         enemyScript = enemy.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
         enemyScript.takeDamage(damage, critDmg, hitChance, critRate);
 
+    }
+
+    public void takeDamage(int damageDealt, int critDamageDealt, int hitChance, int critRate)
+    {
+        if (checkSuccess(hitChance, dodgeRate))
+        {
+            Debug.Log("We hit the enemy");
+            if (checkSuccess(critRate, critResist))
+            {
+                remainingUnitHp -= critDamageDealt - dmgResistance > 0 ? critDamageDealt - dmgResistance : 0;
+                Debug.Log("We dealt a critical hit");
+                Debug.Log("We did " + (critDamageDealt - dmgResistance) + " damage");
+            }
+            else
+            {
+                remainingUnitHp -= (damageDealt - dmgResistance) > 0 ? damageDealt - dmgResistance : 0;
+                Debug.Log("We did " + (damageDealt - dmgResistance) + " damage");
+            }
+
+            healthBar.setHealth(remainingUnitHp, unitMaxHp);
+            if (remainingUnitHp <= 0)
+            {
+                die();
+            }
+        }
+        else
+        {
+            Debug.Log("We missed");
+        }
+
+
+    }
+
+    private void die()
+    {
+        UnitManager.activeUnits.Remove(gameObject);//get rid of this unit from the list
+        Destroy(transform.gameObject);
     }
 
 

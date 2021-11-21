@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Unit
 {
     [SerializeField]
     protected int enemyMaxHealth;
     private int enemyHealth;
     [SerializeField]
     protected float movementSpeed;
-    private float distance;
+    private float distanceToTargetTile;
     private float timePassed;//for frameChecker() keeps track of time passed 
     protected int killReward; //amount of money gained when enemy is killed
     protected int fortressDamage = 1; // The amount of damage the enemy does when it reaches the end/a fortress
@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour
     private int critDmg;
     private int hitChance;
     private int baseHitChance = 80;
+    private float rangedAttackSpeedMod;
 
     protected string enemyName; //the name of the enemy
     protected string type; // the type of the enemy for bonus resistances and damage modifiers
@@ -46,6 +47,7 @@ public class Enemy : MonoBehaviour
     
     private void Awake()
     {
+        isUnit = false;
         EnemiesManager.enemies.Add(gameObject);// add to active enemies
     }
     
@@ -68,6 +70,9 @@ public class Enemy : MonoBehaviour
             ref agility, ref dmgResistance, ref damage, ref movementSpeed, ref killReward, 
             ref dodgeRate, ref critDmg, ref critRate, ref hitChance, ref mana, ref spellPower, 
             ref critResist, ref spriteColor);
+        rangedAttackSpeedMod = Mathf.Sqrt(agility);
+        timeBetweenAttacks = 1.0f / rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
+        range = 1.5f + (agility/ 10);
         Debug.Log("Enemy dodge rate is " + dodgeRate);
         Debug.Log("Enemy critResist is " + critResist);
         Debug.Log("Enemy dmgResist is " + dmgResistance);
@@ -76,20 +81,32 @@ public class Enemy : MonoBehaviour
         
         enemyHealth = enemyMaxHealth;
         healthBar.setHealth(enemyHealth, enemyMaxHealth);
-        
-    }
+        //for dealing with finding enemy player units and determining if we should attempt to attack
+        nearestEnemyWaiter = new WaitForSeconds(.1f);
+        decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
+        decideIfShouldAttack();//only need to run once then co-routine will manage updates
+        updateNearesetEnemy();//only need to run once then coRoutine will manage updates 
 
-    private bool checkSuccess(int successMod, int failMod)
+    }
+    //going to just do a simple damage check without projectiles for now
+    protected override void attack()
     {
-        int successChance = successMod - failMod;
-        int result = Random.Range(1, 101);
-        if (successChance >= result)
-        {
-            return true;
-        }
-        return false;
-
+        ////base.attack();
+        //GameObject newProjectile = Instantiate(projectile, weapon.position, unit.rotation);
+        //newProjectile.GetComponent<Projectile>().expirationTime = 3f; // will be determined by unit stats and specific abilities later
+        //newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
+        //newProjectile.GetComponent<Projectile>().myUnit = this;
+        dealRangedDamage(currentTarget);
     }
+
+    public void dealRangedDamage(GameObject enemyPlayerUnit)
+    {
+        
+        enemyPlayerUnit.GetComponent<BasicUnit>().takeDamage(damage, critDmg, hitChance, critRate);
+        Debug.Log("somehow this is already working");
+    }
+
+    
 
     public void takeDamage(int damageDealt,int critDamageDealt, int hitChance, int critRate)
     {
@@ -138,14 +155,14 @@ public class Enemy : MonoBehaviour
     {
         if(targetTile != null)
         {
-            distance = (transform.position - targetTile.transform.position).magnitude;//get distance to targetTile from enemy
+            distanceToTargetTile = (transform.position - targetTile.transform.position).magnitude;//get distance to targetTile from enemy
         }
-        if(targetTile != MapGenerator.endTile && distance < 0.001f)
+        if(targetTile != MapGenerator.endTile && distanceToTargetTile < 0.001f)
         {
                 currentIndex = MapGenerator.pathTiles.IndexOf(targetTile);
                 targetTile = MapGenerator.pathTiles[currentIndex + 1];
         }
-        else if(distance < 0.001f)
+        else if(distanceToTargetTile < 0.001f)
         {
             damageFortress();
             
@@ -153,17 +170,6 @@ public class Enemy : MonoBehaviour
         
     }
 
-    //takes in a limit to updates per second and checks if enough time has passed so we don't do something more than x times per second
-    //private bool limitedUpdatesChecker(int maxUpdatesPerSecond)
-    //{
-    //    timePassed += Time.deltaTime;
-    //    if(1f/maxUpdatesPerSecond <= timePassed)//if a x fraction of a second has passed 
-    //    {
-    //        timePassed = 0;
-    //        return true;
-    //    }
-    //    return false;
-    //}
 
     private void damageFortress()
     {

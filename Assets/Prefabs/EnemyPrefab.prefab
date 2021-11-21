@@ -405,6 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da5346bdcb684a47a588b05947407da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentTarget: {fileID: 0}
   enemyMaxHealth: 200
   movementSpeed: 5
   healthBar: {fileID: 4489172237401720374}

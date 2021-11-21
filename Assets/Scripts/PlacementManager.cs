@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlacementManager : MonoBehaviour
 {
-    public UnitManager unitManager;
-
     public ShopManager shopManager;//reference to the shopManager script
 
     public GameObject basicUnitObject;
+
+    public GameObject dummyUnitSprite;
 
     public GameObject validPlacementTileObject;//for referencing the validtile prefab
 
@@ -32,6 +32,7 @@ public class PlacementManager : MonoBehaviour
 
     private void Start()
     {
+
         //startDeploying();   
     }
 
@@ -56,17 +57,12 @@ public class PlacementManager : MonoBehaviour
 
         currentUnitDeploying = UnitToDeploy;
         placementTile = Instantiate(validPlacementTileObject);
-        dummyPlacement = Instantiate(UnitToDeploy);
-        //Debug.Log(dummyPlacement);
-
-        if (dummyPlacement.GetComponent<Unit>())
+        dummyPlacement = Instantiate(dummyUnitSprite);
+        if (hoverTile)
         {
-            Destroy(dummyPlacement.GetComponent<Unit>());
+            dummyPlacement.transform.position = hoverTile.transform.position;
         }
-        if (dummyPlacement.GetComponent<UnitRotaton>())
-        {
-            Destroy(dummyPlacement.GetComponent<UnitRotaton>());
-        }
+        
     }
 
     public bool CheckForUnit()
@@ -74,8 +70,8 @@ public class PlacementManager : MonoBehaviour
         bool UnitOnSlot = false;
 
         //Vector2 mousePosition = GetMousePosition();
-        if (isDeploying) {
-            foreach (GameObject unit in unitManager.activeUnits)
+        if (isDeploying && UnitManager.activeUnits != null) {
+            foreach( GameObject unit in UnitManager.activeUnits)
             {
                 if (unit.transform.position == dummyPlacement.transform.position)
                 {
@@ -103,7 +99,6 @@ public class PlacementManager : MonoBehaviour
             GameObject newUnitObject = Instantiate(currentUnitDeploying);
             newUnitObject.layer = LayerMask.NameToLayer("unit");
             newUnitObject.transform.position = hoverTile.transform.position;
-            unitManager.addToActiveUnits(newUnitObject);
             shopManager.buyUnit(currentUnitDeploying);
             endDeploying();
         }

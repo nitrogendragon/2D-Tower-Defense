@@ -5,6 +5,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     protected Enemy enemyScript;//reference to the Enemy script for easy access
+    protected BasicUnit playerUnitScript; //reference to the BasicUnit script for easy access
     protected float range;//attack range
     private float distance;//distance to enemy/currentNearestEnemy, starts at infinity so first check always lower;
     private float newDistance;//new distance to enemy, for checking distance and if a new enemy is closer than another/current target
@@ -12,11 +13,12 @@ public class Unit : MonoBehaviour
     protected float maxAttackSpeed = 0.05f;//we will never allow more than 20 attacks a second per unit
     //private float timeSinceLastAttack;// keep track of how long it's been since an attack occured
     private float lastAttackTime;//keeps track of the time when the last attack happened;
-    private int level;
+    protected bool isUnit; //are we a player unit?
     protected WaitForSeconds nearestEnemyWaiter;
     protected WaitForSeconds decideIfShouldAttackWaiter;
     public GameObject currentTarget;
     private GameObject currentNearestEnemy;
+    
  
     //private void Start()
     //{
@@ -37,7 +39,8 @@ public class Unit : MonoBehaviour
         {
             distance = Mathf.Infinity;//reset each time to make sure we will choose a new target if one is available
                                       //go through all the enemies and check distance to determine current target if any are in range
-            foreach (GameObject enemy in EnemiesManager.enemies)
+
+            foreach (GameObject enemy in isUnit ? EnemiesManager.enemies : UnitManager.activeUnits)
             {
                 if (enemy != null)//make sure the enemy exists
                 {
@@ -62,6 +65,18 @@ public class Unit : MonoBehaviour
     {
             //enemyScript = currentTarget.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
             //enemyScript.takeDamage(damage);//deal damage 
+    }
+
+    protected bool checkSuccess(int successMod, int failMod)
+    {
+        int successChance = successMod - failMod;
+        int result = Random.Range(1, 101);
+        if (successChance >= result)
+        {
+            return true;
+        }
+        return false;
+
     }
 
     protected virtual void decideIfShouldAttack()

@@ -178,10 +178,6 @@ PrefabInstance:
       propertyPath: shopManager
       value: 
       objectReference: {fileID: 1918363631}
-    - target: {fileID: 1487088471506732998, guid: d643a6625fb534e4eaa181ad9e588056, type: 3}
-      propertyPath: unitManager
-      value: 
-      objectReference: {fileID: 797591078}
     - target: {fileID: 1487088471506732999, guid: d643a6625fb534e4eaa181ad9e588056, type: 3}
       propertyPath: m_Name
       value: PlacementManager
@@ -314,23 +310,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2175433943545631917, guid: d29835272e0324647a3ef959c855227a, type: 3}
+      propertyPath: activeUnits.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2175433943545631922, guid: d29835272e0324647a3ef959c855227a, type: 3}
       propertyPath: m_Name
       value: UnitManager
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d29835272e0324647a3ef959c855227a, type: 3}
---- !u!114 &797591078 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2175433943545631917, guid: d29835272e0324647a3ef959c855227a, type: 3}
-  m_PrefabInstance: {fileID: 797591077}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a72e1eff5d1f334db9f813c8accc617, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &954637678
 GameObject:
   m_ObjectHideFlags: 0

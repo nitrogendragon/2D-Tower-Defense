@@ -4,10 +4,5 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    public List<GameObject> activeUnits;
-
-    public void addToActiveUnits(GameObject newUnit)
-    {
-        activeUnits.Add(newUnit);
-    }
+    public static List<GameObject> activeUnits = new List<GameObject>();
 }

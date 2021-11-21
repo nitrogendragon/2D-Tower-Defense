@@ -43,7 +43,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e2d961cd20d814c82d023e1d9766bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shopManager: {fileID: 0}
+  unitManager: {fileID: 2175433943545631917, guid: d29835272e0324647a3ef959c855227a, type: 3}
   basicUnitObject: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
+  dummyUnitSprite: {fileID: 5852184743713723132, guid: e963c1cfe39e97345ba3f7c256fc34e6, type: 3}
   validPlacementTileObject: {fileID: 3762612264017638489, guid: 026997f846e8a0042b55a4ff567e1787, type: 3}
   invalidPlacementTileObject: {fileID: 3414482405101230141, guid: 2b4955e40fef69a4ab0fc3a245b35e6d, type: 3}
   cam: {fileID: 1300049415655445336, guid: 53f978ea775cce043aecff70ac06efad, type: 3}
