@@ -72,7 +72,7 @@ public class Enemy : Unit
             ref critResist, ref spriteColor);
         rangedAttackSpeedMod = Mathf.Sqrt(agility);
         timeBetweenAttacks = 1.0f / rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
-        range = 1.5f + (agility/ 10);
+        range = 1.5f + (agility/ 5);
         Debug.Log("Enemy dodge rate is " + dodgeRate);
         Debug.Log("Enemy critResist is " + critResist);
         Debug.Log("Enemy dmgResist is " + dmgResistance);
@@ -144,11 +144,11 @@ public class Enemy : Unit
         EnemiesManager.enemies.Remove(gameObject);//get rid of this enemy from the enemies list
         Destroy(transform.gameObject);
     }
-
-    private void moveEnemy()
+    // We will either move to an enemy player unit if one is in range or to the next targetTile on the path
+    private void moveEnemy(GameObject target)
     {
-        transform.position = targetTile ? 
-            Vector3.MoveTowards(transform.position, targetTile.transform.position, movementSpeed * Time.deltaTime) : transform.position;
+        transform.position = target ? 
+            Vector3.MoveTowards(transform.position, target.transform.position, movementSpeed * Time.deltaTime) : transform.position;
     }
 
     private void checkPosition()
@@ -170,6 +170,19 @@ public class Enemy : Unit
         
     }
 
+    //if we have a target player unit (currenTarget) that will be our focus otherwise we continue along the path
+    private void decideWhereToMoveAndRunMoveFunction()
+    {
+        if (currentTarget)
+        {
+            moveEnemy(currentTarget);
+        }
+        else
+        {
+            moveEnemy(targetTile);
+        }
+    }
+
 
     private void damageFortress()
     {
@@ -187,7 +200,7 @@ public class Enemy : Unit
     private void Update()
     {
         checkPosition();
-        moveEnemy();
+        decideWhereToMoveAndRunMoveFunction();
     }
 
 }

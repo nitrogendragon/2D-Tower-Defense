@@ -49,13 +49,13 @@ public class BasicUnit : Unit
         decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
         decideIfShouldAttack();//only need to run once then co-routine will manage updates
         updateNearesetEnemy();//only need to run once then coRoutine will manage updates 
-        unitMaxHp = strength * 20 + baseHp;
+        unitMaxHp = strength * 200 + baseHp;
         damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
         dodgeRate = charm * 2 + luck + dodgeRate * 2;
         hitChance = baseHitChance + agility + wisdom * 2 + luck;
         critRate = baseCritRate + luck * 3 + charm * 2 + agility;
-        critDmg = damage * 2 + luck * 10 + charm * 20 + agility* 10;
+        critDmg = (int)(damage * 1.5 + luck + charm * 2 + agility);
         critResist = luck + charm + agility;
         rangedAttackSpeedMod = Mathf.Sqrt(agility);
         timeBetweenAttacks = 1.0f /rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed

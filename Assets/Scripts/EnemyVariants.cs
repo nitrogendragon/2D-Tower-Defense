@@ -44,7 +44,7 @@ public class EnemyVariants : MonoBehaviour
             else
             {
                 
-                return value = (int)(Mathf.Pow(2*mod,2)+ Mathf.Sqrt((float)((rank-3)*Mathf.Pow(mod,(float)rank))));
+                return value = (int)(Mathf.Pow(2*mod,2)+ Mathf.Sqrt((float)((rank-3)*(mod+rank))));
             }
     }
 
@@ -56,7 +56,7 @@ public class EnemyVariants : MonoBehaviour
         rankModifier = RankModifier();
         enemyMaxHealth = 100 + rankModifier;
         fortressDamage = rank;
-        agility = (int)(1 + .05 * rankModifier);
+        agility = (int)(1 + .15 * rankModifier);
         damage = (int)(2 + 1.5 * rankModifier);
         dmgResistance = (int)(1 + .3 * damage);
         spellPower = (int)(4 + 2 * rankModifier);
