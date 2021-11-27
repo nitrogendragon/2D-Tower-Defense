@@ -6,6 +6,8 @@ public class PlacementManager : MonoBehaviour
 {
     public ShopManager shopManager;//reference to the shopManager script
 
+    public ClickManager clickManager;//reference to the clickManager objects clickManager script
+
     public GameObject basicUnitObject;
 
     public GameObject dummyUnitSprite;
@@ -39,8 +41,7 @@ public class PlacementManager : MonoBehaviour
         //Get the mouse position on the screen and send a raycast into the game world from that position.
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
-        //Vector2 mousePosition = GetMousePosition();
-        //RaycastHit2D hit = Physics2D.Raycast(mousePosition, new Vector2(0, 0), 0, mask, -100, 100);
+        
         //make sure we hit a collider and that its a mapTile and that it wasn't a pathTile
         if (hit.collider && MapGenerator.mapTiles.Contains(hit.collider.gameObject))
         {
@@ -53,7 +54,7 @@ public class PlacementManager : MonoBehaviour
     public void startDeploying(GameObject UnitToDeploy)
     {
         isDeploying = true;
-
+        clickManager.DeselectUnit();//we don't want an active unit to do things while deploying
         currentUnitDeploying = UnitToDeploy;
         placementTile = Instantiate(validPlacementTileObject);
         dummyPlacement = Instantiate(dummyUnitSprite);

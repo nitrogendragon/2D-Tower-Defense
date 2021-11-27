@@ -32,7 +32,8 @@ public class BasicUnit : Unit
     private int baseHitChance = 80;
     private float movementSpeed;
     private float rangedAttackSpeedMod;
-
+    public Vector3 movementTarget;
+    private Vector3 nullTarget;//impossible to move to
     public HealthBar healthBar;//reference to our health bar script
 
     private void Awake()
@@ -45,7 +46,8 @@ public class BasicUnit : Unit
 
     private void Start()
     {
-        
+        nullTarget = new Vector3(10000, 0, 0);
+        movementTarget = nullTarget;//this will never be possible to move to
         nearestEnemyWaiter = new WaitForSeconds(.1f);
         decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
         decideIfShouldAttack();//only need to run once then co-routine will manage updates
@@ -116,9 +118,10 @@ public class BasicUnit : Unit
 
     }
 
-    private void movePlayer()
+    public void movePlayerToTarget()
     {
-
+        transform.position = movementTarget!= nullTarget && movementTarget != transform.position ?
+            Vector3.MoveTowards(transform.position, movementTarget, movementSpeed * Time.deltaTime) : transform.position;
     }
 
     private void die()
@@ -126,6 +129,12 @@ public class BasicUnit : Unit
         UnitManager.activeUnits.Remove(gameObject);//get rid of this unit from the list
         Destroy(transform.gameObject);
     }
+
+    private void Update()
+    {
+        movePlayerToTarget();
+    }
+
 
 
 

@@ -157,7 +157,7 @@ public class Enemy : Unit
         {
             distanceToTargetTile = (transform.position - targetTile.transform.position).magnitude;//get distance to targetTile from enemy
         }
-        if(targetTile != MapGenerator.endTile && distanceToTargetTile < 0.001f)
+        if(targetTile != MapGenerator.endTile && distanceToTargetTile < 0.01f)
         {
                 currentIndex = MapGenerator.pathTiles.IndexOf(targetTile);
                 targetTile = MapGenerator.pathTiles[currentIndex + 1];
