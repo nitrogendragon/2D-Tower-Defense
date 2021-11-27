@@ -30,18 +30,17 @@ public class PlacementManager : MonoBehaviour
 
     public bool isDeploying = false;
 
-    private void Start()
-    {
-
-        //startDeploying();   
-    }
+ 
 
     /*gets our mouse position, creates a 2D raycast which hits wherever our mouse is and checks for appropriate conditions to determine if we 
      * are hovering over a valid tile to place a unit and sets hoverTile to the gameObject that the collider hits if so*/
     public void GetCurrentHoverTile()
     {
-        Vector2 mousePosition = GetMousePosition();
-        RaycastHit2D hit = Physics2D.Raycast(mousePosition, new Vector2(0, 0), 0.1f, mask, -100, 100);
+        //Get the mouse position on the screen and send a raycast into the game world from that position.
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+        //Vector2 mousePosition = GetMousePosition();
+        //RaycastHit2D hit = Physics2D.Raycast(mousePosition, new Vector2(0, 0), 0, mask, -100, 100);
         //make sure we hit a collider and that its a mapTile and that it wasn't a pathTile
         if (hit.collider && MapGenerator.mapTiles.Contains(hit.collider.gameObject))
         {

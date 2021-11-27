@@ -186,7 +186,7 @@ public class MapGenerator : MonoBehaviour
 
                 mapTiles.Add(newTile);
 
-                newTile.transform.position = new Vector2(x-(mapWidth/2), y-(mapHeight/2));
+                newTile.transform.position = new Vector2(x-(mapWidth/2), y-(mapHeight/2)+2);
             }
         }
 

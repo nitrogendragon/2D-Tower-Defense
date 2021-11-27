@@ -16,7 +16,7 @@ public class BasicUnit : Unit
     private int wisdom = 10; //affects spell casting speed+++, mana regen+++, spell cooldown++, hit++, critResist+, dmgResistance+
     private int charm = 10; //affects critResist+++, dodge++, crit rate++, crit damage++, hit+
     private int luck = 10; //affects crit rate+++, crit dmg+, dodge+, hit+
-
+    public int unitID;//will be set by unit manager
     private int damage;
     private int dmgResistance;
     private int unitMaxHp;
@@ -39,6 +39,7 @@ public class BasicUnit : Unit
     {
         isUnit = true;
         UnitManager.activeUnits.Add(gameObject);
+
         Debug.Log(UnitManager.activeUnits.Count);
     }
 
@@ -60,9 +61,10 @@ public class BasicUnit : Unit
         rangedAttackSpeedMod = Mathf.Sqrt(agility);
         timeBetweenAttacks = 1.0f /rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
         range = 1.1f + (agility + .6f*(strength + intelligence + wisdom) / 10);
-
+        movementSpeed = (float)(Mathf.Sqrt(agility));
         remainingUnitHp = unitMaxHp;
         healthBar.setHealth(remainingUnitHp, unitMaxHp);
+        
         //Debug.Log("we finished everything in here");
     }
 
@@ -111,6 +113,11 @@ public class BasicUnit : Unit
             Debug.Log("We missed");
         }
 
+
+    }
+
+    private void movePlayer()
+    {
 
     }
 
