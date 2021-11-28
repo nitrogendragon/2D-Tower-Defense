@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopManager: {fileID: 0}
-  unitManager: {fileID: 2175433943545631917, guid: d29835272e0324647a3ef959c855227a, type: 3}
+  unitDeploymentCards: {fileID: 0}
+  clickManager: {fileID: 0}
   basicUnitObject: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
   dummyUnitSprite: {fileID: 5852184743713723132, guid: e963c1cfe39e97345ba3f7c256fc34e6, type: 3}
   validPlacementTileObject: {fileID: 3762612264017638489, guid: 026997f846e8a0042b55a4ff567e1787, type: 3}

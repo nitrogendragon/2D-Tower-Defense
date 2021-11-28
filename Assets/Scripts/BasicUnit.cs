@@ -16,7 +16,6 @@ public class BasicUnit : Unit
     private int wisdom = 10; //affects spell casting speed+++, mana regen+++, spell cooldown++, hit++, critResist+, dmgResistance+
     private int charm = 10; //affects critResist+++, dodge++, crit rate++, crit damage++, hit+
     private int luck = 10; //affects crit rate+++, crit dmg+, dodge+, hit+
-    public int unitID;//will be set by unit manager
     private int damage;
     private int dmgResistance;
     private int unitMaxHp;
@@ -41,7 +40,7 @@ public class BasicUnit : Unit
         isUnit = true;
         UnitManager.activeUnits.Add(gameObject);
 
-        Debug.Log(UnitManager.activeUnits.Count);
+        //Debug.Log(UnitManager.activeUnits.Count);
     }
 
     private void Start()
@@ -91,17 +90,17 @@ public class BasicUnit : Unit
     {
         if (checkSuccess(hitChance, dodgeRate))
         {
-            Debug.Log("We hit the enemy");
+            //Debug.Log("We hit the enemy");
             if (checkSuccess(critRate, critResist))
             {
                 remainingUnitHp -= critDamageDealt - dmgResistance > 0 ? critDamageDealt - dmgResistance : 0;
-                Debug.Log("We dealt a critical hit");
-                Debug.Log("We did " + (critDamageDealt - dmgResistance) + " damage");
+                //Debug.Log("We dealt a critical hit");
+                //Debug.Log("We did " + (critDamageDealt - dmgResistance) + " damage");
             }
             else
             {
                 remainingUnitHp -= (damageDealt - dmgResistance) > 0 ? damageDealt - dmgResistance : 0;
-                Debug.Log("We did " + (damageDealt - dmgResistance) + " damage");
+                //Debug.Log("We did " + (damageDealt - dmgResistance) + " damage");
             }
 
             healthBar.setHealth(remainingUnitHp, unitMaxHp);
@@ -112,7 +111,7 @@ public class BasicUnit : Unit
         }
         else
         {
-            Debug.Log("We missed");
+            //Debug.Log("We missed");
         }
 
 

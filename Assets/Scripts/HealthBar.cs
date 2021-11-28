@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     public Slider slider;
+    public Text unitName;
     public Color Low;
     public Color High;
-    public Vector3 Offset;
+    public Vector3 OffsetHB;
+    public Vector3 OffsetName;
 
     public void setHealth(float health, float maxHealth)
     {
@@ -22,7 +24,11 @@ public class HealthBar : MonoBehaviour
 
     private void Update()
     {
-        slider.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + Offset);
+        slider.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + OffsetHB);
+        if (unitName)
+        {
+            unitName.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + OffsetName);
+        }
 
     }
 }

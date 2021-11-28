@@ -261,6 +261,10 @@ PrefabInstance:
       propertyPath: clickManager
       value: 
       objectReference: {fileID: 1252510731}
+    - target: {fileID: 1487088471506732998, guid: d643a6625fb534e4eaa181ad9e588056, type: 3}
+      propertyPath: unitDeploymentCards
+      value: 
+      objectReference: {fileID: 1196122217}
     - target: {fileID: 1487088471506732999, guid: d643a6625fb534e4eaa181ad9e588056, type: 3}
       propertyPath: m_Name
       value: PlacementManager
@@ -817,9 +821,10 @@ GameObject:
   - component: {fileID: 490298720}
   - component: {fileID: 490298719}
   - component: {fileID: 490298718}
+  - component: {fileID: 490298721}
   m_Layer: 5
   m_Name: UnitSelectionButton6
-  m_TagString: Untagged
+  m_TagString: UnitDeploymentCards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -894,11 +899,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1036549583}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
         m_MethodName: startDeploying
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -941,6 +946,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 490298716}
   m_CullTransparentMesh: 1
+--- !u!114 &490298721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490298716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bdce5151574114dbabe1d5c210d53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitNameText: {fileID: 1087440639}
+  unitCostText: {fileID: 699681799}
 --- !u!1 &505341079
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,9 +1416,10 @@ GameObject:
   - component: {fileID: 903249897}
   - component: {fileID: 903249896}
   - component: {fileID: 903249895}
+  - component: {fileID: 903249898}
   m_Layer: 5
   m_Name: UnitSelectionButton2
-  m_TagString: Untagged
+  m_TagString: UnitDeploymentCards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1474,11 +1494,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1036549583}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
         m_MethodName: startDeploying
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1521,6 +1541,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 903249893}
   m_CullTransparentMesh: 1
+--- !u!114 &903249898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903249893}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bdce5151574114dbabe1d5c210d53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitNameText: {fileID: 961760336}
+  unitCostText: {fileID: 348532836}
 --- !u!1 &918627988
 GameObject:
   m_ObjectHideFlags: 0
@@ -1533,9 +1567,10 @@ GameObject:
   - component: {fileID: 918627992}
   - component: {fileID: 918627991}
   - component: {fileID: 918627990}
+  - component: {fileID: 918627993}
   m_Layer: 5
   m_Name: UnitSelectionButton3
-  m_TagString: Untagged
+  m_TagString: UnitDeploymentCards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1610,11 +1645,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1036549583}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
         m_MethodName: startDeploying
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1657,6 +1692,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918627988}
   m_CullTransparentMesh: 1
+--- !u!114 &918627993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918627988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bdce5151574114dbabe1d5c210d53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitNameText: {fileID: 2139506338}
+  unitCostText: {fileID: 1639327554}
 --- !u!1 &937963072
 GameObject:
   m_ObjectHideFlags: 0
@@ -2072,6 +2121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1196122216}
+  - component: {fileID: 1196122217}
   m_Layer: 5
   m_Name: UnitSelectionButtons
   m_TagString: Untagged
@@ -2105,6 +2155,19 @@ RectTransform:
   m_AnchoredPosition: {x: 530, y: 274}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1196122217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196122215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 125d6246174a89943934814acd839407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitDeploymentCards: []
 --- !u!114 &1252510731 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5258732062369567518, guid: dc803abcb9cbeeb45a3d939a5fdfd6c8, type: 3}
@@ -2229,9 +2292,10 @@ GameObject:
   - component: {fileID: 1390945232}
   - component: {fileID: 1390945231}
   - component: {fileID: 1390945233}
+  - component: {fileID: 1390945234}
   m_Layer: 5
   m_Name: UnitSelectionButton1
-  m_TagString: Untagged
+  m_TagString: UnitDeploymentCards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2344,15 +2408,29 @@ MonoBehaviour:
       - m_Target: {fileID: 1036549583}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
         m_MethodName: startDeploying
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1390945234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390945229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bdce5151574114dbabe1d5c210d53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitNameText: {fileID: 1143751995}
+  unitCostText: {fileID: 954637680}
 --- !u!1 &1408990172
 GameObject:
   m_ObjectHideFlags: 0
@@ -2891,9 +2969,10 @@ GameObject:
   - component: {fileID: 1644205917}
   - component: {fileID: 1644205916}
   - component: {fileID: 1644205915}
+  - component: {fileID: 1644205918}
   m_Layer: 5
   m_Name: UnitSelectionButton4
-  m_TagString: Untagged
+  m_TagString: UnitDeploymentCards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2968,11 +3047,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1036549583}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
         m_MethodName: startDeploying
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3015,6 +3094,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1644205913}
   m_CullTransparentMesh: 1
+--- !u!114 &1644205918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644205913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bdce5151574114dbabe1d5c210d53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitNameText: {fileID: 51617229}
+  unitCostText: {fileID: 937963074}
 --- !u!1 &1648074619
 GameObject:
   m_ObjectHideFlags: 0
@@ -3027,9 +3120,10 @@ GameObject:
   - component: {fileID: 1648074623}
   - component: {fileID: 1648074622}
   - component: {fileID: 1648074621}
+  - component: {fileID: 1648074624}
   m_Layer: 5
   m_Name: UnitSelectionButton5
-  m_TagString: Untagged
+  m_TagString: UnitDeploymentCards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3104,11 +3198,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1036549583}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
         m_MethodName: startDeploying
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3151,6 +3245,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1648074619}
   m_CullTransparentMesh: 1
+--- !u!114 &1648074624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1648074619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bdce5151574114dbabe1d5c210d53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitNameText: {fileID: 1408990174}
+  unitCostText: {fileID: 554793935}
 --- !u!1 &1689583268
 GameObject:
   m_ObjectHideFlags: 0
@@ -3317,9 +3425,10 @@ GameObject:
   - component: {fileID: 1828165782}
   - component: {fileID: 1828165781}
   - component: {fileID: 1828165780}
+  - component: {fileID: 1828165783}
   m_Layer: 5
   m_Name: UnitSelectionButton7
-  m_TagString: Untagged
+  m_TagString: UnitDeploymentCards
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3394,11 +3503,11 @@ MonoBehaviour:
       - m_Target: {fileID: 1036549583}
         m_TargetAssemblyTypeName: PlacementManager, Assembly-CSharp
         m_MethodName: startDeploying
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 1385048058531860830, guid: 20ed313c1dc66be47a10e36e613d3716, type: 3}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3441,6 +3550,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828165778}
   m_CullTransparentMesh: 1
+--- !u!114 &1828165783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828165778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8bdce5151574114dbabe1d5c210d53e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitNameText: {fileID: 238326349}
+  unitCostText: {fileID: 486584562}
 --- !u!1 &1853789696
 GameObject:
   m_ObjectHideFlags: 0

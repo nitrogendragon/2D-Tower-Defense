@@ -26,7 +26,9 @@ public class EnemyVariants : MonoBehaviour
     private int rankModifier;
     public Color spriteColor;
     public List<object> stats;
-    
+    private List<string> names = new List<string>() {"fodder", "minion", "lesser mob", "ravenous chicken",
+        "mob", "hydra", "Demon Lord Headless Chicken"};
+    private string name;
 
     private int DetermineRank()
     {
@@ -50,11 +52,13 @@ public class EnemyVariants : MonoBehaviour
 
     public void DetermineStats(ref int eMaxHealth, ref int efortressDamage, ref int eAgility, ref int eDmgResistance,
         ref int eDamage, ref float eMovementSpeed, ref int eKillReward,ref int eDodgeRate, ref int eCritDmg,
-        ref int eCritRate, ref int eHitChance, ref int eMana, ref int eSpellPower, ref int eCritResist, ref Color eSpriteColor)
+        ref int eCritRate, ref int eHitChance, ref int eMana, ref int eSpellPower,
+        ref int eCritResist, ref string eName, ref Color eSpriteColor)
     {
         DetermineRank();
         rankModifier = RankModifier();
         enemyMaxHealth = 100 + rankModifier;
+        name = names[rank - 1];
         fortressDamage = rank;
         agility = (int)(1 + .15 * rankModifier);
         damage = (int)(2 + 1.5 * rankModifier);
@@ -78,6 +82,7 @@ public class EnemyVariants : MonoBehaviour
         //Debug.Log("killReward " + killReward);
         //Debug.Log("Color " + spriteColor);
         eMaxHealth = enemyMaxHealth;
+        eName = name;
         efortressDamage = fortressDamage;
         eAgility = agility;
         eDmgResistance = dmgResistance;

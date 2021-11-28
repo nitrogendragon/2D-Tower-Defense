@@ -69,18 +69,19 @@ public class Enemy : Unit
         enemyVariants.GetComponent<EnemyVariants>().DetermineStats(ref enemyMaxHealth, ref fortressDamage, 
             ref agility, ref dmgResistance, ref damage, ref movementSpeed, ref killReward, 
             ref dodgeRate, ref critDmg, ref critRate, ref hitChance, ref mana, ref spellPower, 
-            ref critResist, ref spriteColor);
+            ref critResist, ref enemyName, ref spriteColor);
         rangedAttackSpeedMod = Mathf.Sqrt(agility);
         timeBetweenAttacks = 1.0f / rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
         range = 1.5f + (agility/ 5);
-        Debug.Log("Enemy dodge rate is " + dodgeRate);
-        Debug.Log("Enemy critResist is " + critResist);
-        Debug.Log("Enemy dmgResist is " + dmgResistance);
+        //Debug.Log("Enemy dodge rate is " + dodgeRate);
+        //Debug.Log("Enemy critResist is " + critResist);
+        //Debug.Log("Enemy dmgResist is " + dmgResistance);
         sprite = GetComponent<SpriteRenderer>();
         sprite.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b);
         
         enemyHealth = enemyMaxHealth;
         healthBar.setHealth(enemyHealth, enemyMaxHealth);
+        nameText.text = enemyName;
         //for dealing with finding enemy player units and determining if we should attempt to attack
         nearestEnemyWaiter = new WaitForSeconds(.1f);
         decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
@@ -112,17 +113,17 @@ public class Enemy : Unit
     {
         if (checkSuccess(hitChance, dodgeRate))
         {
-            Debug.Log("We hit the enemy");
+            //Debug.Log("We hit the enemy");
             if(checkSuccess(critRate,critResist))
             {
                 enemyHealth -= critDamageDealt - dmgResistance > 0 ? critDamageDealt - dmgResistance : 0;
-                Debug.Log("We dealt a critical hit");
-                Debug.Log("We did " + (critDamageDealt - dmgResistance) + " damage");
+                //Debug.Log("We dealt a critical hit");
+                //Debug.Log("We did " + (critDamageDealt - dmgResistance) + " damage");
             }
             else
             {
                 enemyHealth -= (damageDealt - dmgResistance) > 0 ? damageDealt - dmgResistance : 0;
-                Debug.Log("We did " + (damageDealt - dmgResistance) + " damage");
+                //Debug.Log("We did " + (damageDealt - dmgResistance) + " damage");
             }
 
             healthBar.setHealth(enemyHealth, enemyMaxHealth);
@@ -133,7 +134,7 @@ public class Enemy : Unit
         }
         else
         {
-            Debug.Log("We missed");
+            //Debug.Log("We missed");
         }
        
         

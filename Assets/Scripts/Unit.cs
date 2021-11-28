@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
@@ -18,15 +19,18 @@ public class Unit : MonoBehaviour
     protected WaitForSeconds decideIfShouldAttackWaiter;
     public GameObject currentTarget;
     private GameObject currentNearestEnemy;
-    
- 
-    //private void Start()
-    //{
-    //    nearestEnemyWaiter = new WaitForSeconds(.1f);
-    //    decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
-    //    decideIfShouldAttack();//only need to run once then co-routine will manage updates
-    //    updateNearesetEnemy();//only need to run once then coRoutine will manage updates 
-    //}
+    public Text nameText;
+    private int unitID;
+
+    public void setUnitID(int id)
+    {
+        unitID = id;
+    }
+
+    public int getUnitID()
+    {
+        return unitID;
+    }
 
     protected void updateNearesetEnemy()
     {

@@ -32,7 +32,7 @@ public class ClickManager : MonoBehaviour
             {
                 //set our selectedUnit gameObject
                 selectedUnit = hit.collider.gameObject;
-                loggingText.text = hit.collider.name;
+                loggingText.text = hit.collider.GetComponent<Unit>().nameText.text;
             }
             //handle movement and resetting selectedUnit
             else if(hit.collider && selectedUnit)

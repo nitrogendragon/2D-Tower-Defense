@@ -6,6 +6,8 @@ public class PlacementManager : MonoBehaviour
 {
     public ShopManager shopManager;//reference to the shopManager script
 
+    public UnitDeploymentCards unitDeploymentCards;// reference to the unitDeloymentCards script
+
     public ClickManager clickManager;//reference to the clickManager objects clickManager script
 
     public GameObject basicUnitObject;
@@ -21,6 +23,10 @@ public class PlacementManager : MonoBehaviour
     private GameObject currentUnitDeploying;//the current unit we are deploying
 
     private GameObject dummyPlacement;
+
+    private int currentUnitDeployingID;
+
+    private string currentUnitDeployingName;
 
     public Camera cam;
 
@@ -51,11 +57,14 @@ public class PlacementManager : MonoBehaviour
     }
 
     //tell the game we are deploying and instantiate a unit but remove its scripts so its just a placeholder sprite/gameobject
-    public void startDeploying(GameObject UnitToDeploy)
+    public void startDeploying(int unitID)
     {
         isDeploying = true;
         clickManager.DeselectUnit();//we don't want an active unit to do things while deploying
-        currentUnitDeploying = UnitToDeploy;
+        currentUnitDeployingID = unitID;
+        currentUnitDeployingName = unitDeploymentCards.unitDeploymentCards[unitID].GetComponent<UnitDeploymentCard>().GetName();
+        //currentUnitDeployingName = unitDeploymentCards.unitDeploymentCards[unitID].GetComponent<UnitDeploymentCard>().GetUnit4Sprite();
+        currentUnitDeploying = basicUnitObject;//temp til i have different sprites then code above will get implemented
         placementTile = Instantiate(validPlacementTileObject);
         dummyPlacement = Instantiate(dummyUnitSprite);
         if (hoverTile)
@@ -64,6 +73,11 @@ public class PlacementManager : MonoBehaviour
         }
         
     }
+
+    /// <summary>
+    /// TO DO after lunch, set up onclick to run startDeploying through script instead of inspector
+    /// </summary>
+    /// <returns></returns>
 
     public bool CheckForUnit()
     {
@@ -97,6 +111,8 @@ public class PlacementManager : MonoBehaviour
             shopManager.canBuyUnit(currentUnitDeploying) == true && isDeploying)
         {
             GameObject newUnitObject = Instantiate(currentUnitDeploying);
+            newUnitObject.GetComponent<Unit>().nameText.text = currentUnitDeployingName;
+            newUnitObject.GetComponent<Unit>().setUnitID(currentUnitDeployingID);
             newUnitObject.layer = LayerMask.NameToLayer("unit");
             newUnitObject.transform.position = hoverTile.transform.position;
             shopManager.buyUnit(currentUnitDeploying);
@@ -158,12 +174,12 @@ public class PlacementManager : MonoBehaviour
         if(!isDeploying && Input.GetKeyDown(KeyCode.Alpha1)){
             isDeploying = true;
             currentUnitDeploying = basicUnitObject;//temp code for now
-            Debug.Log("we started attempting to deploy our unit 1.");
-            startDeploying(currentUnitDeploying);
+            //Debug.Log("we started attempting to deploy our unit 1.");
+            startDeploying(0);
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            Debug.Log("we stopped attempting to deploy our unit 1.");
+            //Debug.Log("we stopped attempting to deploy our unit 1.");
             endDeploying();
         }
     }
