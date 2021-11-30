@@ -104,7 +104,7 @@ public class Enemy : Unit
     {
         
         enemyPlayerUnit.GetComponent<BasicUnit>().takeDamage(damage, critDmg, hitChance, critRate);
-        Debug.Log("somehow this is already working");
+        //Debug.Log("somehow this is already working");
     }
 
     

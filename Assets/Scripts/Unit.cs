@@ -20,7 +20,7 @@ public class Unit : MonoBehaviour
     public GameObject currentTarget;
     private GameObject currentNearestEnemy;
     public Text nameText;
-    private int unitID;
+    protected int unitID;
 
     public void setUnitID(int id)
     {

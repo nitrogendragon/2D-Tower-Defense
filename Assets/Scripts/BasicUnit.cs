@@ -34,6 +34,15 @@ public class BasicUnit : Unit
     public Vector3 movementTarget;
     private Vector3 nullTarget;//impossible to move to
     public HealthBar healthBar;//reference to our health bar script
+    private List<string> unitNames = new List<string>() { "gunner", "mage", "priest", "knight", "samurai", "ninja", "dancer" };//reference
+    private List<int> unitCosts = new List<int>() { 250, 300, 400, 200, 350, 600, 700 };
+    private List<int> unitsStrengths = new List<int> { 7, 3, 5, 9, 10, 6, 4 };
+    private List<int> unitsIntelligences = new List<int> { 5, 9, 7, 2, 0, 4, 5};
+    private List<int> unitsAgilities = new List<int> { 4, 2, 5, 5, 6, 8, 7 };
+    private List<int> unitsWisdoms = new List<int> { 6, 7, 8, 3, 4, 6, 5 };
+    private List<int> unitsCharms = new List<int> { 2, 3, 6, 5, 4, 5, 9 };
+    private List<int> unitsLucks = new List<int> { 8, 4, 4, 3, 6, 9, 6 };
+    private List<int> unitsTotalPoints = new List<int> { 32, 28, 35, 27, 30, 38, 36 };
 
     private void Awake()
     {
@@ -51,6 +60,14 @@ public class BasicUnit : Unit
         decideIfShouldAttackWaiter = new WaitForSeconds(maxAttackSpeed);
         decideIfShouldAttack();//only need to run once then co-routine will manage updates
         updateNearesetEnemy();//only need to run once then coRoutine will manage updates 
+        strength = unitsStrengths[unitID];
+        intelligence = unitsIntelligences[unitID];
+        wisdom = unitsWisdoms[unitID];
+        agility = unitsAgilities[unitID];
+        charm = unitsCharms[unitID];
+        luck = unitsLucks[unitID];
+        Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
+            "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
         unitMaxHp = strength * 200 + baseHp;
         damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
