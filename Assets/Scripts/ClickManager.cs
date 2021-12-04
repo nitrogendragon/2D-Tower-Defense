@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ClickManager : MonoBehaviour
 {
     public Text loggingText;
+    public  GameObject unitStatsUI;
     private GameObject selectedUnit = null;
     // Start is called before the first frame update
     void Start()
@@ -18,11 +19,9 @@ public class ClickManager : MonoBehaviour
         loggingText.text = "unit deselected";
     }
 
-    // Update is called once per frame
-    void Update()
+    public void HandleSelectionAndUnitMovement()
     {
-        if (Input.GetMouseButtonDown(1))
-        {
+        
             //Get the mouse position on the screen and send a raycast into the game world from that position.
             Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
@@ -32,17 +31,27 @@ public class ClickManager : MonoBehaviour
             {
                 //set our selectedUnit gameObject
                 selectedUnit = hit.collider.gameObject;
+                unitStatsUI.GetComponent<UnitStatsUI>().setSelectedUnit(selectedUnit, hit.collider.GetComponent<Unit>().nameText.text);
                 loggingText.text = hit.collider.GetComponent<Unit>().nameText.text;
             }
             //handle movement and resetting selectedUnit
-            else if(hit.collider && selectedUnit)
+            else if (hit.collider && selectedUnit)
             {
                 if (hit.collider.CompareTag("ValidMovementTile") || hit.collider.CompareTag("Enemy"))
                 {
                     selectedUnit.GetComponent<BasicUnit>().movementTarget = hit.collider.transform.position;
                 }
-                
+
             }
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            HandleSelectionAndUnitMovement();
         }
     }
 }

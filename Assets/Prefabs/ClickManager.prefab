@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loggingText: {fileID: 0}
+  unitStatsUI: {fileID: 0}

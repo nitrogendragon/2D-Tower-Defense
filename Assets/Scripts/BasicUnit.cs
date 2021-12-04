@@ -16,6 +16,14 @@ public class BasicUnit : Unit
     private int wisdom = 10; //affects spell casting speed+++, mana regen+++, spell cooldown++, hit++, critResist+, dmgResistance+
     private int charm = 10; //affects critResist+++, dodge++, crit rate++, crit damage++, hit+
     private int luck = 10; //affects crit rate+++, crit dmg+, dodge+, hit+
+    private int currentStrength = 10; //affects damage+++, dmg resistance++, skill recharge rate++, and hp++
+    private int currentIntelligence = 10; //affects mana+++, spell power++, spell dmg resistance++
+    private int currentAgility = 10; //affects movement speed+++, attack speed++, dodge++, hit+, dmgResistance+, crit rate+ and crit dmg+
+    private int currentWisdom = 10; //affects spell casting speed+++, mana regen+++, spell cooldown++, hit++, critResist+, dmgResistance+
+    private int currentCharm = 10; //affects critResist+++, dodge++, crit rate++, crit damage++, hit+
+    private int currentLuck = 10; //affects crit rate+++, crit dmg+, dodge+, hit+
+    private int level = 1;
+    private int exp = 0;
     private int damage;
     private int dmgResistance;
     private int unitMaxHp;
@@ -43,6 +51,7 @@ public class BasicUnit : Unit
     private List<int> unitsCharms = new List<int> { 2, 3, 6, 5, 4, 5, 9 };
     private List<int> unitsLucks = new List<int> { 8, 4, 4, 3, 6, 9, 6 };
     private List<int> unitsTotalPoints = new List<int> { 32, 28, 35, 27, 30, 38, 36 };
+    private List<int> unitsStats;
 
     private void Awake()
     {
@@ -82,13 +91,21 @@ public class BasicUnit : Unit
         movementSpeed = (float)(Mathf.Sqrt(agility));
         remainingUnitHp = unitMaxHp;
         healthBar.setHealth(remainingUnitHp, unitMaxHp);
-        
+        unitsStats = new List<int> { unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
+            currentAgility, currentWisdom, currentLuck, currentCharm};
         //Debug.Log("we finished everything in here");
     }
 
     public int getUnitCost(int unitID)
     {
         return unitCosts[unitID];
+    }
+
+    public List<int> getUnitStats()
+    {
+        unitsStats = new List<int> {unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
+            currentAgility, currentWisdom, currentLuck, currentCharm};
+        return unitsStats;
     }
 
     protected override void attack()
