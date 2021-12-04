@@ -2728,10 +2728,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4493550370575412378, guid: 789ead7cbdde29d4690d65794fc74d87, type: 3}
-      propertyPath: starterMoney
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 4493550370575412378, guid: 789ead7cbdde29d4690d65794fc74d87, type: 3}
       propertyPath: playerFundsText
       value: 
       objectReference: {fileID: 1113880483}

@@ -43,4 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1ed32d94259ce45929c6885740a552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  starterMoney: 1000
+  starterMoney: 10000
+  playerFundsText: {fileID: 0}

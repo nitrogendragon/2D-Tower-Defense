@@ -143,6 +143,7 @@ public class Enemy : Unit
     private void die()
     {
         EnemiesManager.enemies.Remove(gameObject);//get rid of this enemy from the enemies list
+        EnemiesManager.supplyKillReward(killReward);
         Destroy(transform.gameObject);
     }
     // We will either move to an enemy player unit if one is in range or to the next targetTile on the path
