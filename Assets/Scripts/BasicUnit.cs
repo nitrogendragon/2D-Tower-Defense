@@ -86,6 +86,10 @@ public class BasicUnit : Unit
         //Debug.Log("we finished everything in here");
     }
 
+    public int getUnitCost(int unitID)
+    {
+        return unitCosts[unitID];
+    }
 
     protected override void attack()
     {

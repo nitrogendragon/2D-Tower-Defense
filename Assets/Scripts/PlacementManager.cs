@@ -108,14 +108,14 @@ public class PlacementManager : MonoBehaviour
     {
         //make sure we have a tile, it doesn't have a unit on it and it's not a pathTile and we have enough money and we are trying to deploy
         if (hoverTile && !CheckForUnit() && !MapGenerator.pathTiles.Contains(hoverTile) && 
-            shopManager.canBuyUnit(currentUnitDeploying) == true && isDeploying)
+            shopManager.canBuyUnit(currentUnitDeployingID) == true && isDeploying)
         {
             GameObject newUnitObject = Instantiate(currentUnitDeploying);
             newUnitObject.GetComponent<Unit>().nameText.text = currentUnitDeployingName;
             newUnitObject.GetComponent<Unit>().setUnitID(currentUnitDeployingID);
             newUnitObject.layer = LayerMask.NameToLayer("unit");
             newUnitObject.transform.position = hoverTile.transform.position;
-            shopManager.buyUnit(currentUnitDeploying);
+            shopManager.buyUnit(unitDeploymentCards.unitDeploymentCards[currentUnitDeployingID].GetComponent<UnitDeploymentCard>().GetCost());
             endDeploying();
         }
         else

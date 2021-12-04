@@ -17,6 +17,11 @@ public class UnitDeploymentCard : MonoBehaviour
         unitCostText.text = cost.ToString();
     }
 
+    public int GetCost()
+    {
+        return cost;
+    }
+
     public void setName(string newName)
     {
         unitName = newName;

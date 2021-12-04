@@ -6,29 +6,27 @@ public class ShopManager : MonoBehaviour
 {
     public MoneyManager moneyManager;
     public GameObject basicUnitPrefab;
-    public int basicUnitCost;
+    
+    public int unitCost;
 
-    public int getUnitCost(GameObject unitPrefab)
+    public int getUnitCost(int uCost)
     {
-        int cost = 0;
-        if(unitPrefab == basicUnitPrefab)
-        {
-            cost = basicUnitCost;
-        }
-        return cost;
+        unitCost = uCost;
+        return unitCost;
+
     }
 
     
 
-    public void buyUnit(GameObject unitPrefab)
+    public void buyUnit(int uCost)
     {
         
-        moneyManager.removeMoney(getUnitCost(unitPrefab));
+        moneyManager.removeMoney(getUnitCost(uCost));
     }
 
-    public bool canBuyUnit(GameObject unitPrefab)
+    public bool canBuyUnit(int uCost)
     {
-        int cost = getUnitCost(unitPrefab);
+        int cost = getUnitCost(uCost);
         //Debug.Log(cost);
         //Debug.Log("current Money " + moneyManager.getCurrentMoney());
         bool canBuy = false;
