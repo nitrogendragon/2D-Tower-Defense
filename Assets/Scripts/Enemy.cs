@@ -66,7 +66,7 @@ public class Enemy : Unit
     {
         targetTile = MapGenerator.startTile;
 
-        enemyVariants.GetComponent<EnemyVariants>().DetermineStats(ref enemyMaxHealth, ref fortressDamage, 
+        enemyVariants.GetComponent<EnemyVariants>().DetermineStats(ref enemyMaxHealth,ref rank, ref fortressDamage, 
             ref agility, ref dmgResistance, ref damage, ref movementSpeed, ref killReward, 
             ref dodgeRate, ref critDmg, ref critRate, ref hitChance, ref mana, ref spellPower, 
             ref critResist, ref enemyName, ref spriteColor);
@@ -109,7 +109,7 @@ public class Enemy : Unit
 
     
 
-    public void takeDamage(int damageDealt,int critDamageDealt, int hitChance, int critRate)
+    public void takeDamage(int damageDealt,int critDamageDealt, int hitChance, int critRate, int unitID)
     {
         if (checkSuccess(hitChance, dodgeRate))
         {
@@ -129,23 +129,21 @@ public class Enemy : Unit
             healthBar.setHealth(enemyHealth, enemyMaxHealth);
             if (enemyHealth <= 0)
             {
-                die();
+                die(unitID);
             }
         }
-        else
-        {
-            //Debug.Log("We missed");
-        }
+
        
         
     }
 
-    private void die()
+    private void die(int unitID)
     {
         EnemiesManager.enemies.Remove(gameObject);//get rid of this enemy from the enemies list
-        EnemiesManager.supplyKillReward(killReward);
+        EnemiesManager.supplyKillReward(killReward, rank, unitID);
         Destroy(transform.gameObject);
     }
+    
     // We will either move to an enemy player unit if one is in range or to the next targetTile on the path
     private void moveEnemy(GameObject target)
     {
@@ -196,7 +194,7 @@ public class Enemy : Unit
             targetGuild.GetComponent<Guild>().TakeDamage(fortressDamage);
             
         }
-        die();
+        Destroy(transform.gameObject);
     }
 
     private void Update()

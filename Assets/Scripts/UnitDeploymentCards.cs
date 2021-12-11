@@ -35,7 +35,7 @@ public class UnitDeploymentCards : MonoBehaviour
                 }
             }
         }
-        Debug.Log(unitDeploymentCards + " " + unitDeploymentCards.Count);
+        //Debug.Log(unitDeploymentCards + " " + unitDeploymentCards.Count);
     }
 
     // Update is called once per frame

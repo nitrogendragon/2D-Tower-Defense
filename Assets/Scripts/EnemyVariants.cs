@@ -50,7 +50,7 @@ public class EnemyVariants : MonoBehaviour
             }
     }
 
-    public void DetermineStats(ref int eMaxHealth, ref int efortressDamage, ref int eAgility, ref int eDmgResistance,
+    public void DetermineStats(ref int eMaxHealth,ref int eRank, ref int efortressDamage, ref int eAgility, ref int eDmgResistance,
         ref int eDamage, ref float eMovementSpeed, ref int eKillReward,ref int eDodgeRate, ref int eCritDmg,
         ref int eCritRate, ref int eHitChance, ref int eMana, ref int eSpellPower,
         ref int eCritResist, ref string eName, ref Color eSpriteColor)
@@ -82,6 +82,7 @@ public class EnemyVariants : MonoBehaviour
         //Debug.Log("killReward " + killReward);
         //Debug.Log("Color " + spriteColor);
         eMaxHealth = enemyMaxHealth;
+        eRank = rank;
         eName = name;
         efortressDamage = fortressDamage;
         eAgility = agility;

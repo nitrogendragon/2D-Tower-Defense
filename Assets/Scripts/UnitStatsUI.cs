@@ -20,6 +20,7 @@ public class UnitStatsUI : MonoBehaviour
     public Text unitWisdom;
     public Text unitCharm;
     public Text unitLuck;
+    public Text unitStatPoints;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +37,7 @@ public class UnitStatsUI : MonoBehaviour
     public void updateStatsUI()
     {
         //current stats{unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
-        //currentAgility, currentWisdom, currentLuck, currentCharm};
+        //currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
         //unitsBaseStats{strength, intelligence,
         //    agility, wisdom, luck, charm};
         if (selectedUnit)
@@ -53,6 +54,7 @@ public class UnitStatsUI : MonoBehaviour
             unitWisdom.text = "WIS " + unitsStats[7].ToString() + " / " + unitsBaseStats[3].ToString();
             unitLuck.text = "LCK " + unitsStats[8].ToString() + " / " + unitsBaseStats[4].ToString();
             unitCharm.text = "CHR " + unitsStats[9].ToString() + " / " + unitsBaseStats[5].ToString();
+            unitStatPoints.text = "Stat Points: " + unitsStats[10].ToString();
         }
         else
         {
@@ -69,6 +71,7 @@ public class UnitStatsUI : MonoBehaviour
             unitWisdom.text = "WIS 0 / 0";
             unitLuck.text = "LCK 0 / 0";
             unitCharm.text = "CHR 0 / 0";
+            unitStatPoints.text = "Stat Points: 0";
         }
     }
 

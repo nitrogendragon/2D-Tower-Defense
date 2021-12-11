@@ -24,6 +24,7 @@ public class BasicUnit : Unit
     private int currentLuck = 10; //affects crit rate+++, crit dmg+, dodge+, hit+
     private int level = 1;
     private int exp = 0;
+    private int statPoints = 0;
     private int damage;
     private int dmgResistance;
     private int unitMaxHp;
@@ -82,8 +83,8 @@ public class BasicUnit : Unit
         currentWisdom = wisdom;
         currentLuck = luck;
         currentCharm = charm;
-        Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
-            "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
+        //Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
+        //    "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
         unitMaxHp = strength * 200 + baseHp;
         damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
@@ -99,7 +100,7 @@ public class BasicUnit : Unit
         remainingUnitHp = unitMaxHp;
         healthBar.setHealth(remainingUnitHp, unitMaxHp);
         unitsStats = new List<int> { unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
-            currentAgility, currentWisdom, currentLuck, currentCharm};
+            currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
         unitsBaseStats = new List<int> {strength, intelligence,
             agility, wisdom, luck, charm};
         //Debug.Log("we finished everything in here");
@@ -113,7 +114,7 @@ public class BasicUnit : Unit
     public List<int> getUnitStats()
     {
         unitsStats = new List<int> {unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
-            currentAgility, currentWisdom, currentLuck, currentCharm};
+            currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
         return unitsStats;
     }
 
@@ -122,6 +123,23 @@ public class BasicUnit : Unit
         unitsBaseStats = new List<int> {strength, intelligence,
             agility, wisdom, luck, charm};
         return unitsBaseStats;
+    }
+
+    public void gainExperience(int experienceGained)
+    {
+        exp += experienceGained;
+        if (exp > level * level)
+        {
+            levelUp();
+        }
+    }
+
+    private void levelUp()
+    {
+        int prevLevel = level;
+
+        level = (int)(Mathf.Sqrt(exp));
+        statPoints += 7 * (level-prevLevel);
     }
 
     protected override void attack()
@@ -136,7 +154,7 @@ public class BasicUnit : Unit
     public void dealRangedDamage(GameObject enemy)
     {
         enemyScript = enemy.GetComponent<Enemy>();//grab the enemy script from the currentTarget/enemy
-        enemyScript.takeDamage(damage, critDmg, hitChance, critRate);
+        enemyScript.takeDamage(damage, critDmg, hitChance, critRate, unitID);
 
     }
 
