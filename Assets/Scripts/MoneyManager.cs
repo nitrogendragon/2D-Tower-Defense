@@ -23,13 +23,13 @@ public class MoneyManager : MonoBehaviour
     public void addMoney(int amount)
     {
         currentPlayerMoney += amount;
-        playerFundsText.text = "Aurum: $" + currentPlayerMoney;
+        playerFundsText.text = "AUR: $" + currentPlayerMoney;
     }
 
     public void removeMoney(int amount)
     {
         currentPlayerMoney = currentPlayerMoney - amount;
-        playerFundsText.text = "Aurum: $" + currentPlayerMoney;
+        playerFundsText.text = "AUR: $" + currentPlayerMoney;
         //Debug.Log("Removed " + amount + " from player's money. Player has $" + currentPlayerMoney + " left.");
     }
 }

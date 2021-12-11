@@ -52,6 +52,7 @@ public class BasicUnit : Unit
     private List<int> unitsLucks = new List<int> { 8, 4, 4, 3, 6, 9, 6 };
     private List<int> unitsTotalPoints = new List<int> { 32, 28, 35, 27, 30, 38, 36 };
     private List<int> unitsStats;
+    private List<int> unitsBaseStats;
 
     private void Awake()
     {
@@ -75,6 +76,12 @@ public class BasicUnit : Unit
         agility = unitsAgilities[unitID];
         charm = unitsCharms[unitID];
         luck = unitsLucks[unitID];
+        currentStrength = strength;
+        currentIntelligence = intelligence;
+        currentAgility = agility;
+        currentWisdom = wisdom;
+        currentLuck = luck;
+        currentCharm = charm;
         Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
             "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
         unitMaxHp = strength * 200 + baseHp;
@@ -93,6 +100,8 @@ public class BasicUnit : Unit
         healthBar.setHealth(remainingUnitHp, unitMaxHp);
         unitsStats = new List<int> { unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
             currentAgility, currentWisdom, currentLuck, currentCharm};
+        unitsBaseStats = new List<int> {strength, intelligence,
+            agility, wisdom, luck, charm};
         //Debug.Log("we finished everything in here");
     }
 
@@ -106,6 +115,13 @@ public class BasicUnit : Unit
         unitsStats = new List<int> {unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
             currentAgility, currentWisdom, currentLuck, currentCharm};
         return unitsStats;
+    }
+
+    public List<int> getUnitBaseStats()
+    {
+        unitsBaseStats = new List<int> {strength, intelligence,
+            agility, wisdom, luck, charm};
+        return unitsBaseStats;
     }
 
     protected override void attack()

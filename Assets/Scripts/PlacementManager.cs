@@ -118,10 +118,7 @@ public class PlacementManager : MonoBehaviour
             shopManager.buyUnit(unitDeploymentCards.unitDeploymentCards[currentUnitDeployingID].GetComponent<UnitDeploymentCard>().GetCost());
             endDeploying();
         }
-        else
-        {
-            //Debug.Log("probably insufficient funds or maybe something else is stopping us from placing the unit here.");
-        }
+        
     }
 
     public void endDeploying()
@@ -177,7 +174,7 @@ public class PlacementManager : MonoBehaviour
             //Debug.Log("we started attempting to deploy our unit 1.");
             startDeploying(0);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        else if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetMouseButtonDown(1))
         {
             //Debug.Log("we stopped attempting to deploy our unit 1.");
             endDeploying();

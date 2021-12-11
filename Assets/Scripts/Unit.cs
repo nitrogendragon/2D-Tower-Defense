@@ -21,6 +21,7 @@ public class Unit : MonoBehaviour
     private GameObject currentNearestEnemy;
     public Text nameText;
     protected int unitID;
+    protected bool isCasting;
 
     public void setUnitID(int id)
     {
@@ -30,6 +31,11 @@ public class Unit : MonoBehaviour
     public int getUnitID()
     {
         return unitID;
+    }
+
+    public bool getCastingStatus()
+    {
+        return isCasting;
     }
 
     protected void updateNearesetEnemy()
