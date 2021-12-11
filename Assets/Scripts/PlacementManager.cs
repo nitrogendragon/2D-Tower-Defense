@@ -174,7 +174,7 @@ public class PlacementManager : MonoBehaviour
             //Debug.Log("we started attempting to deploy our unit 1.");
             startDeploying(0);
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetMouseButtonDown(1))
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             //Debug.Log("we stopped attempting to deploy our unit 1.");
             endDeploying();

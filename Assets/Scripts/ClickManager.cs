@@ -29,7 +29,7 @@ public class ClickManager : MonoBehaviour
             //handle unit selection, always select new unit if we click on one at least for now(magic/healing eventually needs considerations
             if (hit.collider && hit.collider.CompareTag("Player"))
             {
-                //Debug.Log("WE COLLIDED with a player and should be updating");
+                Debug.Log("WE COLLIDED with a player and should be updating");
                 //set our selectedUnit gameObject
                 selectedUnit = hit.collider.gameObject;
                 unitStatsUI.GetComponent<UnitStatsUI>().setSelectedUnit(selectedUnit, hit.collider.GetComponent<Unit>().nameText.text);
@@ -54,10 +54,10 @@ public class ClickManager : MonoBehaviour
         {
             HandleSelectionAndUnitMovement();
         }
-        if(Input.GetMouseButtonDown(0) && selectedUnit && selectedUnit.GetComponent<BasicUnit>().getCastingStatus() == false)
-        {
-            DeselectUnit();
-        }
+        //if(Input.GetKeyDown(KeyCode.Tab) && selectedUnit)
+        //{
+        //    DeselectUnit();
+        //}
         
     }
 }

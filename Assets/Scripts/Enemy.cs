@@ -147,6 +147,7 @@ public class Enemy : Unit
     // We will either move to an enemy player unit if one is in range or to the next targetTile on the path
     private void moveEnemy(GameObject target)
     {
+       
         transform.position = target ? 
             Vector3.MoveTowards(transform.position, target.transform.position, movementSpeed * Time.deltaTime) : transform.position;
     }
@@ -194,6 +195,7 @@ public class Enemy : Unit
             targetGuild.GetComponent<Guild>().TakeDamage(fortressDamage);
             
         }
+        EnemiesManager.enemies.Remove(gameObject);//get rid of this enemy from the enemies list
         Destroy(transform.gameObject);
     }
 

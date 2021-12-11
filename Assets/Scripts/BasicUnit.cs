@@ -77,28 +77,7 @@ public class BasicUnit : Unit
         agility = unitsAgilities[unitID];
         charm = unitsCharms[unitID];
         luck = unitsLucks[unitID];
-        currentStrength = strength;
-        currentIntelligence = intelligence;
-        currentAgility = agility;
-        currentWisdom = wisdom;
-        currentLuck = luck;
-        currentCharm = charm;
-        //Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
-        //    "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
-        unitMaxHp = strength * 200 + baseHp;
-        damage = strength * 3;
-        dmgResistance = strength * 2 + agility + wisdom;
-        dodgeRate = charm * 2 + luck + dodgeRate * 2;
-        hitChance = baseHitChance + agility + wisdom * 2 + luck;
-        critRate = baseCritRate + luck * 3 + charm * 2 + agility;
-        critDmg = (int)(damage * 1.5 + luck + charm * 2 + agility);
-        critResist = luck + charm + agility;
-        rangedAttackSpeedMod = Mathf.Sqrt(agility);
-        timeBetweenAttacks = 1.0f /rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
-        range = 1.1f + (agility + .6f*(strength + intelligence + wisdom) / 10);
-        movementSpeed = (float)(Mathf.Sqrt(agility));
-        remainingUnitHp = unitMaxHp;
-        healthBar.setHealth(remainingUnitHp, unitMaxHp);
+        updateStatus();//sets most everything up
         unitsStats = new List<int> { unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
             currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
         unitsBaseStats = new List<int> {strength, intelligence,
@@ -140,6 +119,64 @@ public class BasicUnit : Unit
 
         level = (int)(Mathf.Sqrt(exp));
         statPoints += 7 * (level-prevLevel);
+    }
+
+    public void ApplyStats(int statIndex)
+    {
+        
+        if(statPoints >= 1)
+        {
+            statPoints -= 1;
+            switch (statIndex)
+            {
+                case 0:
+                    strength += 1;
+                    break;
+                case 1:
+                    intelligence += 1;
+                    break;
+                case 2:
+                    agility += 1;
+                    break;
+                case 3:
+                    wisdom += 1;
+                    break;
+                case 4:
+                    luck += 1;
+                    break;
+                case 5:
+                    charm += 1;
+                    break;
+            }
+            updateStatus();
+        }
+    }
+
+    private void updateStatus()
+    {
+        //will add modifiers eventually to current stats
+        currentStrength = strength;
+        currentIntelligence = intelligence;
+        currentAgility = agility;
+        currentWisdom = wisdom;
+        currentLuck = luck;
+        currentCharm = charm;
+        //Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
+        //    "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
+        unitMaxHp = strength * 200 + baseHp;
+        remainingUnitHp = unitMaxHp;
+        damage = strength * 3;
+        dmgResistance = strength * 2 + agility + wisdom;
+        dodgeRate = charm * 2 + luck + dodgeRate * 2;
+        hitChance = baseHitChance + agility + wisdom * 2 + luck;
+        critRate = baseCritRate + luck * 3 + charm * 2 + agility;
+        critDmg = (int)(damage * 1.5 + luck + charm * 2 + agility);
+        critResist = luck + charm + agility;
+        rangedAttackSpeedMod = Mathf.Sqrt(agility);
+        timeBetweenAttacks = 1.0f / rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
+        range = 1.1f + (agility + .6f * (strength + intelligence + wisdom) / 10);
+        movementSpeed = (float)(Mathf.Sqrt(agility));
+        healthBar.setHealth(remainingUnitHp, unitMaxHp);
     }
 
     protected override void attack()
@@ -198,6 +235,7 @@ public class BasicUnit : Unit
     private void die()
     {
         UnitManager.activeUnits.Remove(gameObject);//get rid of this unit from the list
+        
         Destroy(transform.gameObject);
     }
 

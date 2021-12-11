@@ -34,6 +34,12 @@ public class UnitStatsUI : MonoBehaviour
         updateStatsUI();
     }
 
+    public void useStatPoints(int statIndex)
+    {
+
+        selectedUnit.GetComponent<BasicUnit>().ApplyStats(statIndex);
+    }
+
     public void updateStatsUI()
     {
         //current stats{unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
