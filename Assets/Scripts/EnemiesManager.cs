@@ -21,7 +21,7 @@ public class EnemiesManager : MonoBehaviour
         {
             if (unit.GetComponent<BasicUnit>().getUnitID() == unitID)
             {
-                Debug.Log(rank);
+                
                 unit.GetComponent<BasicUnit>().gainExperience(rank);
             }
         }

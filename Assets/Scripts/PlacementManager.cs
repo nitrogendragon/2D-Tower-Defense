@@ -74,10 +74,7 @@ public class PlacementManager : MonoBehaviour
         
     }
 
-    /// <summary>
-    /// TO DO after lunch, set up onclick to run startDeploying through script instead of inspector
-    /// </summary>
-    /// <returns></returns>
+
 
     public bool CheckForUnit()
     {
@@ -93,13 +90,6 @@ public class PlacementManager : MonoBehaviour
                 }
             }
         }
-        //RaycastHit2D hit = Physics2D.Raycast(mousePosition, new Vector2(0, 0), UnitMask, -100, 100);
-
-        //if (hit.collider)
-        //{
-        //    Debug.Log("We are hitting another unit");
-        //    UnitOnSlot = true;
-        //}
         return UnitOnSlot;
 
     }

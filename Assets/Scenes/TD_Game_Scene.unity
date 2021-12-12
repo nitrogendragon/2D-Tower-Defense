@@ -566,6 +566,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoundController
       objectReference: {fileID: 0}
+    - target: {fileID: 7933973942426496765, guid: df74e3fe0486a8243abb1f075699f48d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: df74e3fe0486a8243abb1f075699f48d, type: 3}
 --- !u!224 &1798740461 stripped
