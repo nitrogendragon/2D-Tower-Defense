@@ -27,7 +27,7 @@ public class ClickManager : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
         bool canMove = true;
         //handle unit selection, always select new unit if we click on one at least for now(magic/healing eventually needs considerations
-        if (hit.collider && hit.collider.CompareTag("Player"))
+        if (hit.collider && hit.collider.tag == "Player")
         {
             Debug.Log("WE COLLIDED with a player and should be updating");
             //set our selectedUnit gameObject
@@ -48,6 +48,10 @@ public class ClickManager : MonoBehaviour
             {
                 selectedUnit.GetComponent<BasicUnit>().movementTarget = hit.collider.transform.position;
             }
+        }
+        else
+        {
+            Debug.Log(hit.collider);
         }
 
         

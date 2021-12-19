@@ -17,6 +17,11 @@ public class UnitDeploymentCard : MonoBehaviour
         unitCostText.text = cost.ToString();
     }
 
+    public Sprite GetSprite()
+    {
+        return unitImgSprite;
+    }
+
     public int GetCost()
     {
         return cost;

@@ -43,12 +43,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76151e13852e08d4d8e339c60c197aac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyMaxHealth: 0
-  movementSpeed: 0
-  killReward: 0
-  fortressDamage: 1
-  defense: 0
-  attack: 0
-  agility: 0
-  rank: 0
+  rank: 1
   spriteColor: {r: 0, g: 0, b: 0, a: 0}
+  mobSprites:
+  - {fileID: 21300000, guid: 7d0266e6370389748bf7af001b7aed20, type: 3}
+  - {fileID: 21300000, guid: a8428cd9eb49f0e4e92f594c04eaec72, type: 3}
+  - {fileID: 21300000, guid: 861d5bffb3ecf254ea6c9e1b376974a7, type: 3}
+  - {fileID: 21300000, guid: 2d979b629ca11e34c8195f1e6990cc00, type: 3}
+  - {fileID: 21300000, guid: 9f9ab5cf9fbbfc94b9b41ea529de2996, type: 3}
+  - {fileID: 21300000, guid: 19f362365c0146b4d90c01dd3ba2f4c4, type: 3}
+  - {fileID: 21300000, guid: 3ede4b541d0050f4ebecaadec9732a2c, type: 3}
+  - {fileID: 21300000, guid: f04c5e9f8a548f549b86d5e71b124e4c, type: 3}
+  - {fileID: 21300000, guid: aaecc8fc077efa949a2e0de091a4431f, type: 3}

@@ -83,6 +83,7 @@ public class BasicUnit : Unit
             currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
         unitsBaseStats = new List<int> {strength, intelligence,
             agility, wisdom, luck, charm};
+        
         //Debug.Log("we finished everything in here");
     }
 
@@ -166,7 +167,7 @@ public class BasicUnit : Unit
         //Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
         //    "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
         unitMaxHp = strength * 200 + baseHp;
-        //remainingUnitHp = unitMaxHp;
+        remainingUnitHp = unitMaxHp;
         damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
         dodgeRate = charm * 2 + luck + agility * 2;

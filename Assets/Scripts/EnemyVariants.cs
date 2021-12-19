@@ -24,11 +24,14 @@ public class EnemyVariants : MonoBehaviour
     private int maxRank = 7;
     private int mod = 4;
     private int rankModifier;
+    
     public Color spriteColor;
     public List<object> stats;
-    private List<string> names = new List<string>() {"fodder", "minion", "lesser mob", "ravenous chicken",
-        "mob", "hydra", "Demon Lord Headless Chicken"};
-    private string name;
+    public List<string> names = new List<string>() {"Putrid Puddle", "Wandering Knight", "Seaweed Hermit", "ravenous chicken",
+        "Conspiring Sorceror", "Murkblood Hydra","Core Kraken","Cerberus of the Black Flame", "Demon Lord Headless Chicken Sama"};
+    public List<Sprite> mobSprites = new List<Sprite>();
+    private Sprite mobSprite;
+    private string mobName;
 
     private int DetermineRank()
     {
@@ -53,12 +56,22 @@ public class EnemyVariants : MonoBehaviour
     public void DetermineStats(ref int eMaxHealth,ref int eRank, ref int efortressDamage, ref int eAgility, ref int eDmgResistance,
         ref int eDamage, ref float eMovementSpeed, ref int eKillReward,ref int eDodgeRate, ref int eCritDmg,
         ref int eCritRate, ref int eHitChance, ref int eMana, ref int eSpellPower,
-        ref int eCritResist, ref string eName, ref Color eSpriteColor)
+        ref int eCritResist, ref string eName, ref Color eSpriteColor, ref Sprite eSprite)
     {
         DetermineRank();
         rankModifier = RankModifier();
         enemyMaxHealth = 100 + rankModifier;
-        name = names[rank - 1];
+        if (rank == 7)
+        {
+            int num = Random.Range(6, 9);
+            mobName = names[num];
+            mobSprite = mobSprites[num];
+        }
+        else
+        {
+            mobName = names[rank - 1];
+            mobSprite = mobSprites[rank - 1];
+        }
         fortressDamage = rank;
         agility = (int)(1 + .15 * rankModifier);
         damage = (int)(2 + 1.5 * rankModifier);
@@ -83,7 +96,7 @@ public class EnemyVariants : MonoBehaviour
         //Debug.Log("Color " + spriteColor);
         eMaxHealth = enemyMaxHealth;
         eRank = rank;
-        eName = name;
+        eName = mobName;
         efortressDamage = fortressDamage;
         eAgility = agility;
         eDmgResistance = dmgResistance;
@@ -98,6 +111,7 @@ public class EnemyVariants : MonoBehaviour
         eSpellPower = spellPower;
         eCritResist = critResist;
         eSpriteColor = spriteColor;
+        eSprite = mobSprite;
 
     }
 }

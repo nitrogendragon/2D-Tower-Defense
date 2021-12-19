@@ -22,11 +22,14 @@ public class Unit : MonoBehaviour
     public Text nameText;
     protected int unitID;
     protected bool isCasting;
+    public SpriteRenderer spriteRenderer;
 
     public void setUnitID(int id)
     {
         unitID = id;
     }
+
+    
 
     public int getUnitID()
     {
@@ -83,10 +86,10 @@ public class Unit : MonoBehaviour
         int result = Random.Range(1, 101);
         if (successChance >= result)
         {
-            Debug.Log("Our unit was hit or critted " + successChance);
+            //Debug.Log("Our unit was hit or critted " + successChance);
             return true;
         }
-        Debug.Log("Our unit was not hit or critted " + successChance);
+        //Debug.Log("Our unit was not hit or critted " + successChance);
         return false;
 
     }

@@ -42,7 +42,7 @@ public class Enemy : Unit
     public GameObject enemyVariants;// reference to our EnemyVariants script
     private GameObject targetTile;
     public GameObject guildManager;
-    SpriteRenderer sprite;
+    private Sprite mobSprite;
     
     
     private void Awake()
@@ -69,15 +69,15 @@ public class Enemy : Unit
         enemyVariants.GetComponent<EnemyVariants>().DetermineStats(ref enemyMaxHealth,ref rank, ref fortressDamage, 
             ref agility, ref dmgResistance, ref damage, ref movementSpeed, ref killReward, 
             ref dodgeRate, ref critDmg, ref critRate, ref hitChance, ref mana, ref spellPower, 
-            ref critResist, ref enemyName, ref spriteColor);
+            ref critResist, ref enemyName, ref spriteColor, ref mobSprite);
         rangedAttackSpeedMod = Mathf.Sqrt(agility);
         timeBetweenAttacks = 1.0f / rangedAttackSpeedMod;//We will have to go over 400 agility to stop increasing attack speed
         range = 1.5f + (agility/ 5);
         //Debug.Log("Enemy dodge rate is " + dodgeRate);
         //Debug.Log("Enemy critResist is " + critResist);
         //Debug.Log("Enemy dmgResist is " + dmgResistance);
-        sprite = GetComponent<SpriteRenderer>();
-        sprite.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b);
+        spriteRenderer.sprite = mobSprite;// set our actual sprite in the unit script parent spriteRenderer sprite
+        this.GetComponent<SpriteRenderer>().color = new Color(spriteColor.r, spriteColor.g, spriteColor.b);
         
         enemyHealth = enemyMaxHealth;
         healthBar.setHealth(enemyHealth, enemyMaxHealth);

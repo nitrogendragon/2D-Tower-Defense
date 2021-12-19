@@ -65,6 +65,8 @@ public class PlacementManager : MonoBehaviour
         currentUnitDeployingName = unitDeploymentCards.unitDeploymentCards[unitID].GetComponent<UnitDeploymentCard>().GetName();
         //currentUnitDeployingName = unitDeploymentCards.unitDeploymentCards[unitID].GetComponent<UnitDeploymentCard>().GetUnit4Sprite();
         currentUnitDeploying = basicUnitObject;//temp til i have different sprites then code above will get implemented
+        currentUnitDeploying.GetComponent<Unit>().spriteRenderer.sprite =
+            unitDeploymentCards.unitDeploymentCards[unitID].GetComponent<UnitDeploymentCard>().GetSprite();
         placementTile = Instantiate(validPlacementTileObject);
         dummyPlacement = Instantiate(dummyUnitSprite);
         if (hoverTile)
