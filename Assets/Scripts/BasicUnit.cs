@@ -167,7 +167,7 @@ public class BasicUnit : Unit
         remainingUnitHp = unitMaxHp;
         damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
-        dodgeRate = charm * 2 + luck + dodgeRate * 2;
+        dodgeRate = charm * 2 + luck + agility * 2;
         hitChance = baseHitChance + agility + wisdom * 2 + luck;
         critRate = baseCritRate + luck * 3 + charm * 2 + agility;
         critDmg = (int)(damage * 1.5 + luck + charm * 2 + agility);

@@ -83,8 +83,10 @@ public class Unit : MonoBehaviour
         int result = Random.Range(1, 101);
         if (successChance >= result)
         {
+            Debug.Log("Our unit was hit or critted " + successChance);
             return true;
         }
+        Debug.Log("Our unit was not hit or critted " + successChance);
         return false;
 
     }
