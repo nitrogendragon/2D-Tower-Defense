@@ -665,6 +665,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1036549583}
+    - target: {fileID: 1300049415655445336, guid: 53f978ea775cce043aecff70ac06efad, type: 3}
+      propertyPath: orthographic size
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 1300049415655445339, guid: 53f978ea775cce043aecff70ac06efad, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -960,6 +964,10 @@ PrefabInstance:
     - target: {fileID: 9027299037721847473, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9027299037721847486, guid: c5312f4dfef1be340b904c0791200f03, type: 3}
+      propertyPath: mapHeight
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c5312f4dfef1be340b904c0791200f03, type: 3}

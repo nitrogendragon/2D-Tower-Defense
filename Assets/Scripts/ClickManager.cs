@@ -27,19 +27,11 @@ public class ClickManager : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
         bool canMove = true;
         //handle unit selection, always select new unit if we click on one at least for now(magic/healing eventually needs considerations
-        if (hit.collider && hit.collider.tag == "Player")
-        {
-            Debug.Log("WE COLLIDED with a player and should be updating");
-            //set our selectedUnit gameObject
-            selectedUnit = hit.collider.gameObject;
-            unitStatsUI.GetComponent<UnitStatsUI>().setSelectedUnit(selectedUnit, hit.collider.GetComponent<Unit>().nameText.text);
-
-        }
-        else if(selectedUnit)
+        if (selectedUnit)
         {
             foreach (GameObject unit in UnitManager.activeUnits)
             {
-                if (hit.collider.transform.position == unit.transform.position)
+                if (hit.collider && hit.collider.transform.position == unit.transform.position)
                 {
                     canMove = false;
                 }
@@ -49,10 +41,24 @@ public class ClickManager : MonoBehaviour
                 selectedUnit.GetComponent<BasicUnit>().movementTarget = hit.collider.transform.position;
             }
         }
-        else
+
+        else if (hit.collider)
         {
-            Debug.Log(hit.collider);
+            foreach(GameObject unit in UnitManager.activeUnits)
+            {
+                float distance = Vector2.Distance(hit.collider.transform.position, unit.transform.position);
+                if(distance <= .2f)
+                {
+                    selectedUnit = unit;
+                    unitStatsUI.GetComponent<UnitStatsUI>().setSelectedUnit(selectedUnit, selectedUnit.GetComponent<Unit>().nameText.text);
+                    break;
+                }
+            }
+            
+
         }
+        
+        
 
         
             //handle movement
