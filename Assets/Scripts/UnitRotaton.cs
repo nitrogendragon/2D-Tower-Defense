@@ -5,7 +5,7 @@ using UnityEngine;
 public class UnitRotaton : MonoBehaviour
 {
     //public Transform pivot;
-    public Transform weapon;
+    public Transform weaponpivot;
 
     private float angle;//angle between unit and enemy for determing rotation
     private Vector3 newRotation;//new angle to be oriented at (just rotating on z-axis to spin
@@ -24,7 +24,7 @@ public class UnitRotaton : MonoBehaviour
 
                 newRotation = new Vector3(0, 0, angle);
 
-                unit.transform.localRotation = Quaternion.Euler(newRotation);
+                weaponpivot.transform.localRotation = Quaternion.Euler(newRotation);
             }
         }
     }

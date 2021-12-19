@@ -286,6 +286,7 @@ MonoBehaviour:
   nameText: {fileID: 6754580201120240677}
   projectile: {fileID: 5658519426457431506, guid: 6ce857e8f969f994e9cc098712d9aac9, type: 3}
   unit: {fileID: 1385048058531860828}
+  weaponPivot: {fileID: 4957365453822920707}
   weapon: {fileID: 8052073049074054310}
   movementTarget: {x: 0, y: 0, z: 0}
   healthBar: {fileID: 799634301163291978}
@@ -301,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b524ba12845b498458575b5f75367ac5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 8052073049074054310}
+  weaponpivot: {fileID: 4957365453822920707}
   unit: {fileID: 1053906331}
 --- !u!61 &-2637184298525814636
 BoxCollider2D:
@@ -719,7 +720,7 @@ GameObject:
   - component: {fileID: 6909427878223408449}
   - component: {fileID: 4673345984401189191}
   m_Layer: 8
-  m_Name: Circle
+  m_Name: RaiderSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -734,7 +735,7 @@ Transform:
   m_GameObject: {fileID: 6365372998635083323}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 1385048058531860828}
   m_RootOrder: 0

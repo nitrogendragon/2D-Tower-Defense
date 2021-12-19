@@ -8,6 +8,7 @@ public class BasicUnit : Unit
     //public List<GameObject> activeProjectiles = new List<GameObject>();
     //private List<GameObject> tempProjectiles = new List<GameObject>();
     public Transform unit;
+    public Transform weaponPivot;
     // each + adds one to the modifier per point
     public Transform weapon; // the units weapons transform, used in UnitRotation script
     private int strength = 10; //affects damage+++, dmg resistance++, skill recharge rate++, and hp++
@@ -115,6 +116,7 @@ public class BasicUnit : Unit
 
     private void levelUp()
     {
+        remainingUnitHp = unitMaxHp;
         int prevLevel = level;
 
         level = (int)(Mathf.Sqrt(exp));
@@ -164,7 +166,7 @@ public class BasicUnit : Unit
         //Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
         //    "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
         unitMaxHp = strength * 200 + baseHp;
-        remainingUnitHp = unitMaxHp;
+        //remainingUnitHp = unitMaxHp;
         damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
         dodgeRate = charm * 2 + luck + agility * 2;
@@ -182,7 +184,7 @@ public class BasicUnit : Unit
     protected override void attack()
     {
         //base.attack();
-        GameObject newProjectile = Instantiate(projectile, weapon.position, unit.rotation);
+        GameObject newProjectile = Instantiate(projectile, weapon.position, weaponPivot.transform.localRotation);
         newProjectile.GetComponent<Projectile>().expirationTime = 3f; // will be determined by unit stats and specific abilities later
         newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
         newProjectile.GetComponent<Projectile>().myUnit = this;

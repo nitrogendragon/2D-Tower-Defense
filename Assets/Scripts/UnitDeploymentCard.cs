@@ -10,7 +10,7 @@ public class UnitDeploymentCard : MonoBehaviour
     private string unitName;//name of the unit
     public Text unitNameText;//reference to the text UI for displaying the name
     public Text unitCostText;//reference to the text UI for displaying the cost
-    //public Sprite unitImgSprite;//may use this may not
+    public Sprite unitImgSprite;//may use this may not
     public void setCost(int newCost)
     {
         cost = newCost;
