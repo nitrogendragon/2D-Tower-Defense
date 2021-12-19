@@ -380,7 +380,7 @@ SpriteRenderer:
   m_SortingLayerID: 1569879681
   m_SortingLayer: 4
   m_SortingOrder: 1
-  m_Sprite: {fileID: -2135585597343286014, guid: eed45a33cd08446c8b88325cf82fc52f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a8428cd9eb49f0e4e92f594c04eaec72, type: 3}
   m_Color: {r: 0.8207547, g: 0.25938943, b: 0.25938943, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -405,10 +405,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTarget: {fileID: 0}
   nameText: {fileID: 5165717154366773563}
+  enemyMaxHealth: 0
+  movementSpeed: 0
   healthBar: {fileID: 4489172237401720374}
   enemyVariants: {fileID: 4371802414826934825, guid: d9bfa67809945c84894570ee8d06172f, type: 3}
   guildManager: {fileID: 1680518322971258430, guid: 38cedf44c29f3fd45b60343d34d7d212, type: 3}
-  moneyManagerScript: {fileID: 4493550370575412378, guid: 789ead7cbdde29d4690d65794fc74d87, type: 3}
 --- !u!61 &4489172238752232368
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -426,7 +427,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8828125, y: 1}
+    oldSize: {x: 2.56, y: 2.56}
     newSize: {x: 0.8828125, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
