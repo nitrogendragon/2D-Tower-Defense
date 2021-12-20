@@ -92,7 +92,8 @@ public class Enemy : Unit
     //going to just do a simple damage check without projectiles for now
     protected override void attack()
     {
-        GameObject newProjectile = Instantiate(projectile, weapon.position, weaponPivot.transform.localRotation);
+        GameObject newProjectile = Instantiate(projectile, weapon.position,
+            weaponPivot.transform.localRotation);
         newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10; // will be determined by unit stats and specific abilities later
         newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
         newProjectile.GetComponent<Projectile>().myEnemyUnit = this;
@@ -144,11 +145,19 @@ public class Enemy : Unit
     }
     
     // We will either move to an enemy player unit if one is in range or to the next targetTile on the path
-    private void moveEnemy(GameObject target)
+    private void moveEnemy(GameObject target, bool isMovingTowardsUnit)
     {
-       
-        transform.position = target ? 
-            Vector3.MoveTowards(transform.position, target.transform.position, movementSpeed * Time.deltaTime) : transform.position;
+        if (isMovingTowardsUnit)//for moving to a unit/raider
+        {
+            float distanceTo = target ? Vector2.Distance(transform.position, target.transform.position) : 0.0f;
+            transform.position = target && distanceTo >= 1.3f ?
+                Vector3.MoveTowards(transform.position, target.transform.position, movementSpeed * Time.deltaTime) : transform.position;
+        }
+        else//for moving to next tile
+        {
+            transform.position = target ?
+                Vector3.MoveTowards(transform.position, target.transform.position, movementSpeed * Time.deltaTime) : transform.position;
+        }
     }
 
     private void checkPosition()
@@ -175,11 +184,11 @@ public class Enemy : Unit
     {
         if (currentTarget)
         {
-            moveEnemy(currentTarget);
+            moveEnemy(currentTarget, true);
         }
         else
         {
-            moveEnemy(targetTile);
+            moveEnemy(targetTile, false);
         }
     }
 

@@ -36,7 +36,8 @@ public class ClickManager : MonoBehaviour
                     canMove = false;
                 }
             }
-            if (canMove && (hit.collider.CompareTag("ValidMovementTile") || hit.collider.CompareTag("Enemy")))
+            //if (canMove && (hit.collider.CompareTag("ValidMovementTile") || hit.collider.CompareTag("Enemy")))
+            if (canMove && hit.collider && hit.collider.CompareTag("ValidMovementTile"))
             {
                 selectedUnit.GetComponent<BasicUnit>().movementTarget = hit.collider.transform.position;
             }

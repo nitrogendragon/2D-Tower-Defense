@@ -183,7 +183,8 @@ public class BasicUnit : Unit
     protected override void attack()
     {
         //base.attack();
-        GameObject newProjectile = Instantiate(projectile, weapon.position, weaponPivot.transform.localRotation);
+        GameObject newProjectile = Instantiate(projectile, weapon.position,
+            weaponPivot.transform.localRotation);
         newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10; // will be determined by unit stats and specific abilities later
         newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
         newProjectile.GetComponent<Projectile>().myUnit = this;
