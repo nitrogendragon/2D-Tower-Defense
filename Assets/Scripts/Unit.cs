@@ -22,6 +22,11 @@ public class Unit : MonoBehaviour
     public Text nameText;
     protected int unitID;
     protected bool isCasting;
+
+    public GameObject projectile;
+    public Transform unit;
+    public Transform weaponPivot;
+    public Transform weapon; // the units weapons transform, used in UnitRotation script
     public SpriteRenderer spriteRenderer;
 
     public void setUnitID(int id)

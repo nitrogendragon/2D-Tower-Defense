@@ -92,19 +92,18 @@ public class Enemy : Unit
     //going to just do a simple damage check without projectiles for now
     protected override void attack()
     {
-        ////base.attack();
-        //GameObject newProjectile = Instantiate(projectile, weapon.position, unit.rotation);
-        //newProjectile.GetComponent<Projectile>().expirationTime = 3f; // will be determined by unit stats and specific abilities later
-        //newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
-        //newProjectile.GetComponent<Projectile>().myUnit = this;
-        dealRangedDamage(currentTarget);
+        GameObject newProjectile = Instantiate(projectile, weapon.position, weaponPivot.transform.localRotation);
+        newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10; // will be determined by unit stats and specific abilities later
+        newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
+        newProjectile.GetComponent<Projectile>().myEnemyUnit = this;
+        //dealRangedDamage(currentTarget);
     }
 
     public void dealRangedDamage(GameObject enemyPlayerUnit)
     {
         
         enemyPlayerUnit.GetComponent<BasicUnit>().takeDamage(damage, critDmg, hitChance, critRate);
-        //Debug.Log("somehow this is already working");
+        
     }
 
     

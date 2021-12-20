@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class BasicUnit : Unit
 {
-    public GameObject projectile;
-    //public List<GameObject> activeProjectiles = new List<GameObject>();
-    //private List<GameObject> tempProjectiles = new List<GameObject>();
-    public Transform unit;
-    public Transform weaponPivot;
+    //public GameObject projectile;
+    //public Transform unit;
+    //public Transform weaponPivot;
+    //public Transform weapon; // the units weapons transform, used in UnitRotation script
     // each + adds one to the modifier per point
-    public Transform weapon; // the units weapons transform, used in UnitRotation script
     private int strength = 10; //affects damage+++, dmg resistance++, skill recharge rate++, and hp++
     private int intelligence = 10; //affects mana+++, spell power++, spell dmg resistance++
     private int agility = 10; //affects movement speed+++, attack speed++, dodge++, hit+, dmgResistance+, crit rate+ and crit dmg+
@@ -186,7 +184,7 @@ public class BasicUnit : Unit
     {
         //base.attack();
         GameObject newProjectile = Instantiate(projectile, weapon.position, weaponPivot.transform.localRotation);
-        newProjectile.GetComponent<Projectile>().expirationTime = 3f; // will be determined by unit stats and specific abilities later
+        newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10; // will be determined by unit stats and specific abilities later
         newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
         newProjectile.GetComponent<Projectile>().myUnit = this;
     }
