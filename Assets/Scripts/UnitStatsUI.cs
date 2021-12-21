@@ -21,6 +21,11 @@ public class UnitStatsUI : MonoBehaviour
     public Text unitCharm;
     public Text unitLuck;
     public Text unitStatPoints;
+    public Text weaponName;
+    public Image weaponImage;
+    public Text armorName;
+    public Image armorImage;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +53,13 @@ public class UnitStatsUI : MonoBehaviour
         //    agility, wisdom, luck, charm};
         if (selectedUnit)
         {
-            unitsStats = selectedUnit.GetComponent<BasicUnit>().getUnitStats();
-            unitsBaseStats = selectedUnit.GetComponent<BasicUnit>().getUnitBaseStats();
+            BasicUnit selectedUnitsScript = selectedUnit.GetComponent<BasicUnit>();
+            unitsStats = selectedUnitsScript.getUnitStats();
+            unitsBaseStats = selectedUnitsScript.getUnitBaseStats();
+            weaponName.text = selectedUnitsScript.grabWeaponName();
+            weaponImage.sprite = selectedUnitsScript.grabWeaponSprite();
+            armorName.text = selectedUnitsScript.grabArmorName();
+            armorImage.sprite = selectedUnitsScript.grabArmorSprite();
             unitHP.text = "HP " + unitsStats[1].ToString() + " / " + unitsStats[0].ToString();
             unitMana.text = " Mana " + "0 / 0";
             unitLevel.text = "Level " + unitsStats[2].ToString();
@@ -66,7 +76,7 @@ public class UnitStatsUI : MonoBehaviour
         {
             unitsStats = null;
             unitsBaseStats = null;
-            unitName.text = " ";
+            unitName.text = "No Raider Selected ";
             unitHP.text = "HP 0 / 0" ;
             unitMana.text = " Mana " + "0 / 0";
             unitLevel.text = "Level ";
@@ -78,6 +88,10 @@ public class UnitStatsUI : MonoBehaviour
             unitLuck.text = "LCK 0 / 0";
             unitCharm.text = "CHR 0 / 0";
             unitStatPoints.text = "Stat Points: 0";
+            weaponName.text = "Unequipped";
+            weaponImage.sprite = null;
+            armorName.text = "Unequipped";
+            armorImage.sprite = null;
         }
     }
 

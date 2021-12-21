@@ -155,5 +155,25 @@ public class Unit : MonoBehaviour
             isArmorEquipped = true;
         }
     }
-    
+
+    public string grabWeaponName()
+    {
+        return weaponName;
+    }
+
+    public Sprite grabWeaponSprite()
+    {
+        return weaponSprite;
+    }
+
+    public string grabArmorName()
+    {
+        return armorName;
+    }
+
+    public Sprite grabArmorSprite()
+    {
+        return armorSprite;
+    }
+
 }
