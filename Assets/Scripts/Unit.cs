@@ -23,6 +23,15 @@ public class Unit : MonoBehaviour
     protected int unitID;
     protected bool isCasting;
 
+    protected bool isWeaponEquipped = false;
+    protected string weaponName;
+    protected int weaponStr, weaponInt, weaponAgi, weaponWis, weaponCha, weaponLuc;
+    protected Sprite weaponSprite;
+    protected bool isArmorEquipped = false;
+    protected string armorName;
+    protected int armorStr, armorInt, armorAgi, armorWis, armorCha, armorLuc;
+    protected Sprite armorSprite;
+
     public GameObject projectile;
     public Transform unit;
     public Transform weaponPivot;
@@ -115,6 +124,35 @@ public class Unit : MonoBehaviour
                 lastAttackTime = Time.time;//update to current time
             }
             yield return decideIfShouldAttackWaiter;//note that this will limit attack speed to 20 attacks a second.. probably a good thing though
+        }
+    }
+
+    public void EquipGear(int strStat, int intStat, int agiStat, int wisStat, int chaStat, int lucStat, string gearName,
+        bool isWeapon, Sprite gearSprite)
+    {
+        if (isWeapon)
+        {
+            weaponStr = strStat;
+            weaponInt = intStat;
+            weaponAgi = agiStat;
+            weaponWis = wisStat;
+            weaponCha = chaStat;
+            weaponLuc = lucStat;
+            weaponName = gearName;
+            weaponSprite = gearSprite;
+            isWeaponEquipped = true;
+        }
+        else
+        {
+            armorStr = strStat;
+            armorInt = intStat;
+            armorAgi = agiStat;
+            armorWis = wisStat;
+            armorCha = chaStat;
+            armorLuc = lucStat;
+            armorName = gearName;
+            armorSprite = gearSprite;
+            isArmorEquipped = true;
         }
     }
     

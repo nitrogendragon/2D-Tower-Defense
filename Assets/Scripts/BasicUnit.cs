@@ -53,6 +53,7 @@ public class BasicUnit : Unit
     private List<int> unitsTotalPoints = new List<int> { 32, 28, 35, 27, 30, 38, 36 };
     private List<int> unitsStats;
     private List<int> unitsBaseStats;
+    private bool firstUpdate = true;
 
     private void Awake()
     {
@@ -77,6 +78,7 @@ public class BasicUnit : Unit
         charm = unitsCharms[unitID];
         luck = unitsLucks[unitID];
         updateStatus();//sets most everything up
+        
         unitsStats = new List<int> { unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
             currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
         unitsBaseStats = new List<int> {strength, intelligence,
@@ -151,21 +153,30 @@ public class BasicUnit : Unit
             }
             updateStatus();
         }
+        else if(statIndex == 6)//means we are equipping gear so we want to updateStatus to reflect stat changes
+        {
+            //Debug.Log("gear equipped so going to update stats");
+            updateStatus();
+        }
     }
 
     private void updateStatus()
     {
         //will add modifiers eventually to current stats
-        currentStrength = strength;
-        currentIntelligence = intelligence;
-        currentAgility = agility;
-        currentWisdom = wisdom;
-        currentLuck = luck;
-        currentCharm = charm;
+        currentStrength = strength + weaponStr + armorStr;
+        currentIntelligence = intelligence + weaponInt + armorInt;
+        currentAgility = agility + weaponAgi + armorAgi;
+        currentWisdom = wisdom + weaponWis + armorWis;
+        currentLuck = luck + weaponLuc + armorLuc;
+        currentCharm = charm + weaponCha + armorCha;
         //Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
         //    "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
         unitMaxHp = strength * 200 + baseHp;
-        remainingUnitHp = unitMaxHp;
+        if (firstUpdate)
+        {
+            remainingUnitHp = unitMaxHp;
+            firstUpdate = false;//we don't want to max our hp everytime we update our status
+        }
         damage = strength * 3;
         dmgResistance = strength * 2 + agility + wisdom;
         dodgeRate = charm * 2 + luck + agility * 2;

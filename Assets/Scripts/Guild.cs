@@ -43,6 +43,6 @@ public class Guild : MonoBehaviour
     private void DestroyGuild()
     {
         //end the game or something
-        Debug.Log("The guild was destroyed, we lost");
+        //Debug.Log("The guild was destroyed, we lost");
     }
 }

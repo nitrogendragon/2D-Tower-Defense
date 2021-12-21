@@ -6,7 +6,7 @@ public class ClickManager : MonoBehaviour
 {
     
     public  GameObject unitStatsUI;
-    private GameObject selectedUnit = null;
+    public GameObject selectedUnit = null;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +18,8 @@ public class ClickManager : MonoBehaviour
         selectedUnit = null;
         unitStatsUI.GetComponent<UnitStatsUI>().setSelectedUnit(selectedUnit,"");
     }
+
+    
 
     public void HandleSelectionAndUnitMovement()
     {
