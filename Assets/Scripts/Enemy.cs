@@ -150,7 +150,7 @@ public class Enemy : Unit
         if (isMovingTowardsUnit)//for moving to a unit/raider
         {
             float distanceTo = target ? Vector2.Distance(transform.position, target.transform.position) : 0.0f;
-            transform.position = target && distanceTo >= 1.3f ?
+            transform.position = target && distanceTo >= 2f ?
                 Vector3.MoveTowards(transform.position, target.transform.position, movementSpeed * Time.deltaTime) : transform.position;
         }
         else//for moving to next tile

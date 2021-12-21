@@ -22,7 +22,7 @@ public class Projectile : MonoBehaviour
         }
         if(collision.gameObject.tag == "Player" && myEnemyUnit != null)
         {
-            Debug.Log("The enemy projectile got this far");
+            //Debug.Log("The enemy projectile got this far");
             myEnemyUnit.dealRangedDamage(collision.gameObject);
             Destroy(gameObject);
         }
