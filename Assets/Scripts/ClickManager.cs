@@ -81,6 +81,7 @@ public class ClickManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetMouseButtonDown(1))
         {
             HandleSelectionAndUnitMovement();
@@ -89,6 +90,7 @@ public class ClickManager : MonoBehaviour
         {
             DeselectUnit();
         }
+
         
 
     }

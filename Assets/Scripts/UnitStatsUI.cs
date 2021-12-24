@@ -48,7 +48,7 @@ public class UnitStatsUI : MonoBehaviour
     public void updateStatsUI()
     {
         //current stats{unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
-        //currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
+        //currentAgility, currentWisdom, currentLuck, currentCharm, statPoints, unitMaxMana, remainingMana};
         //unitsBaseStats{strength, intelligence,
         //    agility, wisdom, luck, charm};
         if (selectedUnit)
@@ -61,7 +61,7 @@ public class UnitStatsUI : MonoBehaviour
             armorName.text = selectedUnitsScript.grabArmorName();
             armorImage.sprite = selectedUnitsScript.grabArmorSprite();
             unitHP.text = "HP " + unitsStats[1].ToString() + " / " + unitsStats[0].ToString();
-            unitMana.text = " Mana " + "0 / 0";
+            unitMana.text = " Mana " + unitsStats[12].ToString() + " / " + unitsStats[11].ToString();
             unitLevel.text = "Level " + unitsStats[2].ToString();
             unitExperience.text = "XP " + unitsStats[3].ToString();
             unitStrength.text = "STR " + unitsStats[4].ToString() + " / " + unitsBaseStats[0].ToString();

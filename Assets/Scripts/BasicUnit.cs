@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class BasicUnit : Unit
 {
-    //public GameObject projectile;
-    //public Transform unit;
-    //public Transform weaponPivot;
-    //public Transform weapon; // the units weapons transform, used in UnitRotation script
+    
     // each + adds one to the modifier per point
     private int strength = 10; //affects damage+++, dmg resistance++, skill recharge rate++, and hp++
     private int intelligence = 10; //affects mana+++, spell power++, spell dmg resistance++
@@ -28,8 +25,10 @@ public class BasicUnit : Unit
     private int dmgResistance;
     private int unitMaxHp;
     private int remainingUnitHp;
-    private int baseHp = 10;
-    private int mana;
+    private int baseHp = 100;
+    private int baseMana = 20;
+    private int unitMaxMana;
+    private int remainingMana;
     private int dodgeRate;
     private int critRate;
     private int critResist;
@@ -80,7 +79,7 @@ public class BasicUnit : Unit
         updateStatus();//sets most everything up
         
         unitsStats = new List<int> { unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
-            currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
+            currentAgility, currentWisdom, currentLuck, currentCharm, statPoints, unitMaxMana, remainingMana};
         unitsBaseStats = new List<int> {strength, intelligence,
             agility, wisdom, luck, charm};
         
@@ -95,7 +94,7 @@ public class BasicUnit : Unit
     public List<int> getUnitStats()
     {
         unitsStats = new List<int> {unitMaxHp,remainingUnitHp, level, exp, currentStrength, currentIntelligence,
-            currentAgility, currentWisdom, currentLuck, currentCharm, statPoints};
+            currentAgility, currentWisdom, currentLuck, currentCharm, statPoints, unitMaxMana, remainingMana};
         return unitsStats;
     }
 
@@ -118,6 +117,7 @@ public class BasicUnit : Unit
     private void levelUp()
     {
         remainingUnitHp = unitMaxHp;
+        remainingMana = unitMaxMana;
         int prevLevel = level;
 
         level = (int)(Mathf.Sqrt(exp));
@@ -172,9 +172,11 @@ public class BasicUnit : Unit
         //Debug.Log("strength: " + strength + " " + "intelligence: " + intelligence + " " + "wisdom: " + wisdom + " " +
         //    "agility: " + agility + " " + "charm: " + charm + " " + "luck: " + luck + " ");
         unitMaxHp = strength * 200 + baseHp;
+        unitMaxMana = intelligence * 5 + baseMana;
         if (firstUpdate)
         {
             remainingUnitHp = unitMaxHp;
+            remainingMana = unitMaxMana;
             firstUpdate = false;//we don't want to max our hp everytime we update our status
         }
         damage = strength * 3;

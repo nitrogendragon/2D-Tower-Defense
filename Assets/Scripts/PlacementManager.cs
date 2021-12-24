@@ -59,6 +59,7 @@ public class PlacementManager : MonoBehaviour
     //tell the game we are deploying and instantiate a unit but remove its scripts so its just a placeholder sprite/gameobject
     public void startDeploying(int unitID)
     {
+        endDeploying();//cleanup in case we need to
         isDeploying = true;
         clickManager.DeselectUnit();//we don't want an active unit to do things while deploying
         currentUnitDeployingID = unitID;
