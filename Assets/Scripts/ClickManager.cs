@@ -60,28 +60,18 @@ public class ClickManager : MonoBehaviour
             
 
         }
-        
-        
 
-        
-            //handle movement
-            //else if (hit.collider && selectedUnit)
-            //{
-            //    if (hit.collider.CompareTag("ValidMovementTile") || hit.collider.CompareTag("Enemy"))
-            //    {
-            //        selectedUnit.GetComponent<BasicUnit>().movementTarget = hit.collider.transform.position;
-            //    }
-
-            //}
-
-        }
+    }
 
    
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(selectedUnit && Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            selectedUnit.GetComponent<BasicUnit>().runSkillAttack(0);
+        }
         if (Input.GetMouseButtonDown(1))
         {
             HandleSelectionAndUnitMovement();

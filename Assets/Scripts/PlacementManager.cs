@@ -161,7 +161,7 @@ public class PlacementManager : MonoBehaviour
 
     public void checkForUnitSelection()
     {
-        if(!isDeploying && Input.GetKeyDown(KeyCode.Alpha1)){
+        if(!isDeploying && clickManager.selectedUnit == null && Input.GetKeyDown(KeyCode.Alpha1)){
             isDeploying = true;
             currentUnitDeploying = basicUnitObject;//temp code for now
             //Debug.Log("we started attempting to deploy our unit 1.");
@@ -169,7 +169,7 @@ public class PlacementManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            //Debug.Log("we stopped attempting to deploy our unit 1.");
+
             endDeploying();
         }
     }

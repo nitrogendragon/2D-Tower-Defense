@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     public float expirationTime = 1f; //will be set when instantiated otw 1f
     public BasicUnit myUnit;// will be assigned when instantiated if fired from a unit
     public Enemy myEnemyUnit;// assigned when instantiated if fired from a mob
+    public Animator spriteAnimator;// the sprite sheet animation we want to use when firing off an attack/skill
+    public Transform spriteTransform;// the transform of our sprite/spriteAnimator
     private void Start()
     {
         Destroy(gameObject, expirationTime);//remove from game after x period of time of not hitting something

@@ -41,6 +41,7 @@ public class BasicUnit : Unit
     public Vector3 movementTarget;
     private Vector3 nullTarget;//impossible to move to
     public HealthBar healthBar;//reference to our health bar script
+    public SkillAnimations skillAnimations;
     private List<string> unitNames = new List<string>() { "gunner", "mage", "priest", "knight", "samurai", "ninja", "dancer" };//reference
     private List<int> unitCosts = new List<int>() { 250, 300, 400, 200, 350, 600, 700 };
     private List<int> unitsStrengths = new List<int> { 7, 3, 5, 9, 10, 6, 4 };
@@ -201,6 +202,24 @@ public class BasicUnit : Unit
         newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10; // will be determined by unit stats and specific abilities later
         newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
         newProjectile.GetComponent<Projectile>().myUnit = this;
+    }
+
+    protected void skillAttack(int skillIndex)
+    {
+        GameObject newProjectile = Instantiate(projectile, weapon.position,
+            weaponPivot.transform.localRotation);
+        newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10; // will be determined by unit stats and specific abilities later
+        newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
+        newProjectile.GetComponent<Projectile>().spriteAnimator.runtimeAnimatorController = 
+            skillAnimations.skillAnimators[skillIndex].GetComponent<Animator>().runtimeAnimatorController;
+        //Debug.Log(newProjectile.GetComponent<Projectile>().spriteAnimator.runtimeAnimatorController);
+        newProjectile.GetComponent<Projectile>().spriteTransform.transform.rotation = new Quaternion(0,0,90,0);
+        newProjectile.GetComponent<Projectile>().myUnit = this;
+    }
+
+    public void runSkillAttack(int skillIndex)
+    {
+        skillAttack(skillIndex);
     }
 
     public void dealRangedDamage(GameObject enemy)

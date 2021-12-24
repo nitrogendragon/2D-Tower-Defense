@@ -94,6 +94,11 @@ public class Unit : MonoBehaviour
             //enemyScript.takeDamage(damage);//deal damage 
     }
 
+    //protected virtual void skillAttack()
+    //{
+
+    //}
+
     protected bool checkSuccess(int successMod, int failMod)
     {
         int successChance = successMod - failMod;
