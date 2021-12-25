@@ -206,15 +206,18 @@ public class BasicUnit : Unit
 
     protected void skillAttack(int skillIndex)
     {
-        GameObject newProjectile = Instantiate(projectile, weapon.position,
-            weaponPivot.transform.localRotation);
-        newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10; // will be determined by unit stats and specific abilities later
-        newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod; // will be determined by unit stat and or specific abilities later
-        newProjectile.GetComponent<Projectile>().spriteAnimator.runtimeAnimatorController = 
-            skillAnimations.skillAnimators[skillIndex].GetComponent<Animator>().runtimeAnimatorController;
-        //Debug.Log(newProjectile.GetComponent<Projectile>().spriteAnimator.runtimeAnimatorController);
-        newProjectile.GetComponent<Projectile>().spriteTransform.transform.rotation = new Quaternion(0,0,90,0);
-        newProjectile.GetComponent<Projectile>().myUnit = this;
+        if (skillIndex+1 <= skillAnimations.skillAnimators.Count)
+        {
+            Debug.Log(skillIndex+1 + " shouid be equal than or less than " + skillAnimations.skillAnimators.Count);
+            GameObject newProjectile = Instantiate(projectile, weapon.position,
+                weaponPivot.transform.localRotation);
+            newProjectile.GetComponent<Projectile>().expirationTime = 3f * agility / 10;
+            newProjectile.GetComponent<Projectile>().speed = 10f + rangedAttackSpeedMod;
+            newProjectile.GetComponent<Projectile>().spriteAnimator.runtimeAnimatorController =
+                skillAnimations.skillAnimators[skillIndex].GetComponent<Animator>().runtimeAnimatorController;
+            newProjectile.GetComponent<Projectile>().spriteTransform.transform.rotation = new Quaternion(0, 0, 90, 0);
+            newProjectile.GetComponent<Projectile>().myUnit = this;
+        }
     }
 
     public void runSkillAttack(int skillIndex)

@@ -7,6 +7,7 @@ public class ClickManager : MonoBehaviour
     
     public  GameObject unitStatsUI;
     public GameObject selectedUnit = null;
+    private List<int> numberKeys = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; 
     // Start is called before the first frame update
     void Start()
     {
@@ -68,9 +69,16 @@ public class ClickManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(selectedUnit && Input.GetKeyDown(KeyCode.Alpha1))
+
+        if(selectedUnit && Input.anyKeyDown)
         {
-            selectedUnit.GetComponent<BasicUnit>().runSkillAttack(0);
+            string input = Input.inputString;
+            if(int.TryParse(input, out int number))
+            {
+                
+                selectedUnit.GetComponent<BasicUnit>().runSkillAttack(number);//because index starts at zero
+                Debug.Log("we ran the skill attack succesfully or not?");
+            }
         }
         if (Input.GetMouseButtonDown(1))
         {
