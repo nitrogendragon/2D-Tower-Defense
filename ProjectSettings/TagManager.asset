@@ -8,6 +8,8 @@ TagManager:
   - ValidMovementTile
   - UnitDeploymentCards
   - Shop
+  - BoardPiece
+  - BoardTile
   layers:
   - Default
   - TransparentFX
