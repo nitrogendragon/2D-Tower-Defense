@@ -5,6 +5,7 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     public GameObject boardTile;
+    public GameObject MobCard;
     private List<GameObject> boardTiles = new List<GameObject>();//store all our board pieces in here
     private SpriteRenderer lastHoveredBoardSpriteRenderer;
     private Color initialBoardColor;
@@ -60,7 +61,9 @@ public class BoardManager : MonoBehaviour
             HighLightHoveredTile(hit.collider);
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                Debug.Log("We hit a board tile " + hit.collider.name);
+                GameObject mobCard = Instantiate(MobCard);
+                mobCard.transform.position = hit.collider.transform.position;
+
             }
         }
         
