@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CardsController : MonoBehaviour
 {
+    public BoardManager boardManager;
+    private GameObject selectedCard;
     private bool startFirstDraw = false;
     private float startWait = 1f;
     protected bool isFirstDraw  = true;
@@ -46,16 +48,12 @@ public class CardsController : MonoBehaviour
         startFirstDraw = true;
     }
 
-    private void DrawCards()
+    public void ReOrganizeHand()
     {
-        int cardsToDraw = CardsToDraw();
-        int prevCardsInHandCount = cardsInHandCount; // for keeping track of which card we are on between the for loops
-        //Debug.Log("The number of cards to be drawn is " + cardsToDraw);
-        cardsInHandCount += cardsToDraw;
         if (cardsInHand.Count != 0)
         {
             //Debug.Log("we have cards in our hand so we are reorganizing");
-            for(int i = 0; i < cardsInHand.Count; i++)
+            for (int i = 0; i < cardsInHand.Count; i++)
             {
                 //very fancy but should adjust to fill space as cards are drawn, will likely use for adjusting when playing cards too
                 cardsInHand[i].transform.position =
@@ -64,6 +62,15 @@ public class CardsController : MonoBehaviour
                     cardsContainer.transform.position.y, 0);
             }
         }
+    }
+
+    private void DrawCards()
+    {
+        int cardsToDraw = CardsToDraw();
+        int prevCardsInHandCount = cardsInHandCount; // for keeping track of which card we are on between the for loops
+        //Debug.Log("The number of cards to be drawn is " + cardsToDraw);
+        cardsInHandCount += cardsToDraw;
+        ReOrganizeHand();
 
         for (int cardsDrawn = 0; cardsDrawn < cardsToDraw; cardsDrawn++)
         {
@@ -76,7 +83,48 @@ public class CardsController : MonoBehaviour
                         cardsContainer.transform.position.y, 0);
             
         }
-        
+    }
+
+    private void SelectCard()
+    {
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+        if (hit.collider && hit.collider.tag == "MobCard" && hit.collider.GetComponent<MobCard>().isInHand)
+        {
+            if (selectedCard)
+            {
+                selectedCard.GetComponent<SpriteRenderer>().color = Color.gray;
+            }
+            selectedCard = hit.collider.gameObject;
+            selectedCard.GetComponent<SpriteRenderer>().color = Color.green;
+        }
+    }
+
+    private void PlaceSelectedCard()
+    {
+        Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
+        if(cardPlacementPosition.x != 9999)//our invalid placement tile position that our function returns if not hitting a boardtile
+        {
+            selectedCard.GetComponent<SpriteRenderer>().color = Color.gray;
+            selectedCard.transform.position = cardPlacementPosition;
+            selectedCard.GetComponent<MobCard>().isInHand = false;
+            //update cards in hand list
+            List<GameObject> tempList = new List<GameObject>();
+            for(int i = 0; i < cardsInHand.Count; i++)
+            {
+                if(cardsInHand[i] != selectedCard)
+                {
+                    tempList.Add(cardsInHand[i]);
+                }
+            }
+            cardsInHand = tempList;//update our cardsInHand List to be the new list without the placed card
+            Debug.Log(cardsInHand.Count);
+            selectedCard = null;
+            ReOrganizeHand();//reorganize / relayout cards in hand
+            cardsInHandCount = cardsInHand.Count;
+        }
+        //do nothing otw
     }
 
     // Update is called once per frame
@@ -89,8 +137,19 @@ public class CardsController : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(0))//just for testing purposes, will remove later or at least adjust
         {
-            DrawCards();
+            //DrawCards();
+            SelectCard();
         }
+        else if (Input.GetMouseButton(1) && selectedCard)
+        {
+
+            PlaceSelectedCard();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            DrawCards();//just for testing purposes
+        }
+
 
     }
 }

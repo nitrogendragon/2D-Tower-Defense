@@ -7,7 +7,8 @@ public class BoardManager : MonoBehaviour
     public GameObject boardTile;
     public GameObject MobCard;
     private List<GameObject> boardTiles = new List<GameObject>();//store all our board pieces in here
-    private SpriteRenderer lastHoveredBoardSpriteRenderer;
+    private SpriteRenderer lastHoveredBoardTileSpriteRenderer;
+    private GameObject selectedBoardTile;
     private Color initialBoardColor;
     private int rows;//always do an odd number
     private int columns;//always do an odd number
@@ -40,14 +41,28 @@ public class BoardManager : MonoBehaviour
         horizontalOffset = -(columns - 1) / 2;//subtract 1 because we will always use an odd number to keep things centered
     }
 
-    private void HighLightHoveredTile(Collider2D collider)
+    private void HighLightAndSelectHoveredTile(Collider2D collider)
     {
-        if(lastHoveredBoardSpriteRenderer)
+        if(lastHoveredBoardTileSpriteRenderer)
         {
-            lastHoveredBoardSpriteRenderer.color = initialBoardColor;
+            lastHoveredBoardTileSpriteRenderer.color = initialBoardColor;
         }
-        lastHoveredBoardSpriteRenderer = collider.GetComponent<SpriteRenderer>();
-        lastHoveredBoardSpriteRenderer.color = Color.green;
+        selectedBoardTile = collider.gameObject;
+        lastHoveredBoardTileSpriteRenderer = collider.GetComponent<SpriteRenderer>();
+        lastHoveredBoardTileSpriteRenderer.color = Color.green;
+    }
+
+    public Vector3 GetSelectedBoardCoordinates()
+    {
+        if (selectedBoardTile)
+        {
+            return selectedBoardTile.transform.position;
+        }
+        else
+        {
+            return new Vector3(9999, 0, 0);//just as a general unusable coordinate
+        }
+
     }
 
     private void TestRayCastHitBoardTile()
@@ -58,13 +73,13 @@ public class BoardManager : MonoBehaviour
             
         if(hit.collider && hit.collider.tag == "BoardTile")
         {
-            HighLightHoveredTile(hit.collider);
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                GameObject mobCard = Instantiate(MobCard);
-                mobCard.transform.position = hit.collider.transform.position;
-
-            }
+            HighLightAndSelectHoveredTile(hit.collider);
+        }
+        else if(selectedBoardTile)
+        {
+            //if we aren't hitting a board tile we don't want one as being selected
+            selectedBoardTile.GetComponent<SpriteRenderer>().color = initialBoardColor;
+            selectedBoardTile = null;
         }
         
         
