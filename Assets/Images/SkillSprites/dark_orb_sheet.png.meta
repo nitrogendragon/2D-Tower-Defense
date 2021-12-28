@@ -42,6 +42,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -256,6 +257,13 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      dark_orb_sheet_1: 6736767228549191832
+      dark_orb_sheet_3: 9192620233160679105
+      dark_orb_sheet_0: 1657469569259977576
+      dark_orb_sheet_2: -343368814544850448
+      dark_orb_sheet_5: -1380301199195115894
+      dark_orb_sheet_4: -3079849831303889192
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

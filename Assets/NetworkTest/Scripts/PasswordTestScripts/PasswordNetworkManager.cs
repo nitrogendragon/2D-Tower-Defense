@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
-using System;
 using System.Text;
 
 public class PasswordNetworkManager : MonoBehaviour
@@ -11,6 +10,7 @@ public class PasswordNetworkManager : MonoBehaviour
     [SerializeField] private InputField passwordInputField;
     [SerializeField] private GameObject passwordEntryUI;
     [SerializeField] private GameObject leaveButton;
+    [SerializeField] private GameObject localGameObjects;//basically the container for all the non network objects
 
     private void Start()
     {
@@ -54,6 +54,7 @@ public class PasswordNetworkManager : MonoBehaviour
 
         passwordEntryUI.SetActive(true);
         leaveButton.SetActive(false);
+        localGameObjects.SetActive(false);
     }
 
     private void HandleClientConnected(ulong clientId)
@@ -62,6 +63,7 @@ public class PasswordNetworkManager : MonoBehaviour
         {
             passwordEntryUI.SetActive(false);
             leaveButton.SetActive(true);
+            localGameObjects.SetActive(true);//turn on the local game elements basically
         }
     }
 
@@ -71,6 +73,7 @@ public class PasswordNetworkManager : MonoBehaviour
         {
             passwordEntryUI.SetActive(true);
             leaveButton.SetActive(false);
+            localGameObjects.SetActive(false);//leaving the game so don't want the local GameObjects to run/be active
         }
     }
 

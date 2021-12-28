@@ -78,6 +78,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
+  ignoreMasterTextureLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -544,6 +545,25 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    nameFileIdTable:
+      spirit_flame_sheet_8: 2053331533312139760
+      spirit_flame_sheet_0: -2722558163511306037
+      spirit_flame_sheet_7: -7687008230165804117
+      spirit_flame_sheet_9: -3794252914687721862
+      spirit_flame_sheet_11: 5435110428513779662
+      spirit_flame_sheet_15: 1786698524515157980
+      spirit_flame_sheet_16: 8797970422303873484
+      spirit_flame_sheet_6: 9084692043005077661
+      spirit_flame_sheet_14: 6221763973141145470
+      spirit_flame_sheet_3: -726590345278511481
+      spirit_flame_sheet_2: -752153248819776144
+      spirit_flame_sheet_12: -7307216899099244051
+      spirit_flame_sheet_5: 629531907544427604
+      spirit_flame_sheet_4: 8543334033564651099
+      spirit_flame_sheet_13: 3965680084711167947
+      spirit_flame_sheet_17: 4312917533667341605
+      spirit_flame_sheet_1: -1149283612022694375
+      spirit_flame_sheet_10: -5786853355195293534
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
