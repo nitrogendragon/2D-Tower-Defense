@@ -12,6 +12,20 @@ public class PasswordNetworkManager : MonoBehaviour
     [SerializeField] private GameObject passwordEntryUI;
     [SerializeField] private GameObject leaveButton;
 
+    private void Start()
+    {
+        NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
+        NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
+    }
+
+    private void OnDestroy()
+    {
+        if(NetworkManager.Singleton == null) { return; }//prevent editor error
+        NetworkManager.Singleton.OnServerStarted -= HandleServerStarted;
+        NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
+    }
 
     public void Host()
     {
@@ -30,7 +44,42 @@ public class PasswordNetworkManager : MonoBehaviour
 
     public void Leave()
     {
+        NetworkManager.Singleton.Shutdown();
+
+        if (NetworkManager.Singleton.IsHost)
+        {
+            NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+        }
         Debug.Log("Left");
+
+        passwordEntryUI.SetActive(true);
+        leaveButton.SetActive(false);
+    }
+
+    private void HandleClientConnected(ulong clientId)
+    {
+        if(clientId == NetworkManager.Singleton.LocalClientId)
+        {
+            passwordEntryUI.SetActive(false);
+            leaveButton.SetActive(true);
+        }
+    }
+
+    private void HandleClientDisconnect(ulong clientId)
+    {
+        if (clientId == NetworkManager.Singleton.LocalClientId)
+        {
+            passwordEntryUI.SetActive(true);
+            leaveButton.SetActive(false);
+        }
+    }
+
+    private void HandleServerStarted() 
+    {
+        if (NetworkManager.Singleton.IsHost)
+        {
+            HandleClientConnected(NetworkManager.Singleton.LocalClientId);
+        }
     }
 
     private void ApprovalCheck(byte[] connectionData, ulong clientID, NetworkManager.ConnectionApprovedDelegate callback)
@@ -38,7 +87,25 @@ public class PasswordNetworkManager : MonoBehaviour
         string password = Encoding.ASCII.GetString(connectionData);
 
         bool approveConnection = password == passwordInputField.text;
-        callback(true, null, approveConnection, null, null);
+
+        Vector3 spawnPos = Vector3.zero;
+
+        switch (NetworkManager.Singleton.ConnectedClients.Count)
+        {
+            case 0:
+                spawnPos = new Vector3(-2f, 0f, 0f);
+                break;
+            case 1:
+                spawnPos = new Vector3(0f, 0f, 0f);
+                break;
+            case 2:
+                spawnPos = new Vector3(2f, 0f, 0f);
+                break;
+            
+
+        }
+
+        callback(true, null, approveConnection, spawnPos, null);
     }
 }
 
