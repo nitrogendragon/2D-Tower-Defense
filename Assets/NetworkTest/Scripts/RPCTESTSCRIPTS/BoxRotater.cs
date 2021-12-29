@@ -9,19 +9,32 @@ public class BoxRotater : NetworkBehaviour
     private GameObject boxInstance;
     private void Start()
     {
-        boxInstance = Instantiate(box);
+        StartCoroutine(AssignPlayerBox());
     }
 
+    IEnumerator AssignPlayerBox()
+    {
+        yield return new WaitForSeconds(1f);
+        boxInstance = Instantiate(box);
+        Debug.Log(boxInstance);
+    }
     // Update is called once per frame
     void Update()
     {
-        if(!IsOwner || !Input.GetMouseButtonDown(0)) { return; }
-
-        TurnBoxServerRpc();
-        boxInstance.GetComponent<SpriteRenderer>().color = Color.green;
-        boxInstance.transform.Rotate(45, 45, 0);
-        //boxInstance.transform.position += new Vector3(1, 1, 1);
-        Debug.Log(boxInstance.transform.position);
+        if(!IsOwner) { return; }
+        if (Input.GetMouseButtonDown(0) && boxInstance)
+        {
+            TurnBoxServerRpc();
+            boxInstance.GetComponent<SpriteRenderer>().color = Color.green;
+            boxInstance.transform.Rotate(45, 45, 0);
+            //boxInstance.transform.position += new Vector3(1, 1, 1);
+            Debug.Log(boxInstance.transform.position);
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            DestroyBoxInstanceServerRpc();
+            Destroy(boxInstance);
+        }
 
     }
 
@@ -38,5 +51,18 @@ public class BoxRotater : NetworkBehaviour
         boxInstance.GetComponent<SpriteRenderer>().color = Color.green;
         boxInstance.transform.Rotate(45, 45, 0);
         //boxInstance.transform.position += new Vector3(1,1,1);
+    }
+
+    [ServerRpc]
+    public void DestroyBoxInstanceServerRpc()
+    {
+        DestroyBoxInstanceClientRpc();
+    }
+
+    [ClientRpc]
+    private void DestroyBoxInstanceClientRpc()
+    {
+        if (IsOwner) { return; }
+        Destroy(boxInstance);
     }
 }

@@ -11,7 +11,9 @@ public class PasswordNetworkManager : MonoBehaviour
     [SerializeField] private GameObject passwordEntryUI;
     [SerializeField] private GameObject leaveButton;
     [SerializeField] private GameObject localGameObjects;//basically the container for all the non network objects
+    
 
+    
     private void Start()
     {
         NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
@@ -55,6 +57,8 @@ public class PasswordNetworkManager : MonoBehaviour
         passwordEntryUI.SetActive(true);
         leaveButton.SetActive(false);
         localGameObjects.SetActive(false);
+        
+        
     }
 
     private void HandleClientConnected(ulong clientId)
@@ -74,6 +78,7 @@ public class PasswordNetworkManager : MonoBehaviour
             passwordEntryUI.SetActive(true);
             leaveButton.SetActive(false);
             localGameObjects.SetActive(false);//leaving the game so don't want the local GameObjects to run/be active
+            
         }
     }
 
@@ -81,7 +86,7 @@ public class PasswordNetworkManager : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsHost)
         {
-            HandleClientConnected(NetworkManager.Singleton.LocalClientId);
+           // HandleClientConnected(NetworkManager.Singleton.LocalClientId);//maybe don't need this since there is redundancy?
         }
     }
 
