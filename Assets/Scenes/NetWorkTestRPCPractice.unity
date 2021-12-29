@@ -1353,7 +1353,7 @@ MonoBehaviour:
   passwordEntryUI: {fileID: 1212450998}
   leaveButton: {fileID: 1309612603}
   localGameObjects: {fileID: 341407739}
-  playerBox: {fileID: -830713203394430695, guid: 5a5134c5ac8ecf548972e2175c3940e2, type: 3}
+  player: {fileID: 2517058293817089725, guid: d2a38a6854dc550459c024eea1f53607, type: 3}
 --- !u!114 &1796959189
 MonoBehaviour:
   m_ObjectHideFlags: 0

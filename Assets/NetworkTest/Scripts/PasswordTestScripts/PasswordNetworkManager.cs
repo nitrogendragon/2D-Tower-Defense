@@ -57,8 +57,7 @@ public class PasswordNetworkManager : MonoBehaviour
         passwordEntryUI.SetActive(true);
         leaveButton.SetActive(false);
         localGameObjects.SetActive(false);
-        
-        
+
     }
 
     private void HandleClientConnected(ulong clientId)

@@ -16,8 +16,10 @@ public class BoxRotater : NetworkBehaviour
     {
         yield return new WaitForSeconds(1f);
         boxInstance = Instantiate(box);
-        Debug.Log(boxInstance);
+        boxInstance.GetComponent<NetworkObject>().Spawn();
+        Debug.Log(boxInstance.GetComponent<NetworkObject>().GetInstanceID());
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -28,12 +30,13 @@ public class BoxRotater : NetworkBehaviour
             boxInstance.GetComponent<SpriteRenderer>().color = Color.green;
             boxInstance.transform.Rotate(45, 45, 0);
             //boxInstance.transform.position += new Vector3(1, 1, 1);
-            Debug.Log(boxInstance.transform.position);
+           
         }
         if (Input.GetMouseButtonDown(1))
         {
             DestroyBoxInstanceServerRpc();
-            Destroy(boxInstance);
+            //Destroy(boxInstance);
+            boxInstance.GetComponent<NetworkObject>().Despawn();
         }
 
     }
@@ -63,6 +66,7 @@ public class BoxRotater : NetworkBehaviour
     private void DestroyBoxInstanceClientRpc()
     {
         if (IsOwner) { return; }
-        Destroy(boxInstance);
+        boxInstance.GetComponent<NetworkObject>().Despawn();
+        //Destroy(boxInstance);
     }
 }
