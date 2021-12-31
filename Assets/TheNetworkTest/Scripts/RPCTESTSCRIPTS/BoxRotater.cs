@@ -74,8 +74,9 @@ public class BoxRotater : NetworkBehaviour
         //}
     }
 
-    public virtual void OnDestroy()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
         //if (IsOwner && boxInstance)
         //{
         //Destroy(boxInstance);

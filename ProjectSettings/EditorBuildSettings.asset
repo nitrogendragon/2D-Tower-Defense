@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/NetWorkTestRPCPractice.unity
-    guid: d7ea9eb3d4e403141bb67142df9e908e
+    path: Assets/Scenes/NetowkrTestVariables.unity
+    guid: 19ba55745106f884baf248c7576ebf48
   m_configObjects: {}
