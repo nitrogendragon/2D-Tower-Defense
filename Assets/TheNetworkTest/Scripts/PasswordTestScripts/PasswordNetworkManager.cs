@@ -7,11 +7,12 @@ using System.Text;
 
 public class PasswordNetworkManager : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField passwordInputField;
+    
+    [SerializeField] private GameObject passwordInputField;
     [SerializeField] private GameObject teamPickerUI;
     [SerializeField] private GameObject passwordEntryUI;
     [SerializeField] private GameObject leaveButton;
-
+   
     private void Start()
     {
         NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
@@ -39,23 +40,25 @@ public class PasswordNetworkManager : MonoBehaviour
     public void Client()
     {
         // Set password ready to send to the server to validate
-        NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(passwordInputField.text);
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(passwordInputField.GetComponent<TMP_InputField>().text);
         NetworkManager.Singleton.StartClient();
     }
 
     public void Leave()
     {
-        NetworkManager.Singleton.Shutdown();
+        NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
+        
+        
 
         if (NetworkManager.Singleton.IsHost)
         {
-
+            NetworkManager.Singleton.Shutdown();
             NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
         }
 
         passwordEntryUI.SetActive(true);
-        leaveButton.SetActive(false);
         teamPickerUI.SetActive(false);
+        leaveButton.SetActive(false);
     }
 
     private void HandleServerStarted()
@@ -63,12 +66,17 @@ public class PasswordNetworkManager : MonoBehaviour
         // Temporary workaround to treat host as client
         if (NetworkManager.Singleton.IsHost)
         {
-            HandleClientConnected(NetworkManager.Singleton.ServerClientId);
+            //HandleClientConnected(NetworkManager.Singleton.ServerClientId);
         }
     }
 
     private void HandleClientConnected(ulong clientId)
     {
+        //if (!this.GetComponent<NetworkObject>().IsSpawned)
+        //{
+        //    Debug.Log("We aren't spawned right now");
+        //    SpawnNetworkObjectServerRpc(this.gameObject);
+        //}
         // Are we the client that is connecting?
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
@@ -76,6 +84,7 @@ public class PasswordNetworkManager : MonoBehaviour
             leaveButton.SetActive(true);
             teamPickerUI.SetActive(true);
         }
+        
     }
 
     private void HandleClientDisconnect(ulong clientId)
@@ -89,11 +98,30 @@ public class PasswordNetworkManager : MonoBehaviour
         }
     }
 
+    [ServerRpc]
+    private void SpawnNetworkObjectServerRpc(GameObject targetObject)
+    {
+        if (NetworkManager.Singleton.IsServer)
+        {
+            Debug.Log("We are the server");
+            SpawnNetworkObjectClientRpc(targetObject);
+        }
+    }
+
+    [ClientRpc]
+    private void SpawnNetworkObjectClientRpc(GameObject targetObject)
+    {
+        Debug.Log("We ran the spawnNetworkObjectClientRpc function");
+        targetObject.GetComponent<NetworkObject>().Spawn();
+        Debug.Log("We finished the spawnNetworkObjectClientRpc function");
+        
+    }
+
     private void ApprovalCheck(byte[] connectionData, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
     {
         string password = Encoding.ASCII.GetString(connectionData);
 
-        bool approveConnection = password == passwordInputField.text;
+        bool approveConnection = password == passwordInputField.GetComponent<TMP_InputField>().text;
 
         Vector3 spawnPos = Vector3.zero;
         Quaternion spawnRot = Quaternion.identity;
@@ -101,20 +129,22 @@ public class PasswordNetworkManager : MonoBehaviour
         switch (NetworkManager.Singleton.ConnectedClients.Count)
         {
             case 0:
-                spawnPos = new Vector3(-2f, 0f, 0f);
-                spawnRot = Quaternion.Euler(0f, 135f, 0f);
+                spawnPos = new Vector3(1f, 0f, 0f);
+                spawnRot = Quaternion.Euler(0f, 0f, 0f);
                 break;
             case 1:
-                spawnPos = new Vector3(0f, 0f, 0f);
-                spawnRot = Quaternion.Euler(0f, 180f, 0f);
+                spawnPos = new Vector3(15f, 0f, 0f);
+                spawnRot = Quaternion.Euler(0f, 0f, 0f);
                 break;
-            case 2:
-                spawnPos = new Vector3(2f, 0f, 0f);
-                spawnRot = Quaternion.Euler(0f, 225, 0f);
-                break;
+            //case 2:
+            //    spawnPos = new Vector3(2f, 0f, 0f);
+            //    spawnRot = Quaternion.Euler(0f, 0f, 0f);
+            //    break;
         }
 
         callback(true, null, approveConnection, spawnPos, spawnRot);
+
+        
     }
 }
 

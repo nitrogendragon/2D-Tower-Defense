@@ -14,13 +14,11 @@ public class TeamPlayer : NetworkBehaviour
     [ServerRpc (RequireOwnership = false)]
     public void SetTeamServerRpc(byte newTeamIndex)
     {
-        Debug.Log("We are in the setteamServerRpc");
         //make sure index is valid
         if(newTeamIndex > 3) { return; }
 
         //Update the teamIndex network variable
         teamIndex.Value = newTeamIndex;//have to change value, changing directly causes errors since networkVariable<Byte> isn't same type and Byte
-        Debug.Log("the teamIndex.Value is: " + teamIndex.Value);
     }
 
     // the network variable has an event that triggers whenever its value changes and we can subscribe to a function /run it
@@ -43,8 +41,6 @@ public class TeamPlayer : NetworkBehaviour
         //only client needs to update the spriteRenderer
         if (!IsClient) { return; }
         // update the color of the playere's spriteRenderer
-        //teamColourRenderer. = teamColours[newTeamIndex];
-        //this.transform.position = new Vector3(this.transform.position.x + newTeamIndex,0,0);//this works at least locally
         teamColourRenderer.color = teamColours[newTeamIndex];
     }
 
