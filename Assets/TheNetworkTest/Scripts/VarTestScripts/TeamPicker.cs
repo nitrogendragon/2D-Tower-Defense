@@ -13,19 +13,22 @@ public class TeamPicker : NetworkBehaviour
     {
         //Debug.Log(" We started the selectTeamS");
         //make sure we are the server
-        if (!NetworkManager.Singleton.IsServer)
+        if (IsLocalPlayer || !NetworkManager.Singleton.IsServer)
         {
+            
+            
             //Debug.Log("We are not the server");
             return;
         }
         // take the index passed and the localClientId from the client that pressed the button and have the server handle updating target Clients team
         SelectTeamClientRpc(teamIndex, targetLocalClientId);
+
     }
 
     [ClientRpc]
     private void SelectTeamClientRpc(int teamIndex, ulong localClientId)
     {
-        //if (!IsServer) { Debug.Log("Again, we are not the server... clientRpc function call this time"); return; }
+        if (!IsServer) { Debug.Log("Again, we are not the server... clientRpc function call this time"); return; }
         //Debug.Log("The host is running the function");
 
         //if we don't find the local client with our Id in the connectedClients return otw output our NetworkClient as networkClient

@@ -44,21 +44,55 @@ public class PasswordNetworkManager : MonoBehaviour
         NetworkManager.Singleton.StartClient();
     }
 
+    //public void Leave() //for reference if things go wrong
+    //{
+    //    //if we are a connected client then have the server disconnect us
+    //    if (NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost){ 
+    //        DisconnectClientServerRpc(NetworkManager.Singleton.LocalClientId);
+    //        Debug.Log("The server disconnected the connectedclient");
+    //        return;
+    //    }
+        
+        
+
+    //    if (NetworkManager.Singleton.IsHost)
+    //    {
+    //        NetworkManager.Singleton.Shutdown();
+    //        NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+    //    }
+
+    //    passwordEntryUI.SetActive(true);
+    //    teamPickerUI.SetActive(false);
+    //    leaveButton.SetActive(false);
+    //}
+
     public void Leave()
     {
-        NetworkManager.Singleton.DisconnectClient(NetworkManager.Singleton.LocalClientId);
-        
-        
+        ShutdownEveryoneServerRpc();
+    }
 
-        if (NetworkManager.Singleton.IsHost)
-        {
+    [ServerRpc]
+    private void ShutdownEveryoneServerRpc()
+    {
+        ShutdownEveryoneClientRpc();  
+    }
+
+    [ClientRpc]
+    private void ShutdownEveryoneClientRpc()
+    {
+        //if host, do these things
+        //if (NetworkManager.Singleton.IsHost)
+        //{
+            Debug.Log("The host is cleaning up");
             NetworkManager.Singleton.Shutdown();
             NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
-        }
-
+        //}
+        Debug.Log("The host or a client is setting active states");
+        //everyone does this clean up
         passwordEntryUI.SetActive(true);
         teamPickerUI.SetActive(false);
         leaveButton.SetActive(false);
+
     }
 
     private void HandleServerStarted()
@@ -89,6 +123,7 @@ public class PasswordNetworkManager : MonoBehaviour
 
     private void HandleClientDisconnect(ulong clientId)
     {
+        Debug.Log("A client disconnected");
         // Are we the client that is disconnecting?
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
@@ -98,24 +133,7 @@ public class PasswordNetworkManager : MonoBehaviour
         }
     }
 
-    [ServerRpc]
-    private void SpawnNetworkObjectServerRpc(GameObject targetObject)
-    {
-        if (NetworkManager.Singleton.IsServer)
-        {
-            Debug.Log("We are the server");
-            SpawnNetworkObjectClientRpc(targetObject);
-        }
-    }
-
-    [ClientRpc]
-    private void SpawnNetworkObjectClientRpc(GameObject targetObject)
-    {
-        Debug.Log("We ran the spawnNetworkObjectClientRpc function");
-        targetObject.GetComponent<NetworkObject>().Spawn();
-        Debug.Log("We finished the spawnNetworkObjectClientRpc function");
-        
-    }
+    
 
     private void ApprovalCheck(byte[] connectionData, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
     {
