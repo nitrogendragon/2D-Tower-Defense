@@ -83,10 +83,10 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
         }
     }
 
-    public void ReadyUp()
+    public void ReadyUp(bool didWeLeave)
     {
         var colors = readyUpButton.GetComponent<Button>().colors;
-        if(readyUpText.text == readyUpTexts[0])
+        if(readyUpText.text == readyUpTexts[0] && !didWeLeave)
         {
             readyUpText.text = readyUpTexts[1];
             colors.normalColor = new Color(.5f, .8f, .2f);
@@ -102,6 +102,8 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
         readyUpButton.GetComponent<Button>().colors = colors;
         UI_Password.GetComponent<PasswordNetworkManager>().HandlePlayerReadyUp(false);
     }
+
+
 
     
 
