@@ -10,11 +10,12 @@ public class PasswordNetworkManager : MonoBehaviour
 {
     
     [SerializeField] private GameObject passwordInputField;
-    [SerializeField] private GameObject teamPickerUI;
+    [SerializeField] private GameObject playerIconPickerUI;
     [SerializeField] private GameObject passwordEntryUI;
     [SerializeField] private GameObject leaveButton;
     [SerializeField] private GameObject playerCanvas;
     [SerializeField] private GameObject uiMain;
+    
     
 
     private static ulong hostClientId;//our host client
@@ -53,6 +54,7 @@ public class PasswordNetworkManager : MonoBehaviour
         // Hook up password approval check
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.StartHost();
+        
     }
 
     public void Client()
@@ -60,6 +62,7 @@ public class PasswordNetworkManager : MonoBehaviour
         // Set password ready to send to the server to validate
         NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(passwordInputField.GetComponent<TMP_InputField>().text);
         NetworkManager.Singleton.StartClient();
+        
     }
 
    
@@ -87,13 +90,10 @@ public class PasswordNetworkManager : MonoBehaviour
 
         //everyone does this clean up
         passwordEntryUI.SetActive(true);
-        teamPickerUI.SetActive(false);
+        playerIconPickerUI.SetActive(false);
         leaveButton.SetActive(false);
         playerCanvas.SetActive(false);
-        //if (player2ClientId == NetworkManager.Singleton.LocalClientId)
-        //{
-        //    uiMain.GetComponent<LoadingAndWaitingScreen>().AdjustClientScreenMessageServerRpc(-1, hostClientId);
-        //}
+       
 
     }
 
@@ -114,7 +114,7 @@ public class PasswordNetworkManager : MonoBehaviour
             
             passwordEntryUI.SetActive(false);
             leaveButton.SetActive(true);
-            teamPickerUI.SetActive(true);
+            playerIconPickerUI.SetActive(true);
             playerCanvas.SetActive(true);
 
             //If we are the host we want to set our screen active and text to waiting text
@@ -157,9 +157,21 @@ public class PasswordNetworkManager : MonoBehaviour
         {
             passwordEntryUI.SetActive(true);
             leaveButton.SetActive(false);
-            teamPickerUI.SetActive(false);
+            playerIconPickerUI.SetActive(false);
             playerCanvas.SetActive(false);
         }
+    }
+
+    public void HandlePlayerReadyUp(bool isReady)
+    {
+        if (isReady)
+        {
+            //we don't want to be picking our team/updating playericon anymore
+            playerIconPickerUI.SetActive(false);
+            return;
+        }
+        //otw we aren't ready so we can pick our icons again
+        playerIconPickerUI.SetActive(true);
     }
 
     
@@ -167,9 +179,9 @@ public class PasswordNetworkManager : MonoBehaviour
     private void ApprovalCheck(byte[] connectionData, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
     {
         string password = Encoding.ASCII.GetString(connectionData);
-
+        
         bool approveConnection = password == passwordInputField.GetComponent<TMP_InputField>().text;
-
+        
         Vector3 spawnPos = Vector3.zero;
         Quaternion spawnRot = Quaternion.identity;
         
@@ -188,13 +200,10 @@ public class PasswordNetworkManager : MonoBehaviour
             //    spawnRot = Quaternion.Euler(0f, 0f, 0f);
             //    break;
         }
-        //int clientIndex = NetworkManager.Singleton.ConnectedClients.Count;
-        //playerCanvas.GetComponent<AdjustPlayerUI>().MovePlayerName(clientIndex);
-
         callback(true, null, approveConnection, spawnPos, spawnRot);
-        
-        
     }
+
+    
 }
 
 

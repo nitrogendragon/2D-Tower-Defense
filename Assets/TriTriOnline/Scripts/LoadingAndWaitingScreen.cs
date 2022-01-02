@@ -3,15 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
+using TMPro;
 using Unity.Collections;
 
 public class LoadingAndWaitingScreen : NetworkBehaviour
 {
     [SerializeField] private Text loadingAndWaitingTextObject;
     [SerializeField] private GameObject messageScreen;
+    [SerializeField] private Button readyUpButton;
+    [SerializeField] private TMP_Text readyUpText;
+    [SerializeField] private GameObject UI_Password;//reference to our client's UI_Password gameobject
+    private Color initialButtonNormalColor;
+    
+    private string[] readyUpTexts = new string[] { "ready up", "ready" };
     //are we player 1? if not we will be player2
     private string[] textsToDisplay = new string[] 
     { "Loading...", "Waiting for Opponent...", "Players are Prepping for Battle..." };
+
+    private void Start()
+    {
+        //just initializing text to what it should be on start
+        readyUpText.text = readyUpTexts[0];
+        initialButtonNormalColor = readyUpButton.GetComponent<Button>().colors.normalColor;
+    }
 
     //the first time this is called we don't have things set up
     //so we can't just use the serverrpc below even though they are virtually the same
@@ -30,8 +44,6 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
             loadingAndWaitingTextObject.text = textsToDisplay[messageIndex];
             
         }
-
-
     }
 
     public bool GetCurrentMessage(int messageIndexToCompare)
@@ -69,6 +81,26 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
 
             return;
         }
+    }
+
+    public void ReadyUp()
+    {
+        var colors = readyUpButton.GetComponent<Button>().colors;
+        if(readyUpText.text == readyUpTexts[0])
+        {
+            readyUpText.text = readyUpTexts[1];
+            colors.normalColor = new Color(.5f, .8f, .2f);
+            colors.selectedColor = colors.normalColor;
+            //adjust our button colors for being readied up
+            readyUpButton.GetComponent<Button>().colors = colors;
+            UI_Password.GetComponent<PasswordNetworkManager>().HandlePlayerReadyUp(true);
+            return;
+        }
+        readyUpText.text = readyUpTexts[0];
+        colors.normalColor = initialButtonNormalColor;
+        colors.selectedColor = initialButtonNormalColor;
+        readyUpButton.GetComponent<Button>().colors = colors;
+        UI_Password.GetComponent<PasswordNetworkManager>().HandlePlayerReadyUp(false);
     }
 
     
