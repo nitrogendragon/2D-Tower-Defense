@@ -28,7 +28,7 @@ public class TeamPicker : NetworkBehaviour
     [ClientRpc]
     private void SelectTeamClientRpc(int teamIndex, ulong localClientId)
     {
-        if (!IsServer) { Debug.Log("Again, we are not the server... clientRpc function call this time"); return; }
+        if (!IsServer) { /*Debug.Log("Again, we are not the server... clientRpc function call this time");*/ return; }
         //Debug.Log("The host is running the function");
 
         //if we don't find the local client with our Id in the connectedClients return otw output our NetworkClient as networkClient

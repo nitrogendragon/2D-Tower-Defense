@@ -30,7 +30,7 @@ public class PlayerIconPicker : NetworkBehaviour
     [ClientRpc]
     private void SelectPlayerIndexClientRpc(int playerIndex, ulong localClientId)
     {
-        if (!IsServer) { Debug.Log("Again, we are not the server... clientRpc function call this time"); return; }
+        if (!IsServer) { /*Debug.Log("Again, we are not the server... clientRpc function call this time")*/ ; return; }
         //Debug.Log("The host is running the function");
 
         //if we don't find the local client with our Id in the connectedClients return otw output our NetworkClient as networkClient
