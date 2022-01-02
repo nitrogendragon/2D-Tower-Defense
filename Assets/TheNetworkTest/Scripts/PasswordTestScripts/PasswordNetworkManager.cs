@@ -19,7 +19,7 @@ public class PasswordNetworkManager : MonoBehaviour
 
     private static ulong hostClientId;//our host client
     private static ulong player2ClientId;// our connected client aka player 2
-    private static NetworkVariable<byte> playerCount = new NetworkVariable<byte>();
+    
    
     private void Start()
     {
@@ -31,9 +31,9 @@ public class PasswordNetworkManager : MonoBehaviour
 
     private void Update()
     {
-        if(NetworkManager.Singleton.IsHost && uiMain.GetComponent<LoadingAndWaitingScreen>().GetCurrentMessage(2) && NetworkManager.Singleton.ConnectedClients.Count == 1)
+        if (NetworkManager.Singleton.IsHost && uiMain.GetComponent<LoadingAndWaitingScreen>().GetCurrentMessage(2) && NetworkManager.Singleton.ConnectedClients.Count == 1)
         {
-                uiMain.GetComponent<LoadingAndWaitingScreen>().SetScreenMessage(1);        
+            uiMain.GetComponent<LoadingAndWaitingScreen>().SetScreenMessage(1);
         }
     }
 
@@ -66,18 +66,20 @@ public class PasswordNetworkManager : MonoBehaviour
 
     public void Leave()
     {
-        ShutdownEveryoneServerRpc();
+        ShutdownEveryone();
     }
 
-    [ServerRpc(RequireOwnership =false)]
-    private void ShutdownEveryoneServerRpc()
+    //[ServerRpc(RequireOwnership =false)]
+    private void ShutdownEveryone()
     {
-        ShutdownEveryoneClientRpc();  
+       
+        ShutdownClient();  
     }
 
-    [ClientRpc]
-    private void ShutdownEveryoneClientRpc()
+   
+    private void ShutdownClient()
     {
+        
         NetworkManager.Singleton.Shutdown();
         NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
         //}
