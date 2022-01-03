@@ -13,12 +13,16 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
     [SerializeField] private Button readyUpButton;
     [SerializeField] private TMP_Text readyUpText;
     [SerializeField] private GameObject UI_Password;//reference to our client's UI_Password gameobject
+    [SerializeField] private GameObject boardManagerNetwork;
+    [SerializeField] private GameObject cardsControllerNetwork;
     private Color initialButtonNormalColor;
     
     private string[] readyUpTexts = new string[] { "ready up", "ready" };
     //are we player 1? if not we will be player2
     private string[] textsToDisplay = new string[] 
     { "Loading...", "Waiting for Opponent...", "Players are Prepping for Battle..." };
+
+    private NetworkVariable<int> playerReadyCount = new NetworkVariable<int>(0);
 
     private void Start()
     {
@@ -86,7 +90,18 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
     public void ReadyUp(bool didWeLeave)
     {
         var colors = readyUpButton.GetComponent<Button>().colors;
-        if(readyUpText.text == readyUpTexts[0] && !didWeLeave)
+        if(readyUpText.text == readyUpTexts[1] && didWeLeave && IsHost)
+        {
+            Debug.Log("We ran the host disable version");
+            readyUpText.text = readyUpTexts[0];
+            colors.normalColor = initialButtonNormalColor;
+            colors.selectedColor = initialButtonNormalColor;
+            readyUpButton.GetComponent<Button>().colors = colors;
+            UI_Password.GetComponent<PasswordNetworkManager>().HandlePlayerReadyUp(false);
+            if (IsLocalPlayer) { Debug.Log("Not local on unready"); return; }
+            SetReadyPlayerCountToZeroServerRpc();
+        }
+        if (readyUpText.text == readyUpTexts[0] && !didWeLeave)
         {
             readyUpText.text = readyUpTexts[1];
             colors.normalColor = new Color(.5f, .8f, .2f);
@@ -94,18 +109,93 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
             //adjust our button colors for being readied up
             readyUpButton.GetComponent<Button>().colors = colors;
             UI_Password.GetComponent<PasswordNetworkManager>().HandlePlayerReadyUp(true);
-            return;
+            if (IsLocalPlayer) { Debug.Log("Not local on ready up"); return; }
+            //we readied up so we are adding
+            ChangeReadyPlayerCountServerRpc(true);
         }
-        readyUpText.text = readyUpTexts[0];
-        colors.normalColor = initialButtonNormalColor;
-        colors.selectedColor = initialButtonNormalColor;
-        readyUpButton.GetComponent<Button>().colors = colors;
-        UI_Password.GetComponent<PasswordNetworkManager>().HandlePlayerReadyUp(false);
+        else
+        {
+            Debug.Log("We ran the disable version");
+            readyUpText.text = readyUpTexts[0];
+            colors.normalColor = initialButtonNormalColor;
+            colors.selectedColor = initialButtonNormalColor;
+            readyUpButton.GetComponent<Button>().colors = colors;
+            UI_Password.GetComponent<PasswordNetworkManager>().HandlePlayerReadyUp(false);
+            if (IsLocalPlayer) { Debug.Log("Not local on unready"); return; }
+            //we are no longer ready so subtracting
+            ChangeReadyPlayerCountServerRpc(false);
+        }
+
+        
+        
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    private void ChangeReadyPlayerCountServerRpc(bool playerReadiedUp)
+    {
+        //only server should be changing this networkvariable playersReadyCount
+        if (!IsServer) { return; }
+        //add if readied up otherwise subtract 1 unless already zero
+        playerReadyCount.Value += playerReadiedUp ? 1 : playerReadyCount.Value == 0 ? 0 : -1;
+        Debug.Log(playerReadyCount.Value + " number of players ready");
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetReadyPlayerCountToZeroServerRpc()
+    {
+        //only server should be changing this networkvariable playersReadyCount
+        if (!IsServer) { return; }
+        //add if readied up otherwise subtract 1 unless already zero
+        playerReadyCount.Value = 0;
+        Debug.Log(playerReadyCount.Value + " number of players ready");
+    }
+
+    private void OnEnable()
+    {
+        playerReadyCount.OnValueChanged += OnPlayerReadyCountChanged;
+    }
+
+    private void OnDisable()
+    {
+        playerReadyCount.OnValueChanged -= OnPlayerReadyCountChanged;
+    }
+
+    private void OnPlayerReadyCountChanged(int oldCount, int newCount)
+    {
+        if (!IsClient) { return; }
+        //set things to initial values
+        if(playerReadyCount.Value == 2) 
+        {
+            Debug.Log("We got here");
+            //if (IsHost)
+            //{
+            //    //We'll try doing it this way
+            //    playerReadyCount.Value = 0;
+            //    //ChangeReadyPlayerCountServerRpc(false);
+
+            //}
+            messageScreen.SetActive(false);
+            loadingAndWaitingTextObject.text = "";
+            SetUpField();
+            //we are no longer ready so subtracting
+            
+        }
+    }
+
+    private void DisableField()
+    {
+        boardManagerNetwork.SetActive(false);
+        cardsControllerNetwork.SetActive(false);
+    }
+
+    private void SetUpField()
+    {
+        boardManagerNetwork.SetActive(true);
+        cardsControllerNetwork.SetActive(true);
     }
 
 
 
-    
 
 
 
