@@ -10,6 +10,7 @@ public class SquareNetObj : NetworkBehaviour
     [SerializeField] private TMP_Text squareText;
     [SerializeField] private Canvas myCanvas;
 
+    private static FixedString32Bytes[] wordsList = new FixedString32Bytes[] { "test", "pie", "apples", "banana", "hooray!" };
     private NetworkVariable<Color> squareColor = new NetworkVariable<Color>();
     private NetworkVariable<FixedString32Bytes> squareTextString = new NetworkVariable<FixedString32Bytes>();
 
@@ -29,11 +30,15 @@ public class SquareNetObj : NetworkBehaviour
 
         //make sure this belongs to us
         if (!IsOwner) { return; }
-
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            ChangeColorServerRpc();
+            ChangeTextServerRpc();
+        }
         //make sure we hit the left mouse button
         if (!Input.GetKeyDown(KeyCode.Space)) { return; }
         DestroyNetworkObjectServerRpc();
-
+        
     }
 
 
@@ -69,4 +74,42 @@ public class SquareNetObj : NetworkBehaviour
         //as long as we do this on the server it will update for everyone
         Destroy(gameObject);
     }
+
+    [ServerRpc(RequireOwnership =false)]
+    private void ChangeColorServerRpc()
+    {
+        if (!IsServer) { return; }
+        squareColor.Value = Random.ColorHSV();
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    private void ChangeTextServerRpc()
+    {
+        int index = Random.Range(0, 4);
+        squareTextString.Value = wordsList[index];
+    }
+
+    //[ServerRpc]
+    //private void ChangeTextServerRpc()
+    //{
+    //    if (IsHost)
+    //    {
+    //        Debug.Log("host changed text");
+    //        squareTextString.Value = "we tried";
+    //    }
+    //    ChangeTextClientRpc();
+
+
+    //}
+
+    //[ClientRpc]
+    //private void ChangeTextClientRpc()
+    //{
+    //    //only the server can write 
+    //    if (IsLocalPlayer)
+    //    {
+    //        Debug.Log("client changed its text itself");
+    //        squareText.text = "we tried";
+    //    }
+    //}
 }
