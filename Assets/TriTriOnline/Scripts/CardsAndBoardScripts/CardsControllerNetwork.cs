@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class CardsControllerNetwork : MonoBehaviour
+public class CardsControllerNetwork : NetworkBehaviour
 {
     public BoardManagerNetwork boardManager;
     private GameObject selectedCard;
     private bool startFirstDraw = false;
+    //will/can be used to delay several actions like in the yugioh card games or other games
     private float startWait = 1f;
     protected bool isFirstDraw  = true;
     protected int cardsToDraw;
@@ -17,9 +19,19 @@ public class CardsControllerNetwork : MonoBehaviour
     private float widthOfCardsContainer;
     private float mobCardsWidth;
     private float timePassed = 0;
+    [SerializeField ]private int cardsInDeck = 20;
+    //will be used to determine what a player should be doing, drawing, placing a card/cards, activating abilities/spells/traps/field cards, ending turn
+    private NetworkVariable<int> turnActionIndex = new NetworkVariable<int>(0);
+    //Network Specific variables below
+    //who's turn is it? player1(host) or player2(client), determines if we should draw and can place cards and so on in the turn execution cycle
+    private NetworkVariable<bool> isPlayer1Turn = new NetworkVariable<bool>();
+
     // Start is called before the first frame update
     void Start()
     {
+        //initialize/re-initialize variables
+        cardsInDeck = 20;
+        startFirstDraw = false;
         widthOfCardsContainer = cardsContainer.GetComponent<SpriteRenderer>().bounds.size.x;
         mobCardsWidth = mobCard.GetComponent<SpriteRenderer>().bounds.size.x;
         StartCoroutine("WaitToDraw");
@@ -31,7 +43,7 @@ public class CardsControllerNetwork : MonoBehaviour
         {
             Debug.Log("this is our first draw");
             isFirstDraw = false;
-            return cardsToDraw = 2;
+            return cardsToDraw = 5;
         }
         else
         {
@@ -74,9 +86,19 @@ public class CardsControllerNetwork : MonoBehaviour
 
         for (int cardsDrawn = 0; cardsDrawn < cardsToDraw; cardsDrawn++)
         {
+            Debug.Log("Prev cards in hand: " + prevCardsInHandCount);
+            Debug.Log("cards to draw: " + cardsToDraw);
             //Debug.Log("we are drawing our cards, card number being drawn: " + (cardsDrawn+1));
             GameObject myMobCard = Instantiate(mobCard);
             cardsInHand.Add(myMobCard);
+            //special exception to formula when only 1 card because otherwise it shows up in a weird place, so we center here
+            if (prevCardsInHandCount == 0 && cardsToDraw == 1)
+            {
+                Debug.Log("we met the conditions");
+                myMobCard.transform.position = new Vector3(0, cardsContainer.transform.position.y, 0);
+                return;
+            }
+            Debug.Log("We didn't have zero cards in hand and are not the only card being drawn");
             myMobCard.transform.position =
                 new Vector3(cardsContainer.transform.position.x + -widthOfCardsContainer / 1.7f + (mobCardsWidth / 2) +
                 ((mobCardsWidth + .1f) * (cardsDrawn + prevCardsInHandCount) + .1f + widthOfCardsContainer / cardsInHandCount),
