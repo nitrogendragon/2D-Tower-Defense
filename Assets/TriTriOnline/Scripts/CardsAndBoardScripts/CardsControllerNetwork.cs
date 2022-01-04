@@ -112,7 +112,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
-        if (hit.collider && hit.collider.tag == "MobCard" && hit.collider.GetComponent<MobCard>().isInHand)
+        if (hit.collider && hit.collider.tag == "MobCard" && hit.collider.GetComponent<MobCardNetwork>().isInHand)
         {
             if (selectedCard)
             {
