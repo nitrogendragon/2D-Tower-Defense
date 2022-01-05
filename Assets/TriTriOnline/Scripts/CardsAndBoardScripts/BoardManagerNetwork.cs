@@ -5,7 +5,6 @@ using UnityEngine;
 public class BoardManagerNetwork : MonoBehaviour
 {
     public GameObject boardTile;
-    public GameObject MobCard;
     private List<GameObject> boardTiles = new List<GameObject>();//store all our board pieces in here
     private SpriteRenderer lastHoveredBoardTileSpriteRenderer;
     private GameObject selectedBoardTile;

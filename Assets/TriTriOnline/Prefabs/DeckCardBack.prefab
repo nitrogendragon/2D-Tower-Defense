@@ -94,8 +94,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5937070543686858691}
   - component: {fileID: 5937070543686858692}
-  - component: {fileID: 8767551106296135130}
-  - component: {fileID: 784186394210645718}
   m_Layer: 0
   m_Name: DeckCardBack
   m_TagString: Untagged
@@ -171,41 +169,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8767551106296135130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5937070543686858693}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 951099334
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
---- !u!114 &784186394210645718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5937070543686858693}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b58655cb478f6f4180a3989a7527c6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mobSprites:
-  - {fileID: 21300000, guid: f04c5e9f8a548f549b86d5e71b124e4c, type: 3}
-  - {fileID: 21300000, guid: 3ede4b541d0050f4ebecaadec9732a2c, type: 3}
-  - {fileID: 21300000, guid: aaecc8fc077efa949a2e0de091a4431f, type: 3}
-  - {fileID: 21300000, guid: 7d0266e6370389748bf7af001b7aed20, type: 3}
-  - {fileID: 21300000, guid: 19f362365c0146b4d90c01dd3ba2f4c4, type: 3}
-  - {fileID: 21300000, guid: 861d5bffb3ecf254ea6c9e1b376974a7, type: 3}
-  - {fileID: 21300000, guid: 9f9ab5cf9fbbfc94b9b41ea529de2996, type: 3}
-  - {fileID: 21300000, guid: a8428cd9eb49f0e4e92f594c04eaec72, type: 3}
-  - {fileID: 21300000, guid: 602ce352593f677459e409e41b8d9aa1, type: 3}

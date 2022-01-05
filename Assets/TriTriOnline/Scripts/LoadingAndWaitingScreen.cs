@@ -14,7 +14,8 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
     [SerializeField] private TMP_Text readyUpText;
     [SerializeField] private GameObject UI_Password;//reference to our client's UI_Password gameobject
     [SerializeField] private GameObject boardManagerNetwork;
-    [SerializeField] private GameObject cardsControllerNetwork;
+    [SerializeField] private GameObject cardsControllerNetwork;//on our UI_Main gameobject now
+    [SerializeField] private GameObject cardsContainer;//empty container to hold our card and deck related objects
     private Color initialButtonNormalColor;
     
     private string[] readyUpTexts = new string[] { "ready up", "ready" };
@@ -185,13 +186,14 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
     private void DisableField()
     {
         boardManagerNetwork.SetActive(false);
-        cardsControllerNetwork.SetActive(false);
+        cardsContainer.SetActive(false);
     }
 
     private void SetUpField()
     {
         boardManagerNetwork.SetActive(true);
-        cardsControllerNetwork.SetActive(true);
+        cardsContainer.SetActive(true);
+        cardsControllerNetwork.GetComponent<CardsControllerNetwork>().StartGame();
     }
 
 

@@ -10,8 +10,8 @@ public class MobCardNetwork : NetworkBehaviour
     private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints;
     private Color player1mobBackgroundColor = new Color(.4f,0,0);
     private Color player2mobBackgroundColor = new Color(.1f, .1f, 1);
-    [SerializeField]private SpriteRenderer mobSpriteRenderer;
-    [SerializeField]private SpriteRenderer mobBackground;//technically the
+    [SerializeField]private GameObject mobSpriteRenderer;
+    [SerializeField]private GameObject mobBackground;//technically the
     private NetworkVariable<Color> mobBackgroundColor = new NetworkVariable<Color>();
     private NetworkVariable<int> playerOwnerIndex = new NetworkVariable<int>(1);
 
@@ -29,7 +29,7 @@ public class MobCardNetwork : NetworkBehaviour
     private void OnPlayerOwnershipAndColorChanged(int oldPlayerOwnerIndex, int newPlayerOwnerIndex)
     { 
         if (!IsClient) { return; }
-        mobBackground.color = mobBackgroundColor.Value;
+        mobBackground.GetComponent<SpriteRenderer>().color = mobBackgroundColor.Value;
     }
 
     [ServerRpc]
@@ -59,8 +59,10 @@ public class MobCardNetwork : NetworkBehaviour
        
     }
     //will be ran when the card is drawn/instantiated
-    private void CreateMobCard(int initTopStat, int initBottomStat, int initLeftStat, int initRightStat, int initHitPoints)
+    [ServerRpc]
+    public void CreateMobCardServerRpc(int initTopStat, int initBottomStat, int initLeftStat, int initRightStat, int initHitPoints)
     {
+        if (!IsServer) { return; }
         topStat = initTopStat;
         bottomStat = initBottomStat;
         rightStat = initRightStat;
@@ -70,8 +72,17 @@ public class MobCardNetwork : NetworkBehaviour
         curBottomStat = bottomStat;
         curLeftStat = leftStat;
         curRightStat = rightStat;
-        curHitPoints = hitPoints; 
+        curHitPoints = hitPoints;
+        
     }
+
+    public int[] GrabStats()
+    {
+        int[] tempStats = new int[] { leftStat, rightStat, topStat, bottomStat, hitPoints };
+        return tempStats;
+    }
+
+    
 
 
 }

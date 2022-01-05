@@ -629,6 +629,11 @@ MonoBehaviour:
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
+      Prefab: {fileID: 8572697604928018494, guid: 5e1f5d9963e3e684b92e98d7a668e412, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
       Prefab: {fileID: 5181280790988600283, guid: 411a1f25535062f468be42d2b9b76c9d, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
@@ -1050,6 +1055,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 511302930}
   m_CullTransparentMesh: 1
+--- !u!1 &531717841 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3405284982200586677, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
+  m_PrefabInstance: {fileID: 1914408944}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &546174360
 GameObject:
   m_ObjectHideFlags: 0
@@ -3225,14 +3235,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1914408947, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: boardManager
-      value: 
-      objectReference: {fileID: 1448446838}
-    - target: {fileID: 3405284982200586635, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_SortingOrder
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3405284982315401506, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -3279,23 +3281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3405284982315401507, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
       propertyPath: m_Name
-      value: CardsControllerNetwork
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982315401507, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982858896267, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_SortingLayer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982858896267, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982858896267, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_SortingLayerID
-      value: 0
+      value: CardsContainer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
@@ -3304,22 +3290,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3405284982315401507, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
   m_PrefabInstance: {fileID: 1914408944}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1914408948
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1914408945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 833894973
-  AlwaysReplicateAsRoot: 0
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1 &1960424794
 GameObject:
   m_ObjectHideFlags: 0
@@ -3850,6 +3820,9 @@ GameObject:
   - component: {fileID: 8754192519461090462}
   - component: {fileID: 8754192519461090463}
   - component: {fileID: 8754192519461090534}
+  - component: {fileID: 8754192519461090535}
+  - component: {fileID: 8754192519461090536}
+  - component: {fileID: 8754192519461090537}
   m_Layer: 0
   m_Name: UI_Main
   m_TagString: Untagged
@@ -3890,4 +3863,58 @@ MonoBehaviour:
   readyUpText: {fileID: 1626423001}
   UI_Password: {fileID: 913685401}
   boardManagerNetwork: {fileID: 1448446837}
-  cardsControllerNetwork: {fileID: 1914408945}
+  cardsControllerNetwork: {fileID: 8754192519461090532}
+  cardsContainer: {fileID: 1914408945}
+--- !u!114 &8754192519461090535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754192519461090532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b58655cb478f6f4180a3989a7527c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mobSprites:
+  - {fileID: 21300000, guid: f04c5e9f8a548f549b86d5e71b124e4c, type: 3}
+  - {fileID: 21300000, guid: 3ede4b541d0050f4ebecaadec9732a2c, type: 3}
+  - {fileID: 21300000, guid: aaecc8fc077efa949a2e0de091a4431f, type: 3}
+  - {fileID: 21300000, guid: 7d0266e6370389748bf7af001b7aed20, type: 3}
+  - {fileID: 21300000, guid: 19f362365c0146b4d90c01dd3ba2f4c4, type: 3}
+  - {fileID: 21300000, guid: 861d5bffb3ecf254ea6c9e1b376974a7, type: 3}
+  - {fileID: 21300000, guid: 9f9ab5cf9fbbfc94b9b41ea529de2996, type: 3}
+  - {fileID: 21300000, guid: a8428cd9eb49f0e4e92f594c04eaec72, type: 3}
+  - {fileID: 21300000, guid: 602ce352593f677459e409e41b8d9aa1, type: 3}
+--- !u!114 &8754192519461090536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754192519461090532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5f36c1e81d4354182822789714032f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mobCard: {fileID: 615682183105156780, guid: 5e1f5d9963e3e684b92e98d7a668e412, type: 3}
+  boardManager: {fileID: 1448446838}
+  cardsContainer: {fileID: 531717841}
+  mobCardOffServer: {fileID: 8572697604928018494, guid: 4619b87295280404fa1e7ecb84d23487, type: 3}
+  mobDeckNetwork: {fileID: 8754192519461090535}
+  cardsInDeck: 30
+--- !u!114 &8754192519461090537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8754192519461090532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7755ef4ec11a7944fa7ea7c7f785793a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkPrefab: {fileID: 5181280790988600282, guid: 411a1f25535062f468be42d2b9b76c9d, type: 3}

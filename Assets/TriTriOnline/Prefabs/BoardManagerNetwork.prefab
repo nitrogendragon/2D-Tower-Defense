@@ -45,4 +45,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boardTile: {fileID: 4800091394724150467, guid: 62d5d759d38a72a45b39db0ba014acaa, type: 3}
-  MobCard: {fileID: 8572697604928018494, guid: 5e1f5d9963e3e684b92e98d7a668e412, type: 3}
