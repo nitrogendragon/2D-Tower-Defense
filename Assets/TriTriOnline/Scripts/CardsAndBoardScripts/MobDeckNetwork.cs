@@ -29,11 +29,18 @@ public class MobDeckNetwork : MonoBehaviour
         Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
     }
 
-    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList)
+    public Sprite getSprite(int mobSpriteindex)
+    {
+        Sprite tempSprite = mobSprites[mobSpriteindex];
+        return tempSprite;
+    }
+
+    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex)
     {
 
         //get the mob index from our decks mob Index List
         int mobListIndex = deckCardMobIndexReferences[currentDeckCardIndex];
+        mobSpritesListSpriteIndex = mobListIndex;//this should get us the index that we want for grabbing the appropriate sprite later
         //increment currentDeckcard
         currentDeckCardIndex += 1;
         //get our stats for the mob

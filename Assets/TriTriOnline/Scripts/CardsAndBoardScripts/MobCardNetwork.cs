@@ -12,24 +12,41 @@ public class MobCardNetwork : NetworkBehaviour
     private Color player2mobBackgroundColor = new Color(.1f, .1f, 1);
     [SerializeField]private GameObject mobSpriteRenderer;
     [SerializeField]private GameObject mobBackground;//technically the
-    private NetworkVariable<Color> mobBackgroundColor = new NetworkVariable<Color>();
-    private NetworkVariable<int> playerOwnerIndex = new NetworkVariable<int>(1);
+    private NetworkVariable<Color> mobBackgroundColor = new NetworkVariable<Color>(new Color(.4f,0,0));//default is player 1 color
+    private NetworkVariable<int> playerOwnerIndex = new NetworkVariable<int>(0);//0 for no ownership by default
+    private NetworkVariable<int> mobSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
+    [SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
 
     private void OnEnable()
     {
         playerOwnerIndex.OnValueChanged += OnPlayerOwnershipAndColorChanged;
+        mobSpriteIndex.OnValueChanged += OnMobSpriteIndexChanged;
     }
 
     private void OnDisable()
     {
         playerOwnerIndex.OnValueChanged -= OnPlayerOwnershipAndColorChanged;
+        mobSpriteIndex.OnValueChanged += OnMobSpriteIndexChanged;
     }
 
     //don't feel a need for two functions, the way it works makes more sense to me to do it like this.
     private void OnPlayerOwnershipAndColorChanged(int oldPlayerOwnerIndex, int newPlayerOwnerIndex)
-    { 
+    {
+        if (!IsClient) { return; }//testing these parameters
+        Debug.Log("the player owners index: " + newPlayerOwnerIndex);
+        if(newPlayerOwnerIndex == 1)
+        {
+            mobBackground.GetComponent<SpriteRenderer>().color = player1mobBackgroundColor;
+            return;
+        }
+        mobBackground.GetComponent<SpriteRenderer>().color = player2mobBackgroundColor;
+
+    }
+
+    private void OnMobSpriteIndexChanged(int oldIndex,int newIndex)
+    {
         if (!IsClient) { return; }
-        mobBackground.GetComponent<SpriteRenderer>().color = mobBackgroundColor.Value;
+        mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = mobSprites[newIndex];//this should get the sprite from the script and let us set our sprite, hopefully
     }
 
     [ServerRpc]
@@ -41,8 +58,9 @@ public class MobCardNetwork : NetworkBehaviour
         Destroy(gameObject);
     }
 
+    //could work well for changing colors /owners when a unit dies for example and switches teams
     [ServerRpc(RequireOwnership = false)]
-    private void ChangePlayerOwnerAndColorServerRpc()
+    public void ChangePlayerOwnerAndColorServerRpc()
     {
         //only server can do the work to be done
         if (!IsServer) { return; }
@@ -60,7 +78,7 @@ public class MobCardNetwork : NetworkBehaviour
     }
     //will be ran when the card is drawn/instantiated
     [ServerRpc]
-    public void CreateMobCardServerRpc(int initTopStat, int initBottomStat, int initLeftStat, int initRightStat, int initHitPoints)
+    public void CreateMobCardServerRpc(int initTopStat, int initBottomStat, int initLeftStat, int initRightStat, int initHitPoints, int playerOwnrIndex, int mobSpriteIndexreference)
     {
         if (!IsServer) { return; }
         topStat = initTopStat;
@@ -73,6 +91,8 @@ public class MobCardNetwork : NetworkBehaviour
         curLeftStat = leftStat;
         curRightStat = rightStat;
         curHitPoints = hitPoints;
+        playerOwnerIndex.Value = playerOwnrIndex;
+        mobSpriteIndex.Value = mobSpriteIndexreference;
         
     }
 
