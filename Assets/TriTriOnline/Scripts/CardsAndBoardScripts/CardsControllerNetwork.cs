@@ -109,15 +109,21 @@ public class CardsControllerNetwork : NetworkBehaviour
         else { isPlayer1 = false; }
         for (int cardsDrawn = 0; cardsDrawn < cardsToDraw; cardsDrawn++)
         {
-            Sprite tempSprite = null;
+            Sprite tempMobSprite = null;
+            Sprite tempAttributeSprite = null;
+            //in order, left, right, top, bottom, hptens, hpones
+            Sprite[] tempAttackAndHpValueSpritesList = new Sprite[6];
             int[] tempList = new int[5];
             int tempMobSpriteIndex = 0;
-            mobDeckNetwork.setUpCardOnDraw(ref tempSprite, ref tempList, ref tempMobSpriteIndex);
+            mobDeckNetwork.setUpCardOnDraw(ref tempMobSprite, ref tempList, ref tempMobSpriteIndex,ref tempAttackAndHpValueSpritesList, ref tempAttributeSprite);
             //Debug.Log("Prev cards in hand: " + prevCardsInHandCount);
             //Debug.Log("cards to draw: " + cardsToDraw);
             //Debug.Log("we are drawing our cards, card number being drawn: " + (cardsDrawn+1));
             GameObject myMobCardInstance = Instantiate(mobCardOffServer);
-            myMobCardInstance.GetComponent<MobCard>().CreateMobCard(tempList[0], tempList[1], tempList[2], tempList[3], tempList[4], tempSprite,tempMobSpriteIndex, isPlayer1);
+            myMobCardInstance.GetComponent<MobCard>().CreateMobCard(tempList[0], tempList[1], tempList[2], tempList[3], tempList[4], tempMobSprite,tempMobSpriteIndex, isPlayer1,
+                tempAttackAndHpValueSpritesList[0], tempAttackAndHpValueSpritesList[1], tempAttackAndHpValueSpritesList[2],tempAttackAndHpValueSpritesList[3], tempAttackAndHpValueSpritesList[4],
+                tempAttackAndHpValueSpritesList[5], tempAttributeSprite);
+
             cardsInHand.Add(myMobCardInstance);
             //special exception to formula when only 1 card because otherwise it shows up in a weird place, so we center here
             if (prevCardsInHandCount == 0 && cardsToDraw == 1)

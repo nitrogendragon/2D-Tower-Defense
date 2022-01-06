@@ -11,12 +11,17 @@ public class MobCardNetwork : NetworkBehaviour
     private Color player1mobBackgroundColor = new Color(.4f,0,0);
     private Color player2mobBackgroundColor = new Color(.1f, .1f, 1);
     [SerializeField]private GameObject mobSpriteRenderer;
-    [SerializeField]private GameObject mobBackground;//technically the
+    [SerializeField]private GameObject topStatSprite,bottomStatSprite,leftStatSprite, rightStatSprite, hpTensSprite, hpOnesSprite, attributeSprite;//technically renderers but for some reason i named them as just xSprite
+    [SerializeField]private GameObject mobBackground;
     private NetworkVariable<Color> mobBackgroundColor = new NetworkVariable<Color>(new Color(.4f,0,0));//default is player 1 color
     private NetworkVariable<int> playerOwnerIndex = new NetworkVariable<int>(0);//0 for no ownership by default
     private NetworkVariable<int> mobSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     [SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
 
+    private void Start()
+    {
+        
+    }
     private void OnEnable()
     {
         playerOwnerIndex.OnValueChanged += OnPlayerOwnershipAndColorChanged;

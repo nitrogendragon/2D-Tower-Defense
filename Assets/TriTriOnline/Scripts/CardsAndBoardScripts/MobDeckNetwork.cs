@@ -14,6 +14,9 @@ public class MobDeckNetwork : MonoBehaviour
         {/*murkblood hydra */ 7, 7, 7, 4, 18 }, {/*Seaweed Hermit */ 4, 4, 6, 2, 14 }, {/*Conspiring Sorceror */ 6, 6, 3, 5, 12 }, {/*Wandering Knight */ 6, 5, 4, 3, 14 }, {/*OtherRealm Tammy */ 6, 7, 5, 9, 15 }};
     private int[] deckCardMobIndexReferences = new int[30];
     [SerializeField]private List<Sprite> mobSprites = new List<Sprite>();
+    [SerializeField] private List<Sprite> attackValueSprites = new List<Sprite>();
+    [SerializeField] private List<Sprite> hpValueSprites = new List<Sprite>();
+    [SerializeField] private List<Sprite> attributeSprites = new List<Sprite>();
     void Start()
     {
         CreateDeck();
@@ -35,7 +38,7 @@ public class MobDeckNetwork : MonoBehaviour
         return tempSprite;
     }
 
-    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex)
+    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite)
     {
 
         //get the mob index from our decks mob Index List
@@ -46,6 +49,30 @@ public class MobDeckNetwork : MonoBehaviour
         //get our stats for the mob
         int[] MobsStats = { mobStats[mobListIndex, 0], mobStats[mobListIndex, 1], mobStats[mobListIndex, 2], mobStats[mobListIndex, 3], mobStats[mobListIndex, 4] };//probably really bad but it should work
         mobStatsList = MobsStats;
+        //get the value sprites in order of leftstat,rightstat,topstat, bottomstat, 
+        Sprite[] atkAndHpValSprites = { attackValueSprites[mobStatsList[0]], attackValueSprites[mobStatsList[1]], attackValueSprites[mobStatsList[2]], attackValueSprites[mobStatsList[3]],null,null };
+        int hpVal = mobStatsList[4];
+        if(hpVal < 10)
+        {
+            atkAndHpValSprites[4] = null;
+            atkAndHpValSprites[5] = hpValueSprites[hpVal];
+        }
+        else if(hpVal < 20)
+        {
+            atkAndHpValSprites[4] = hpValueSprites[1];
+            atkAndHpValSprites[5] = hpValueSprites[hpVal-10];
+
+        }
+        else
+        {
+            atkAndHpValSprites[4] = hpValueSprites[2];
+            atkAndHpValSprites[5] = hpValueSprites[hpVal-20];
+        }
+
+        //apply to the referenced parameter
+        attackAndHpValueSprites = atkAndHpValSprites;
+        //just going to default to zero index for now
+        attributeSprite = attributeSprites[0];
         mobSprite = mobSprites[mobListIndex];
     }
 

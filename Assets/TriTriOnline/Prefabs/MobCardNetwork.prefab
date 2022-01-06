@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 2952257206642834629}
   - component: {fileID: 2603436627000942966}
   m_Layer: 3
-  m_Name: HitPointsTensOnesDigit
+  m_Name: HitPointsOnesDigit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -596,6 +596,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInHand: 1
   mobSpriteRenderer: {fileID: 8572697605632815781}
+  topStatSprite: {fileID: 8572697604610899497}
+  bottomStatSprite: {fileID: 8572697604570450079}
+  leftStatSprite: {fileID: 8572697604545466510}
+  rightStatSprite: {fileID: 8572697605171084845}
+  hpTensSprite: {fileID: 797874455920283043}
+  hpOnesSprite: {fileID: 1054301241992941858}
   mobBackground: {fileID: 8572697604928018494}
   mobSprites:
   - {fileID: 21300000, guid: f04c5e9f8a548f549b86d5e71b124e4c, type: 3}
