@@ -113,16 +113,17 @@ public class CardsControllerNetwork : NetworkBehaviour
             Sprite tempAttributeSprite = null;
             //in order, left, right, top, bottom, hptens, hpones
             Sprite[] tempAttackAndHpValueSpritesList = new Sprite[6];
-            int[] tempList = new int[5];
+            int[] tempStatList = new int[5];
             int tempMobSpriteIndex = 0;
-            mobDeckNetwork.setUpCardOnDraw(ref tempMobSprite, ref tempList, ref tempMobSpriteIndex,ref tempAttackAndHpValueSpritesList, ref tempAttributeSprite);
+            int tempAttributeSpriteIndex = 0;
+            mobDeckNetwork.setUpCardOnDraw(ref tempMobSprite, ref tempStatList, ref tempMobSpriteIndex,ref tempAttackAndHpValueSpritesList, ref tempAttributeSprite, ref tempAttributeSpriteIndex);
             //Debug.Log("Prev cards in hand: " + prevCardsInHandCount);
             //Debug.Log("cards to draw: " + cardsToDraw);
             //Debug.Log("we are drawing our cards, card number being drawn: " + (cardsDrawn+1));
             GameObject myMobCardInstance = Instantiate(mobCardOffServer);
-            myMobCardInstance.GetComponent<MobCard>().CreateMobCard(tempList[0], tempList[1], tempList[2], tempList[3], tempList[4], tempMobSprite,tempMobSpriteIndex, isPlayer1,
+            myMobCardInstance.GetComponent<MobCard>().CreateMobCard(tempStatList[0], tempStatList[1], tempStatList[2], tempStatList[3], tempStatList[4], tempMobSprite,tempMobSpriteIndex, isPlayer1,
                 tempAttackAndHpValueSpritesList[0], tempAttackAndHpValueSpritesList[1], tempAttackAndHpValueSpritesList[2],tempAttackAndHpValueSpritesList[3], tempAttackAndHpValueSpritesList[4],
-                tempAttackAndHpValueSpritesList[5], tempAttributeSprite);
+                tempAttackAndHpValueSpritesList[5], tempAttributeSprite, tempAttributeSpriteIndex);
 
             cardsInHand.Add(myMobCardInstance);
             //special exception to formula when only 1 card because otherwise it shows up in a weird place, so we center here
@@ -168,9 +169,9 @@ public class CardsControllerNetwork : NetworkBehaviour
             int[] tempStats = selectedCard.GetComponent<MobCard>().GetStats();
             bool tempIsPlayer1 = selectedCard.GetComponent<MobCard>().GetPlayer1Owned();
             int tempMobSpriteIndexRef = selectedCard.GetComponent<MobCard>().GetMobSpriteIndex();
-           
+            int tempAttributeSpriteIndexRef = selectedCard.GetComponent<MobCard>().GetAttributeSpriteIndex();
             selectedCard.GetComponent<MobCard>().isInHand = false;
-            SpawnMobCardOnBoardServerRpc(cardPlacementPosition, tempStats, tempIsPlayer1,tempMobSpriteIndexRef);
+            SpawnMobCardOnBoardServerRpc(cardPlacementPosition, tempStats, tempIsPlayer1,tempMobSpriteIndexRef, tempAttributeSpriteIndexRef);
 
             //update cards in hand list
             List<GameObject> tempList = new List<GameObject>();
@@ -193,7 +194,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     }
 
     [ServerRpc (RequireOwnership = false)]
-    private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos, int[] tempStats, bool isPlayer1, int mobSpriteIndexRef)
+    private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos, int[] tempStats, bool isPlayer1, int mobSpriteIndexRef, int attributeSpriteIndexRef)
     {
         //we can't do this if we aren't the server
         if (!IsServer) { Debug.Log(" we got stuck in the not server if statement"); return; }
@@ -204,7 +205,7 @@ public class CardsControllerNetwork : NetworkBehaviour
 
         int playerOwnerIndex = isPlayer1 ? 1 : 2;
 
-        myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex,mobSpriteIndexRef);
+        myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex,mobSpriteIndexRef, attributeSpriteIndexRef);
 
         
        

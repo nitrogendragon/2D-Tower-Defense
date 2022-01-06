@@ -38,7 +38,7 @@ public class MobDeckNetwork : MonoBehaviour
         return tempSprite;
     }
 
-    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite)
+    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite, ref int attributeSpriteIndex)
     {
 
         //get the mob index from our decks mob Index List
@@ -73,6 +73,8 @@ public class MobDeckNetwork : MonoBehaviour
         attackAndHpValueSprites = atkAndHpValSprites;
         //just going to default to zero index for now
         attributeSprite = attributeSprites[0];
+        //for now it will be zero
+        attributeSpriteIndex = 0;
         mobSprite = mobSprites[mobListIndex];
     }
 

@@ -14,10 +14,10 @@ public class MobCard : MonoBehaviour
     public SpriteRenderer topStatRenderer, bottomStatRenderer, leftStatRenderer, rightStatRenderer, hitPointTensRenderer, hitPointOnesRenderer, attributeRenderer;
     private bool isPlayer1;
     private int mobSpriteIndex; //will pull to figure out what sprite to place on the networkMobCard since i can't do it on the server.
-
+    private int attributeSpriteIndex;
     
-    public void CreateMobCard(int initTopStat, int initBottomStat, int initLeftStat, int initRightStat, int initHitPoints, Sprite mobSprite, int mobSprteIndex, bool isOwnedByPlayer1,
-        Sprite topStatSprite, Sprite bottomStatSprite, Sprite leftStatSprite, Sprite rightStatSprite, Sprite hitPointTensSprite, Sprite hitPointOnesSprite, Sprite attributeSprite)
+    public void CreateMobCard(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, Sprite mobSprite, int mobSprteIndex, bool isOwnedByPlayer1,
+        Sprite leftStatSprite, Sprite rightStatSprite, Sprite topStatSprite, Sprite bottomStatSprite, Sprite hitPointTensSprite, Sprite hitPointOnesSprite, Sprite attributeSprite, int attrSpriteIndex)
     {
         topStat = initTopStat;
         bottomStat = initBottomStat;
@@ -32,6 +32,7 @@ public class MobCard : MonoBehaviour
         isPlayer1 = isOwnedByPlayer1;
         mobSpriteRenderer.sprite = mobSprite;
         mobSpriteIndex = mobSprteIndex;
+        attributeSpriteIndex = attrSpriteIndex;
         mobBackgroundRenderer.color = isPlayer1 ? player1mobBackgroundColor : player2mobBackgroundColor;
         topStatRenderer.sprite = topStatSprite;
         bottomStatRenderer.sprite = bottomStatSprite;
@@ -57,6 +58,11 @@ public class MobCard : MonoBehaviour
     public int GetMobSpriteIndex()
     {
         return mobSpriteIndex;
+    }
+
+    public int GetAttributeSpriteIndex()
+    {
+        return attributeSpriteIndex;
     }
 
     public SpriteRenderer GetBackGround()

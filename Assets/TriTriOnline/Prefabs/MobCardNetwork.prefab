@@ -602,6 +602,7 @@ MonoBehaviour:
   rightStatSprite: {fileID: 8572697605171084845}
   hpTensSprite: {fileID: 797874455920283043}
   hpOnesSprite: {fileID: 1054301241992941858}
+  attributeSprite: {fileID: 632217239214285626}
   mobBackground: {fileID: 8572697604928018494}
   mobSprites:
   - {fileID: 21300000, guid: f04c5e9f8a548f549b86d5e71b124e4c, type: 3}
@@ -613,6 +614,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9f9ab5cf9fbbfc94b9b41ea529de2996, type: 3}
   - {fileID: 21300000, guid: a8428cd9eb49f0e4e92f594c04eaec72, type: 3}
   - {fileID: 21300000, guid: 602ce352593f677459e409e41b8d9aa1, type: 3}
+  spritesReferenceHolder: {fileID: 8102171245093544691, guid: baca78a6905c79345b6abc07239d2c31, type: 3}
 --- !u!212 &602309776338339068
 SpriteRenderer:
   m_ObjectHideFlags: 0
