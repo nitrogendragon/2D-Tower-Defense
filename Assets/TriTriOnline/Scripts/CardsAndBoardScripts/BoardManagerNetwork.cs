@@ -73,15 +73,16 @@ public class BoardManagerNetwork : MonoBehaviour
             for(int i = 0; i < boardTiles.Count; i++)
             {
                 //set to 
-                if(selectedBoardTile = boardTiles[i])
+                if(selectedBoardTile.transform.position == boardTiles[i].transform.position)
                 {
                     targetIndex = i;
+                    Debug.Log("The selectedBoardTilesIndex is: " + targetIndex);
                     return targetIndex;
                 }
             }
         }
-        //we will want to account for this returning negative 1 when we try to use the function so that it doesn't actually get set to -1
-        return -1;
+        //we will want to account for this returning 9999 when we try to use the function so that it doesn't actually get set to 9999
+        return 9999;
     }
 
     private void TestRayCastHitBoardTile()

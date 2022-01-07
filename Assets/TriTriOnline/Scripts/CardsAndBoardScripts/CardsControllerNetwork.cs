@@ -163,7 +163,8 @@ public class CardsControllerNetwork : NetworkBehaviour
     {
         Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
         int cardPlacementBoardIndex = boardManager.GetSelectedBoardIndex();
-        if(cardPlacementPosition.x != 9999)//our invalid placement tile position that our function returns if not hitting a boardtile
+        Debug.Log(cardPlacementBoardIndex + " is our cardPlacementBoardIndex");
+        if(cardPlacementPosition.x != 9999 && cardPlacementBoardIndex != 9999)//our invalid placement tile position that our function returns if not hitting a boardtile
         {
             //selectedCard.GetComponent<SpriteRenderer>().color = Color.gray;
             selectedCard.transform.position = cardPlacementPosition;

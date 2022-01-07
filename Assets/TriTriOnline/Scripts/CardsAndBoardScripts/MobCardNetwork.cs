@@ -125,6 +125,8 @@ public class MobCardNetwork : NetworkBehaviour
         //assigns this networkObject Card to the board index newIndex. so we can find and compare with other cards later
         cardBoardIndexManager.SetCardIndex(this.NetworkObject, newIndex);
         Debug.Log("we set the card in the board index manager");
+        //we want to attack when placed on the field
+       
     }
 
 
@@ -196,8 +198,8 @@ public class MobCardNetwork : NetworkBehaviour
             hpTensSpriteIndex.Value = 2;
             hpOnesSpriteIndex.Value = initHitPoints - 20;
         }
-        TakeDamage(10, 0);
-        
+        Debug.Log("The board position we are going to be placed at is: " + cBoardIndex);
+        Attack(cBoardIndex);//could use cBoardIndex but want to try this first
     }
 
    
@@ -208,7 +210,29 @@ public class MobCardNetwork : NetworkBehaviour
         return tempStats;
     }
 
-    private void TakeDamage(int attackersValue,int defendersValue)
+    public int GetPlayerOwner()
+    {
+        //1 is player 1 and 2 is player 2 ezpz
+        return playerOwnerIndex.Value;
+    }
+
+    public void Attack(int cardBoardPosIndex)
+    {
+        Debug.Log("our card is at board index: " + cardBoardPosIndex);
+        int leftAttackTargetIndex = cardBoardPosIndex - 1;
+        //left attack
+        if(cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex - 1))
+        {
+            Debug.Log("There is a card here"); 
+            if(!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, leftAttackTargetIndex))
+            {
+                Debug.Log("The card we are attacking is not ours so we should deal damage");
+            }
+        }
+
+    }
+
+    public void TakeDamage(int attackersValue,int defendersValue)
     {
         if(attackersValue - defendersValue > 0)
         {

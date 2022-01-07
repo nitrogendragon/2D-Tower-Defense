@@ -5,6 +5,11 @@ using Unity.Netcode;
 
 public class CardBoardIndexManager : NetworkBehaviour
 {
+    private void Start()
+    {
+        
+    }
+
     //for now we have 9 board tiles so size of 9. the index will relate to position on field
     /**
      * 6 7 8
@@ -21,8 +26,19 @@ public class CardBoardIndexManager : NetworkBehaviour
         Debug.Log(cardsOnField[cardBoardTilePositionIndex].name);
     }
 
-    public NetworkObject GetCardAtIndex(int cardBoardIndex)
+    public bool CheckIfCardAtIndex(int cardBoardIndex)
     {
-        return cardsOnField[cardBoardIndex];
+        if (cardsOnField[cardBoardIndex]) { return true; }
+        return false;
+    }
+
+    //when doing something whether attacking or otw, pass through our cards playerOwnerIndex/Id (aka player 1 or 2?) and compare to the target card on the board playerIndex/Id
+    public bool CheckIfCardAtIndexIsOwnedByMe(int myCardPlayerOwnerIndex, int targetCardBoardIndex)
+    {
+        if( myCardPlayerOwnerIndex == cardsOnField[targetCardBoardIndex].GetComponent<MobCardNetwork>().GetPlayerOwner())
+        {
+            return true;
+        }
+        return false;
     }
 }
