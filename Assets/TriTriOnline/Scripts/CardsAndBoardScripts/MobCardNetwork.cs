@@ -121,6 +121,7 @@ public class MobCardNetwork : NetworkBehaviour
 
     private void OnCardPlacementBoardIndexChanged(int oldIndex, int newIndex)
     {
+        if (!IsClient) { return; }
         //assigns this networkObject Card to the board index newIndex. so we can find and compare with other cards later
         cardBoardIndexManager.SetCardIndex(this.NetworkObject, newIndex);
         Debug.Log("we set the card in the board index manager");
@@ -195,14 +196,53 @@ public class MobCardNetwork : NetworkBehaviour
             hpTensSpriteIndex.Value = 2;
             hpOnesSpriteIndex.Value = initHitPoints - 20;
         }
-        
+        TakeDamage(10, 0);
         
     }
+
+   
 
     public int[] GrabStats()
     {
         int[] tempStats = new int[] { leftStat, rightStat, topStat, bottomStat, hitPoints };
         return tempStats;
+    }
+
+    private void TakeDamage(int attackersValue,int defendersValue)
+    {
+        if(attackersValue - defendersValue > 0)
+        {
+            curHitPoints -= attackersValue - defendersValue;
+            if(curHitPoints <= 0)
+            {
+                curHitPoints = 0;
+                //we will run our death function here later
+            }
+            UpdateHpSpritesServerRpc(curHitPoints);
+        }
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    public void UpdateHpSpritesServerRpc(int newCurHitPoints)
+    {
+        //just want the server to do the work and update
+        if (!IsServer) { return; }
+        if (newCurHitPoints < 10)
+        {
+            hpTensSpriteIndex.Value = 0;//will use this for when we don't want to render a sprite for the ten's digit
+            hpOnesSpriteIndex.Value = newCurHitPoints;
+        }
+        else if (newCurHitPoints < 20)
+        {
+            hpTensSpriteIndex.Value = 1;
+            hpOnesSpriteIndex.Value = newCurHitPoints - 10;
+
+        }
+        else
+        {
+            hpTensSpriteIndex.Value = 2;
+            hpOnesSpriteIndex.Value = newCurHitPoints - 20;
+        }
     }
 
     
