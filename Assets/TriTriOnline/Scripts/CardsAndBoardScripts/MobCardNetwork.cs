@@ -124,7 +124,7 @@ public class MobCardNetwork : NetworkBehaviour
         if (!IsClient) { return; }
         //assigns this networkObject Card to the board index newIndex. so we can find and compare with other cards later
         cardBoardIndexManager.SetCardIndex(this.NetworkObject, newIndex);
-        Debug.Log("we set the card in the board index manager");
+        //Debug.Log("we set the card in the board index manager");
         //we want to attack when placed on the field
        
     }
@@ -154,8 +154,8 @@ public class MobCardNetwork : NetworkBehaviour
             return;
         }
         //otw we go to player 1 and change color to player 1 color
-        playerOwnerIndex.Value = 2;
-        mobBackgroundColor.Value = player2mobBackgroundColor;
+        playerOwnerIndex.Value = 1;
+        mobBackgroundColor.Value = player1mobBackgroundColor;
        
     }
     //will be ran when the card is drawn/instantiated
@@ -184,7 +184,7 @@ public class MobCardNetwork : NetworkBehaviour
         rightStatSpriteIndex.Value = initRightStat;
         if (initHitPoints < 10)
         {
-            hpTensSpriteIndex.Value = -1;//will use this for when we don't want to render a sprite for the ten's digit
+            hpTensSpriteIndex.Value = 0;//will use this for when we don't want to render a sprite for the ten's digit
             hpOnesSpriteIndex.Value = initHitPoints;
         }
         else if (initHitPoints < 20)
@@ -198,7 +198,7 @@ public class MobCardNetwork : NetworkBehaviour
             hpTensSpriteIndex.Value = 2;
             hpOnesSpriteIndex.Value = initHitPoints - 20;
         }
-        Debug.Log("The board position we are going to be placed at is: " + cBoardIndex);
+        //Debug.Log("The board position we are going to be placed at is: " + cBoardIndex);
         Attack(cBoardIndex);//could use cBoardIndex but want to try this first
     }
 
@@ -219,7 +219,7 @@ public class MobCardNetwork : NetworkBehaviour
     //handles attacks for all four directions 
     public void Attack(int cardBoardPosIndex)
     {
-        Debug.Log("our card is at board index: " + cardBoardPosIndex);
+        //Debug.Log("our card is at board index: " + cardBoardPosIndex);
         int leftAttackTargetBoardIndex = cardBoardPosIndex - 1;
         int rightAttackTargetBoardIndex = cardBoardPosIndex + 1;
         int topAttackTargetBoardIndex = cardBoardPosIndex + 3;
@@ -230,7 +230,7 @@ public class MobCardNetwork : NetworkBehaviour
         //make sure there is a card to our left
         if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex - 1))
         {
-            Debug.Log("There is a card to our left"); 
+            //Debug.Log("There is a card to our left"); 
             //make sure we don't own the card we are targeting
             if(!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, leftAttackTargetBoardIndex))
             {
@@ -243,7 +243,7 @@ public class MobCardNetwork : NetworkBehaviour
         //make sure there is a card to our right
         if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex + 1))
         {
-            Debug.Log("There is a card to our right");
+            //Debug.Log("There is a card to our right");
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, rightAttackTargetBoardIndex))
             {
@@ -256,7 +256,7 @@ public class MobCardNetwork : NetworkBehaviour
         //make sure ther is a card above us
         if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex + 3))
         {
-            Debug.Log("There is a card above");
+            //Debug.Log("There is a card above");
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, topAttackTargetBoardIndex))
             {
@@ -269,7 +269,7 @@ public class MobCardNetwork : NetworkBehaviour
         //make sure there is a card below us
         if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex - 3))
         {
-            Debug.Log("There is a card below");
+            //Debug.Log("There is a card below");
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, bottomAttackTargetBoardIndex))
             {
@@ -288,11 +288,12 @@ public class MobCardNetwork : NetworkBehaviour
         defendersValue = defenseSideIndex == 1 ? leftStat : defenseSideIndex == 2 ? rightStat : defenseSideIndex == 3 ? topStat : bottomStat;
         if(attackersValue - defendersValue > 0)
         {
-            Debug.Log("Damage dealt is :" + (attackersValue - defendersValue));
+            Debug.Log("Damage dealt is : " + (attackersValue - defendersValue));
             curHitPoints -= attackersValue - defendersValue;
             if(curHitPoints <= 0)
             {
-                curHitPoints = 0;
+                curHitPoints = hitPoints/2;//revive with half health
+                ChangePlayerOwnerAndColorServerRpc();
                 //we will run our death function here later
             }
             UpdateHpSpritesServerRpc(curHitPoints);

@@ -11,6 +11,7 @@ public class SpritesLists : MonoBehaviour
     // Start is called before the first frame update
     public Sprite GetMobSprite(int index)
     {
+        
         return mobSprites[index];
     }
 
