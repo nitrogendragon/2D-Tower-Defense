@@ -64,6 +64,26 @@ public class BoardManagerNetwork : MonoBehaviour
 
     }
 
+    public int GetSelectedBoardIndex()
+    {
+        //the index of the board we are hovering over
+        int targetIndex;
+        if (selectedBoardTile)
+        {
+            for(int i = 0; i < boardTiles.Count; i++)
+            {
+                //set to 
+                if(selectedBoardTile = boardTiles[i])
+                {
+                    targetIndex = i;
+                    return targetIndex;
+                }
+            }
+        }
+        //we will want to account for this returning negative 1 when we try to use the function so that it doesn't actually get set to -1
+        return -1;
+    }
+
     private void TestRayCastHitBoardTile()
     {
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);

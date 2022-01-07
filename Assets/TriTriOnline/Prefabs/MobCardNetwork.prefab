@@ -615,6 +615,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a8428cd9eb49f0e4e92f594c04eaec72, type: 3}
   - {fileID: 21300000, guid: 602ce352593f677459e409e41b8d9aa1, type: 3}
   spritesReferenceHolder: {fileID: 8102171245093544691, guid: baca78a6905c79345b6abc07239d2c31, type: 3}
+  cardBoardIndexManager: {fileID: 1675286641, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
 --- !u!212 &602309776338339068
 SpriteRenderer:
   m_ObjectHideFlags: 0

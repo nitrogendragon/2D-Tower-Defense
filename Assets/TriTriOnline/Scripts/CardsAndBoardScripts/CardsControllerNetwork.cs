@@ -162,6 +162,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     private void PlaceSelectedCard()
     {
         Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
+        int cardPlacementBoardIndex = boardManager.GetSelectedBoardIndex();
         if(cardPlacementPosition.x != 9999)//our invalid placement tile position that our function returns if not hitting a boardtile
         {
             //selectedCard.GetComponent<SpriteRenderer>().color = Color.gray;
@@ -171,7 +172,7 @@ public class CardsControllerNetwork : NetworkBehaviour
             int tempMobSpriteIndexRef = selectedCard.GetComponent<MobCard>().GetMobSpriteIndex();
             int tempAttributeSpriteIndexRef = selectedCard.GetComponent<MobCard>().GetAttributeSpriteIndex();
             selectedCard.GetComponent<MobCard>().isInHand = false;
-            SpawnMobCardOnBoardServerRpc(cardPlacementPosition, tempStats, tempIsPlayer1,tempMobSpriteIndexRef, tempAttributeSpriteIndexRef);
+            SpawnMobCardOnBoardServerRpc(cardPlacementPosition, cardPlacementBoardIndex, tempStats, tempIsPlayer1,tempMobSpriteIndexRef, tempAttributeSpriteIndexRef);
 
             //update cards in hand list
             List<GameObject> tempList = new List<GameObject>();
@@ -194,7 +195,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     }
 
     [ServerRpc (RequireOwnership = false)]
-    private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos, int[] tempStats, bool isPlayer1, int mobSpriteIndexRef, int attributeSpriteIndexRef)
+    private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos,int cardPlacementBoardIndex, int[] tempStats, bool isPlayer1, int mobSpriteIndexRef, int attributeSpriteIndexRef)
     {
         //we can't do this if we aren't the server
         if (!IsServer) { Debug.Log(" we got stuck in the not server if statement"); return; }
@@ -205,7 +206,7 @@ public class CardsControllerNetwork : NetworkBehaviour
 
         int playerOwnerIndex = isPlayer1 ? 1 : 2;
 
-        myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex,mobSpriteIndexRef, attributeSpriteIndexRef);
+        myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex,mobSpriteIndexRef, attributeSpriteIndexRef, cardPlacementBoardIndex);
 
         
        

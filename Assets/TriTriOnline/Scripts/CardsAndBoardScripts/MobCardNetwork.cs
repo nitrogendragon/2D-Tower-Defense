@@ -23,9 +23,11 @@ public class MobCardNetwork : NetworkBehaviour
     private NetworkVariable<int> hpTensSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     private NetworkVariable<int> hpOnesSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     private NetworkVariable<int> attributeSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
+    private NetworkVariable<int> cardPlacementBoardIndex = new NetworkVariable<int>();//the index of the board tile in the boardTiles list that we placed the card on
     
     [SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
     public SpritesLists spritesReferenceHolder;
+    public CardBoardIndexManager cardBoardIndexManager;
 
     private void Start()
     {
@@ -42,19 +44,21 @@ public class MobCardNetwork : NetworkBehaviour
         hpTensSpriteIndex.OnValueChanged += OnHpTensSpriteIndexChanged;
         hpOnesSpriteIndex.OnValueChanged += OnHpOnesSpriteIndexChanged;
         attributeSpriteIndex.OnValueChanged += OnAttributeSpriteIndexChanged;
+        cardPlacementBoardIndex.OnValueChanged += OnCardPlacementBoardIndexChanged;
     }
 
     private void OnDisable()
     {
         playerOwnerIndex.OnValueChanged -= OnPlayerOwnershipAndColorChanged;
-        mobSpriteIndex.OnValueChanged += OnMobSpriteIndexChanged;
-        topStatSpriteIndex.OnValueChanged += OnTopStatSpriteIndexChanged;
-        bottomStatSpriteIndex.OnValueChanged += OnBottomStatSpriteIndexChanged;
-        leftStatSpriteIndex.OnValueChanged += OnLeftStatSpriteIndexChanged;
-        rightStatSpriteIndex.OnValueChanged += OnRightStatSpriteIndexChanged;
-        hpTensSpriteIndex.OnValueChanged += OnHpTensSpriteIndexChanged;
-        hpOnesSpriteIndex.OnValueChanged += OnHpOnesSpriteIndexChanged;
-        attributeSpriteIndex.OnValueChanged += OnAttributeSpriteIndexChanged;
+        mobSpriteIndex.OnValueChanged -= OnMobSpriteIndexChanged;
+        topStatSpriteIndex.OnValueChanged -= OnTopStatSpriteIndexChanged;
+        bottomStatSpriteIndex.OnValueChanged -= OnBottomStatSpriteIndexChanged;
+        leftStatSpriteIndex.OnValueChanged -= OnLeftStatSpriteIndexChanged;
+        rightStatSpriteIndex.OnValueChanged -= OnRightStatSpriteIndexChanged;
+        hpTensSpriteIndex.OnValueChanged -= OnHpTensSpriteIndexChanged;
+        hpOnesSpriteIndex.OnValueChanged -= OnHpOnesSpriteIndexChanged;
+        attributeSpriteIndex.OnValueChanged -= OnAttributeSpriteIndexChanged;
+        cardPlacementBoardIndex.OnValueChanged -= OnCardPlacementBoardIndexChanged;
 
     }
 
@@ -115,6 +119,13 @@ public class MobCardNetwork : NetworkBehaviour
         attributeSprite.GetComponent<SpriteRenderer>().sprite = spritesReferenceHolder.GetAttributeSprite(newIndex);
     }
 
+    private void OnCardPlacementBoardIndexChanged(int oldIndex, int newIndex)
+    {
+        //assigns this networkObject Card to the board index newIndex. so we can find and compare with other cards later
+        cardBoardIndexManager.SetCardIndex(this.NetworkObject, newIndex);
+        Debug.Log("we set the card in the board index manager");
+    }
+
 
 
     [ServerRpc]
@@ -146,7 +157,7 @@ public class MobCardNetwork : NetworkBehaviour
     }
     //will be ran when the card is drawn/instantiated
     [ServerRpc]
-    public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, int mobSpriteIndexReference, int attributeSpriteIndexReference)
+    public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, int mobSpriteIndexReference, int attributeSpriteIndexReference, int cBoardIndex)
     {
         if (!IsServer) { return; }
         topStat = initTopStat;
@@ -159,6 +170,7 @@ public class MobCardNetwork : NetworkBehaviour
         curLeftStat = leftStat;
         curRightStat = rightStat;
         curHitPoints = hitPoints;
+        cardPlacementBoardIndex.Value = cBoardIndex;
         playerOwnerIndex.Value = playerOwnrIndex;
         mobSpriteIndex.Value = mobSpriteIndexReference;
         //new stuff added that needs onChange listeners and functions
