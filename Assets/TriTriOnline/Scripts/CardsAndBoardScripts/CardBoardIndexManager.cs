@@ -28,6 +28,8 @@ public class CardBoardIndexManager : NetworkBehaviour
 
     public bool CheckIfCardAtIndex(int cardBoardIndex)
     {
+        //we can't check for negative indexes or indexes greater than or equal to our list length
+        if (cardBoardIndex < 0 || cardBoardIndex >= cardsOnField.Length) { return false; }
         if (cardsOnField[cardBoardIndex]) { return true; }
         return false;
     }
@@ -40,5 +42,10 @@ public class CardBoardIndexManager : NetworkBehaviour
             return true;
         }
         return false;
+    }
+
+    public void RunTargetCardsDamageCalculations(int myStat, int targetCardBoardIndex, int defenseStatIndex)
+    {
+        cardsOnField[targetCardBoardIndex].GetComponent<MobCardNetwork>().TakeDamage(myStat, defenseStatIndex);
     }
 }

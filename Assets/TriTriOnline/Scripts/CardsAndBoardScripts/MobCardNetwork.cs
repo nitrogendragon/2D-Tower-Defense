@@ -221,19 +221,25 @@ public class MobCardNetwork : NetworkBehaviour
         Debug.Log("our card is at board index: " + cardBoardPosIndex);
         int leftAttackTargetIndex = cardBoardPosIndex - 1;
         //left attack
+        //make sure there is a card to our left
         if(cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex - 1))
         {
             Debug.Log("There is a card here"); 
+            //make sure we don't own the card we are targeting
             if(!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, leftAttackTargetIndex))
             {
                 Debug.Log("The card we are attacking is not ours so we should deal damage");
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, leftAttackTargetIndex, 2);
             }
         }
 
     }
 
-    public void TakeDamage(int attackersValue,int defendersValue)
+    public void TakeDamage(int attackersValue,int defenseSideIndex)
     {
+        int defendersValue = 0;
+        // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
+        defendersValue = defenseSideIndex == 1 ? leftStat : defenseSideIndex == 2 ? rightStat : defenseSideIndex == 3 ? topStat : bottomStat;
         if(attackersValue - defendersValue > 0)
         {
             curHitPoints -= attackersValue - defendersValue;

@@ -72,7 +72,7 @@ public class BoardManagerNetwork : MonoBehaviour
         {
             for(int i = 0; i < boardTiles.Count; i++)
             {
-                //set to 
+                //check to which tile position our selected tile is at
                 if(selectedBoardTile.transform.position == boardTiles[i].transform.position)
                 {
                     targetIndex = i;
