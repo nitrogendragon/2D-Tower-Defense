@@ -10,14 +10,14 @@ public class BoardManager : MonoBehaviour
     private SpriteRenderer lastHoveredBoardTileSpriteRenderer;
     private GameObject selectedBoardTile;
     private Color initialBoardColor;
-    private int rows;//always do an odd number
-    private int columns;//always do an odd number
+    public int rows = 4;
+    public int columns = 4;
     private int verticalOffset;
     private int horizontalOffset;
     // Start is called before the first frame update
     void Start()
     {
-        createBoard(3, 3, 1);
+        createBoard(rows, columns, 1);
         initialBoardColor = boardTiles[0].GetComponent<SpriteRenderer>().color;
     }
 
@@ -37,8 +37,13 @@ public class BoardManager : MonoBehaviour
 
     private void SetOffSets(int rows, int columns)
     {
-        verticalOffset = -(rows - 1) / 2;//subtract 1 because we will always use an odd number to keep things centered
-        horizontalOffset = -(columns - 1) / 2;//subtract 1 because we will always use an odd number to keep things centered
+        if((float)rows%2.0f == 0)
+        {
+            verticalOffset = -rows / 2;
+            horizontalOffset = -columns / 2;
+        }
+        verticalOffset = -(rows - 1) / 2;//subtract 1 because we used an odd number to keep things centered
+        horizontalOffset = -(columns - 1) / 2;//subtract 1 because we used an odd number to keep things centered
     }
 
     private void HighLightAndSelectHoveredTile(Collider2D collider)
