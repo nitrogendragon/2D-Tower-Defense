@@ -231,11 +231,11 @@ public class MobCardNetwork : NetworkBehaviour
         // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
         //checkcardindex notes: we are currently using a 6x6 board so obv left right add subtract 1, but top bottom could change later if size changes so be aware of that, for now though plus minus 3
         //left attack
-        //make sure there is a card to our left
-        if (cardBoardIndexManager.CheckIfCardAtIndex(leftAttackTargetBoardIndex))
+        //make sure there is a card to our left and specifically to our left not just in the index 1 below us in the list/array
+        if (cardBoardIndexManager.CheckIfCardAtIndex(leftAttackTargetBoardIndex) && cardBoardPosIndex != 0 && cardBoardPosIndex % topBottomAttackIndexMod != 0)
         {
             //Debug.Log("There is a card to our left"); 
-            //make sure we don't own the card we are targeting
+            //make sure we don't own the card we are targeting 
             if(!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, leftAttackTargetBoardIndex))
             {
                 Debug.Log("The card we are attacking is not ours so we should deal damage");
@@ -244,7 +244,7 @@ public class MobCardNetwork : NetworkBehaviour
             }
         }
         //right attack
-        //make sure there is a card to our right
+        //make sure there is a card to our right and specifically to our right not just in the index 1 above us in the list/array
         if (cardBoardIndexManager.CheckIfCardAtIndex(rightAttackTargetBoardIndex))
         {
             //Debug.Log("There is a card to our right");
