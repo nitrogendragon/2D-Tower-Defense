@@ -290,18 +290,15 @@ public class MobCardNetwork : NetworkBehaviour
         int defendersValue = 0;
         // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
         defendersValue = defenseSideIndex == 1 ? leftStat : defenseSideIndex == 2 ? rightStat : defenseSideIndex == 3 ? topStat : bottomStat;
-        if(attackersValue - defendersValue > 0)
+       
+        //if our attack is higher than their attack stat or the atk/2 is greater than or equal to their curHitPoints, we defeat them
+        if(attackersValue - defendersValue > 0 || curHitPoints - (attackersValue/2) <= 0)
         {
-            Debug.Log("Damage dealt is : " + (attackersValue - defendersValue));
-            curHitPoints -= attackersValue - defendersValue;
-            if(curHitPoints <= 0)
-            {
-                curHitPoints = hitPoints/2;//revive with half health
-                ChangePlayerOwnerAndColorServerRpc();
-                //we will run our death function here later
-            }
-            UpdateHpSpritesServerRpc(curHitPoints);
+            curHitPoints = hitPoints / 2;//revive with half health
+            ChangePlayerOwnerAndColorServerRpc();
         }
+        else { curHitPoints -= attackersValue / 2; }
+        UpdateHpSpritesServerRpc(curHitPoints);
     }
 
     [ServerRpc(RequireOwnership =false)]
