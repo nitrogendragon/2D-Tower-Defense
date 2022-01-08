@@ -633,11 +633,6 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 5181280790988600283, guid: 411a1f25535062f468be42d2b9b76c9d, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
@@ -3944,7 +3939,6 @@ GameObject:
   - component: {fileID: 8754192519461090534}
   - component: {fileID: 8754192519461090535}
   - component: {fileID: 8754192519461090536}
-  - component: {fileID: 8754192519461090537}
   m_Layer: 0
   m_Name: UI_Main
   m_TagString: Untagged
@@ -4056,16 +4050,3 @@ MonoBehaviour:
   mobCardOffServer: {fileID: 8572697604928018494, guid: 4619b87295280404fa1e7ecb84d23487, type: 3}
   mobDeckNetwork: {fileID: 8754192519461090535}
   cardsInDeck: 30
---- !u!114 &8754192519461090537
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8754192519461090532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7755ef4ec11a7944fa7ea7c7f785793a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  networkPrefab: {fileID: 5181280790988600282, guid: 411a1f25535062f468be42d2b9b76c9d, type: 3}

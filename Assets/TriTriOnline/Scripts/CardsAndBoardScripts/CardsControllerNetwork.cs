@@ -228,7 +228,7 @@ public class CardsControllerNetwork : NetworkBehaviour
             startFirstDraw = false;
             DrawCards();
         }
-        else if (Input.GetMouseButtonDown(0))//just for testing purposes, will remove later or at least adjust
+        else if (Input.GetMouseButtonDown(0))
         {
             SelectCard();
         }
