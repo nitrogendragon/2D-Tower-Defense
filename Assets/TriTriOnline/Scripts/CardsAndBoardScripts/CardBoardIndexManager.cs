@@ -5,10 +5,7 @@ using Unity.Netcode;
 
 public class CardBoardIndexManager : NetworkBehaviour
 {
-    private void Start()
-    {
-        
-    }
+    public BoardManagerNetwork boardManagerNetwork;
 
     //for now we have 9 board tiles so size of 9. the index will relate to position on field
     /**
@@ -19,7 +16,14 @@ public class CardBoardIndexManager : NetworkBehaviour
      * if a card is placed on 4 they wil check index - 1 for left attack, index +1 for right attack, index -3 for bottom attack and index +3 for top attack
      * left attacks right, right attacks left, top attacks bottom, bottom attacks top, ezpz
      */
-    private NetworkObject[] cardsOnField = new NetworkObject[9];
+    //for now at least this seems to need to be manually entered
+    private NetworkObject[] cardsOnField = new NetworkObject[36];
+    private void Awake()
+    {
+        int topBottomAttackIndexMod = (int)Mathf.Sqrt(GetFieldSizeCount());
+        Debug.Log("the attack mod for top and bottom is: " + topBottomAttackIndexMod);
+
+    }
     public void SetCardIndex(NetworkObject Card, int cardBoardTilePositionIndex)
     {
         cardsOnField[cardBoardTilePositionIndex] = Card;
@@ -42,6 +46,12 @@ public class CardBoardIndexManager : NetworkBehaviour
             return true;
         }
         return false;
+    }
+
+    //return our cardsOnField Length since it is the size of the board tile count
+    public int GetFieldSizeCount()
+    {
+        return cardsOnField.Length;
     }
 
     public void RunTargetCardsDamageCalculations(int myStat, int targetCardBoardIndex, int defenseStatIndex)

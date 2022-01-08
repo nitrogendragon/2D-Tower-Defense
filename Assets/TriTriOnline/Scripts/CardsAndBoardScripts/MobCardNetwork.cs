@@ -219,16 +219,20 @@ public class MobCardNetwork : NetworkBehaviour
     //handles attacks for all four directions 
     public void Attack(int cardBoardPosIndex)
     {
+        int fieldSize = cardBoardIndexManager.GetFieldSizeCount();
+        //the value we need to adjust our cardBoardPosIndex by to get the top and bottom attack target board positions
+        int topBottomAttackIndexMod = (int)Mathf.Sqrt(fieldSize);
+        Debug.Log(topBottomAttackIndexMod + "is the topbottomattackindexMod");
         //Debug.Log("our card is at board index: " + cardBoardPosIndex);
         int leftAttackTargetBoardIndex = cardBoardPosIndex - 1;
         int rightAttackTargetBoardIndex = cardBoardPosIndex + 1;
-        int topAttackTargetBoardIndex = cardBoardPosIndex + 3;
-        int bottomAttackTargetBoardIndex = cardBoardPosIndex - 3;
+        int topAttackTargetBoardIndex = cardBoardPosIndex + topBottomAttackIndexMod;
+        int bottomAttackTargetBoardIndex = cardBoardPosIndex - topBottomAttackIndexMod;
         // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
-        //checkcardindex notes: we are currently using a 3x3 board so obv left right add subtract 1, but top bottom could change later if size changes so be aware of that, for now though plus minus 3
+        //checkcardindex notes: we are currently using a 6x6 board so obv left right add subtract 1, but top bottom could change later if size changes so be aware of that, for now though plus minus 3
         //left attack
         //make sure there is a card to our left
-        if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex - 1))
+        if (cardBoardIndexManager.CheckIfCardAtIndex(leftAttackTargetBoardIndex))
         {
             //Debug.Log("There is a card to our left"); 
             //make sure we don't own the card we are targeting
@@ -241,7 +245,7 @@ public class MobCardNetwork : NetworkBehaviour
         }
         //right attack
         //make sure there is a card to our right
-        if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex + 1))
+        if (cardBoardIndexManager.CheckIfCardAtIndex(rightAttackTargetBoardIndex))
         {
             //Debug.Log("There is a card to our right");
             //make sure we don't own the card we are targeting
@@ -254,27 +258,27 @@ public class MobCardNetwork : NetworkBehaviour
         }
         //top attack
         //make sure ther is a card above us
-        if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex + 3))
+        if (cardBoardIndexManager.CheckIfCardAtIndex(topAttackTargetBoardIndex))
         {
             //Debug.Log("There is a card above");
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, topAttackTargetBoardIndex))
             {
                 Debug.Log("The card we are attacking is not ours so we should deal damage");
-                //we are attacking their bottom stat so we need the defense stat index to be the bottom, thus 4
+                //we are attacking their top stat so we need the defense stat index to be the bottom, thus 4
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, topAttackTargetBoardIndex, 4);
             }
         }
         //bottom attack
         //make sure there is a card below us
-        if (cardBoardIndexManager.CheckIfCardAtIndex(cardBoardPosIndex - 3))
+        if (cardBoardIndexManager.CheckIfCardAtIndex(bottomAttackTargetBoardIndex))
         {
             //Debug.Log("There is a card below");
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, bottomAttackTargetBoardIndex))
             {
                 Debug.Log("The card we are attacking is not ours so we should deal damage");
-                //we are attacking their bottom stat so we need the defense stat index to be the bottom, thus 4
+                //we are attacking their bottom stat so we need the defense stat index to be the bottom, thus 3
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, bottomAttackTargetBoardIndex, 3);
             }
         }

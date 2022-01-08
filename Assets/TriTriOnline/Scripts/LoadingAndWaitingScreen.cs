@@ -183,15 +183,16 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
         }
     }
 
+    //not used atm but probably will soon
     private void DisableField()
     {
-        boardManagerNetwork.SetActive(false);
+        boardManagerNetwork.GetComponent<BoardManagerNetwork>().DestroyBoard();
         cardsContainer.SetActive(false);
     }
 
     private void SetUpField()
     {
-        boardManagerNetwork.SetActive(true);
+        boardManagerNetwork.GetComponent<BoardManagerNetwork>().CreateBoard(1);
         cardsContainer.SetActive(true);
         cardsControllerNetwork.GetComponent<CardsControllerNetwork>().StartGame();
     }

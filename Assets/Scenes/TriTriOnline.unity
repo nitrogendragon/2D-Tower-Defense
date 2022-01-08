@@ -3717,6 +3717,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1675286641, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
+      propertyPath: boardManagerNetwork
+      value: 
+      objectReference: {fileID: 1448446838}
     - target: {fileID: 4431682994649708781, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
       propertyPath: m_Name
       value: CardBoardIndexManager

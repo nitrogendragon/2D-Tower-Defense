@@ -22,12 +22,13 @@ public class MobDeckNetwork : MonoBehaviour
         CreateDeck();
     }
 
+    //creates a random deck of cards 
     private void CreateDeck()
     {
         for(int i = 0; i < deckCardInitialCount; i++)
         {
             //get a reference index for the card to be used to create it on draw later;
-            deckCardMobIndexReferences[i] = Random.Range(0, 9);
+            deckCardMobIndexReferences[i] = Random.Range(0, mobNames.Length);
         }
         Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
     }

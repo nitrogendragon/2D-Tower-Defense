@@ -9,16 +9,12 @@ public class BoardManagerNetwork : MonoBehaviour
     private SpriteRenderer lastHoveredBoardTileSpriteRenderer;
     private GameObject selectedBoardTile;
     private Color initialBoardColor;
-    private int rows = 4;//always do an odd number
-    private int columns = 4;//always do an odd number
+    private int rows = 6;//always do an odd number
+    private int columns = 6;//always do an odd number
     private float verticalOffset;
     private float horizontalOffset;
     // Start is called before the first frame update
-    void Start()
-    {
-        createBoard(rows, columns, 1);
-        initialBoardColor = boardTiles[0].GetComponent<SpriteRenderer>().color;
-    }
+    
 
     public int GetRowsCount()
     {
@@ -30,7 +26,7 @@ public class BoardManagerNetwork : MonoBehaviour
         return columns;
     }
 
-    private void createBoard(int rows, int columns, int scale)
+    public void CreateBoard(int scale)
     {
         SetOffSets(rows, columns);
         for(int row = 0; row < rows; row++)
@@ -41,6 +37,15 @@ public class BoardManagerNetwork : MonoBehaviour
                 newBoardPiece.transform.position = new Vector3((horizontalOffset + column) * scale, (verticalOffset + row) * scale, 0);
                 boardTiles.Add(newBoardPiece);
             }
+        }
+        initialBoardColor = boardTiles[0].GetComponent<SpriteRenderer>().color;
+    }
+
+    public void DestroyBoard()
+    {
+        foreach(GameObject tile in boardTiles)
+        {
+            Destroy(tile);
         }
     }
 
