@@ -169,7 +169,7 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
         //set things to initial values
         if(playerReadyCount.Value == 2) 
         {
-            Debug.Log("We got here");
+            //Debug.Log("We got here");
             //if (IsHost)
             //{
             //    //We'll try doing it this way

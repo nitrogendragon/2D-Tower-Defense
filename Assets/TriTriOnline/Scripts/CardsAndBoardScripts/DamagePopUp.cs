@@ -1,0 +1,110 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.Netcode;
+
+public class DamagePopUp : NetworkBehaviour
+{
+    [SerializeField]  private GameObject damagePopUp;
+    private Vector3 initialPosition;
+    private float movementRangeX = .01f;
+    [SerializeField] 
+    private bool moveRight = true;
+    private float timeTilDeactive = 1.6f;
+    private float timePassed;
+    private NetworkVariable<bool> tookDamage = new NetworkVariable<bool>(false);
+    private NetworkVariable<int> damageTaken = new NetworkVariable<int>();
+    // Start is called before the first frame update
+
+    private void OnEnable()
+    {
+        tookDamage.OnValueChanged += OnTookDamageChanged;
+        damageTaken.OnValueChanged += OnDamageTakenChanged;
+    }
+
+    private void OnDisable()
+    {
+        tookDamage.OnValueChanged -= OnTookDamageChanged;
+        damageTaken.OnValueChanged -= OnDamageTakenChanged;
+    }
+
+    private void OnTookDamageChanged(bool oldVal, bool newVal)
+    {
+        //if we didn't take damage then we will change text to nothing
+        if (newVal) { damagePopUp.GetComponent<MeshRenderer>().enabled = true; }
+        else { damagePopUp.GetComponent<MeshRenderer>().enabled = false; }
+    }
+
+    private void OnDamageTakenChanged(int oldVal, int newVal)
+    {
+        if(damageTaken.Value > 0) { damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString(); }
+    }
+
+    private void ShakePopUp()
+    {
+        
+        if(damagePopUp.transform.position.x <= initialPosition.x + movementRangeX && moveRight)
+        {
+            damagePopUp.transform.position += new Vector3(.1f * Time.deltaTime,0,0);
+        }
+        else { moveRight = false; }
+        if (damagePopUp.transform.position.x >= initialPosition.x - movementRangeX && !moveRight)
+        {
+            damagePopUp.transform.position -= new Vector3(.1f * Time.deltaTime, 0, 0);
+        }
+        else { moveRight = true; }
+        timePassed += Time.deltaTime;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeTextAndSetActiveServerRpc(int value)
+    {
+        if (!IsServer) { return; }
+        if(value <= 0) { return; }
+        
+        Debug.Log("The damage value should is: " + value);
+        tookDamage.Value = true;
+        damageTaken.Value = value;
+        //damagePopUp.GetComponent<MeshRenderer>().sortingLayerName = "UI";
+        //damagePopUp.GetComponent<MeshRenderer>().sortingOrder = 2;
+        initialPosition = transform.position;
+        Debug.Log(initialPosition);
+        Debug.Log(damagePopUp.activeSelf);
+        damagePopUp.GetComponent<TextMesh>().text = "-" + value;
+        Debug.Log(damagePopUp.GetComponent<TextMesh>().text);
+        StartCoroutine(WaitToDisablePopUp());
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DisablePopUpServerRpc()
+    {
+        if (!IsServer) { return; }
+        tookDamage.Value = false;
+        damageTaken.Value = 0;
+        damagePopUp.GetComponent<MeshRenderer>().enabled = false;
+        Debug.Log(damagePopUp.activeSelf);
+    }
+
+    private IEnumerator WaitToDisablePopUp()
+    {
+        Debug.Log(Time.time);
+        yield return new WaitForSeconds(2f);
+        Debug.Log(Time.time);
+        DisablePopUpServerRpc();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        //if(tookDamage.Value && timeTilDeactive > timePassed)
+        //{
+        //    ShakePopUp();
+        //}
+        //else
+        //{
+        //    timePassed = 0.0f;
+        //    DisablePopUpServerRpc();
+            
+        //}
+    }
+}

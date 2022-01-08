@@ -13,6 +13,7 @@ public class MobCardNetwork : NetworkBehaviour
     [SerializeField]private GameObject mobSpriteRenderer;
     [SerializeField]private GameObject topStatSprite,bottomStatSprite,leftStatSprite, rightStatSprite, hpTensSprite, hpOnesSprite, attributeSprite;//technically renderers but for some reason i named them as just xSprite
     [SerializeField]private GameObject mobBackground;
+    [SerializeField] private GameObject damagePopUp;
     private NetworkVariable<Color> mobBackgroundColor = new NetworkVariable<Color>(new Color(.4f,0,0));//default is player 1 color
     private NetworkVariable<int> playerOwnerIndex = new NetworkVariable<int>(0);//0 for no ownership by default
     private NetworkVariable<int> mobSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
@@ -66,7 +67,7 @@ public class MobCardNetwork : NetworkBehaviour
     private void OnPlayerOwnershipAndColorChanged(int oldPlayerOwnerIndex, int newPlayerOwnerIndex)
     {
         if (!IsClient) { return; }//testing these parameters
-        Debug.Log("the player owners index: " + newPlayerOwnerIndex);
+        //Debug.Log("the player owners index: " + newPlayerOwnerIndex);
         if(newPlayerOwnerIndex == 1)
         {
             mobBackground.GetComponent<SpriteRenderer>().color = player1mobBackgroundColor;
@@ -222,7 +223,7 @@ public class MobCardNetwork : NetworkBehaviour
         int fieldSize = cardBoardIndexManager.GetFieldSizeCount();
         //the value we need to adjust our cardBoardPosIndex by to get the top and bottom attack target board positions
         int topBottomAttackIndexMod = (int)Mathf.Sqrt(fieldSize);
-        Debug.Log(topBottomAttackIndexMod + "is the topbottomattackindexMod");
+        //Debug.Log(topBottomAttackIndexMod + "is the topbottomattackindexMod");
         //Debug.Log("our card is at board index: " + cardBoardPosIndex);
         int leftAttackTargetBoardIndex = cardBoardPosIndex - 1;
         int rightAttackTargetBoardIndex = cardBoardPosIndex + 1;
@@ -238,7 +239,7 @@ public class MobCardNetwork : NetworkBehaviour
             //make sure we don't own the card we are targeting 
             if(!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, leftAttackTargetBoardIndex))
             {
-                Debug.Log("The card we are attacking is not ours so we should deal damage");
+                //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their right stat so we need the defense stst index to be the right, thus 2
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, leftAttackTargetBoardIndex, 2);
             }
@@ -251,7 +252,7 @@ public class MobCardNetwork : NetworkBehaviour
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, rightAttackTargetBoardIndex))
             {
-                Debug.Log("The card we are attacking is not ours so we should deal damage");
+                //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their left stat so we need the defense stat index to be the left, thus 1
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, rightAttackTargetBoardIndex, 1);
             }
@@ -264,7 +265,7 @@ public class MobCardNetwork : NetworkBehaviour
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, topAttackTargetBoardIndex))
             {
-                Debug.Log("The card we are attacking is not ours so we should deal damage");
+                //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their top stat so we need the defense stat index to be the bottom, thus 4
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, topAttackTargetBoardIndex, 4);
             }
@@ -277,7 +278,7 @@ public class MobCardNetwork : NetworkBehaviour
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, bottomAttackTargetBoardIndex))
             {
-                Debug.Log("The card we are attacking is not ours so we should deal damage");
+                //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their bottom stat so we need the defense stat index to be the bottom, thus 3
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, bottomAttackTargetBoardIndex, 3);
             }
@@ -297,9 +298,16 @@ public class MobCardNetwork : NetworkBehaviour
             curHitPoints = hitPoints / 2;//revive with half health
             ChangePlayerOwnerAndColorServerRpc();
         }
-        else { curHitPoints -= attackersValue / 2; }
+        else
+        { 
+            curHitPoints -= attackersValue / 2;
+            int damageDealt = attackersValue / 2;
+            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt);
+        }
         UpdateHpSpritesServerRpc(curHitPoints);
     }
+
+    
 
     [ServerRpc(RequireOwnership =false)]
     public void UpdateHpSpritesServerRpc(int newCurHitPoints)

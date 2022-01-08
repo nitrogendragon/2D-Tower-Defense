@@ -44,7 +44,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     private void SpawnMeServerRpc()
     {
         if (!IsServer) { return; }
-        Debug.Log("We spawned our card controller");
+        //Debug.Log("We spawned our card controller");
         this.NetworkObject.SpawnWithOwnership(OwnerClientId);
     }
 
@@ -52,13 +52,13 @@ public class CardsControllerNetwork : NetworkBehaviour
     {
         if (isFirstDraw)
         {
-            Debug.Log("this is our first draw");
+            //Debug.Log("this is our first draw");
             isFirstDraw = false;
             return cardsToDraw = 5;
         }
         else
         {
-            Debug.Log("This is not the first draw");
+            //Debug.Log("This is not the first draw");
             return cardsToDraw = 1;
         }
 
@@ -165,7 +165,7 @@ public class CardsControllerNetwork : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Mouse0) && hit.collider && hit.collider.tag == "Deck")
         {
-            Debug.Log("We hit the deck");
+            //Debug.Log("We hit the deck");
             return true;
         }
         return false;
@@ -175,7 +175,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     {
         Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
         int cardPlacementBoardIndex = boardManager.GetSelectedBoardIndex();
-        Debug.Log(cardPlacementBoardIndex + " is our cardPlacementBoardIndex");
+        //Debug.Log(cardPlacementBoardIndex + " is our cardPlacementBoardIndex");
         if(cardPlacementPosition.x != 9999 && cardPlacementBoardIndex != 9999)//our invalid placement tile position that our function returns if not hitting a boardtile
         {
             //selectedCard.GetComponent<SpriteRenderer>().color = Color.gray;
@@ -198,7 +198,7 @@ public class CardsControllerNetwork : NetworkBehaviour
             }
             Destroy(selectedCard);
             selectedCard = null;
-            Debug.Log(selectedCard);
+            //Debug.Log(selectedCard);
             cardsInHand = tempList;//update our cardsInHand List to be the new list without the placed card
             //Debug.Log(cardsInHand.Count);
             ReOrganizeHand();//reorganize / relayout cards in hand
@@ -214,7 +214,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos,int cardPlacementBoardIndex, int[] tempStats, bool isPlayer1, int mobSpriteIndexRef, int attributeSpriteIndexRef)
     {
         //we can't do this if we aren't the server
-        if (!IsServer) { Debug.Log(" we got stuck in the not server if statement"); return; }
+        //if (!IsServer) { Debug.Log(" we got stuck in the not server if statement"); return; }
 
         NetworkObject myMobCardInstance = Instantiate(mobCard,spawnPos , new Quaternion(0,0,0,0));
 
@@ -228,7 +228,7 @@ public class CardsControllerNetwork : NetworkBehaviour
        
         int[] tempMobStats = myMobCardInstance.GetComponent<MobCardNetwork>().GrabStats();
 
-        Debug.Log("Network mob card stats: " + tempMobStats[0] + " " + tempMobStats[1] + " " + tempMobStats[4]);
+        //Debug.Log("Network mob card stats: " + tempMobStats[0] + " " + tempMobStats[1] + " " + tempMobStats[4]);
         //spawn our mob card with ownership
         
     }
@@ -254,13 +254,13 @@ public class CardsControllerNetwork : NetworkBehaviour
             if(IsHost && turnManager.GetIsPlayer1Turn() && turnManager.GetTurnActionIndex() == 1  || 
                 !IsHost && IsClient && !turnManager.GetIsPlayer1Turn() && turnManager.GetTurnActionIndex() == 1)
             {
-                Debug.Log("we met the conditions");
+                //Debug.Log("we met the conditions");
                 SelectCard();
             }
-            Debug.Log("we are not meeting the conditions to select a card obviously");
-            Debug.Log(IsHost + "host bool");
-            Debug.Log(turnManager.GetIsPlayer1Turn() + " isplayer1bool value");
-            Debug.Log(turnManager.GetTurnActionIndex() + " turnactionindex value");
+            //Debug.Log("we are not meeting the conditions to select a card obviously");
+            //Debug.Log(IsHost + "host bool");
+            //Debug.Log(turnManager.GetIsPlayer1Turn() + " isplayer1bool value");
+            //Debug.Log(turnManager.GetTurnActionIndex() + " turnactionindex value");
         }
         //lastly see if we can place the card selected on the field
         else if (Input.GetMouseButton(1) && selectedCard)

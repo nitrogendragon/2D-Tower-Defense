@@ -52,7 +52,7 @@ public class TurnManager : NetworkBehaviour
             turnActionIndex.Value = 0;
             return;
         }
-        Debug.Log("after running updateturnmanagerserverrpc these are our isplayer1turn and turnactionindex values: " + isPlayer1Turn + "  " + turnActionIndex);
+        //Debug.Log("after running updateturnmanagerserverrpc these are our isplayer1turn and turnactionindex values: " + isPlayer1Turn + "  " + turnActionIndex);
         
     }
 
@@ -63,8 +63,8 @@ public class TurnManager : NetworkBehaviour
         //get it so it's player 1's turn and it's their summon phase
         isPlayer1Turn.Value = true;
         turnActionIndex.Value = 1;
-        Debug.Log("we initialized the turn manager");
-        Debug.Log("isplayer1Turn and turnactionindex are: " + isPlayer1Turn.Value + "  " + turnActionIndex.Value);
+        //Debug.Log("we initialized the turn manager");
+        //Debug.Log("isplayer1Turn and turnactionindex are: " + isPlayer1Turn.Value + "  " + turnActionIndex.Value);
     }
 
     private void OnEnable()
@@ -135,9 +135,9 @@ public class TurnManager : NetworkBehaviour
     {
 
         isWaitingToChangePhase = true;
-        Debug.Log("We started waiting" + Time.time);
+        //Debug.Log("We started waiting" + Time.time);
         yield return new WaitForSeconds(endTurnWait);
-        Debug.Log("We have finished waiting " + Time.time);
+        //Debug.Log("We have finished waiting " + Time.time);
         //after x number of seconds after the action has been processed, go to the next phase
         UpdateTurnManagerServerRpc();
         isWaitingToChangePhase = false;

@@ -27,7 +27,7 @@ public class CardBoardIndexManager : NetworkBehaviour
     public void SetCardIndex(NetworkObject Card, int cardBoardTilePositionIndex)
     {
         cardsOnField[cardBoardTilePositionIndex] = Card;
-        Debug.Log(cardsOnField[cardBoardTilePositionIndex].name);
+        //Debug.Log(cardsOnField[cardBoardTilePositionIndex].name);
     }
 
     public bool CheckIfCardAtIndex(int cardBoardIndex)

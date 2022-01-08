@@ -53,7 +53,7 @@ public class BoardManagerNetwork : MonoBehaviour
     {
         if ((float)rows % 2.0f == 0.0f)
         {
-            Debug.Log("even board count");
+            //Debug.Log("even board count");
             verticalOffset = -rows / 2 + .5f;
             horizontalOffset = -columns / 2 + .5f;
             return;
@@ -98,7 +98,7 @@ public class BoardManagerNetwork : MonoBehaviour
                 if(selectedBoardTile.transform.position == boardTiles[i].transform.position)
                 {
                     targetIndex = i;
-                    Debug.Log("The selectedBoardTilesIndex is: " + targetIndex);
+                    //Debug.Log("The selectedBoardTilesIndex is: " + targetIndex);
                     return targetIndex;
                 }
             }
