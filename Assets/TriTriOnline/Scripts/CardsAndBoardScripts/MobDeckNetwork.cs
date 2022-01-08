@@ -30,7 +30,7 @@ public class MobDeckNetwork : MonoBehaviour
             //get a reference index for the card to be used to create it on draw later;
             deckCardMobIndexReferences[i] = Random.Range(0, mobNames.Length);
         }
-        Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
+        //Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
     }
 
     public Sprite getSprite(int mobSpriteindex)

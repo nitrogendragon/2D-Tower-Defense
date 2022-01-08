@@ -9,7 +9,6 @@ public class CardsControllerNetwork : NetworkBehaviour
     [SerializeField] private NetworkObject mobCard;
     public BoardManagerNetwork boardManager;
     private GameObject selectedCard;
-    private bool startFirstDraw = false;
     //will/can be used to delay several actions like in the yugioh card games or other games
     private float startWait = 1f;
     protected bool isFirstDraw  = true;
@@ -22,12 +21,8 @@ public class CardsControllerNetwork : NetworkBehaviour
     private float mobCardsWidth;
     private float timePassed = 0;
     [SerializeField] MobDeckNetwork mobDeckNetwork;//on our DeckCardBack GameObject
-    [SerializeField ]private int cardsInDeck = 30;
-    //will be used to determine what a player should be doing, drawing, placing a card/cards, activating abilities/spells/traps/field cards, ending turn
-    private NetworkVariable<int> turnActionIndex = new NetworkVariable<int>(0);
-    //Network Specific variables below
-    //who's turn is it? player1(host) or player2(client), determines if we should draw and can place cards and so on in the turn execution cycle
-    private NetworkVariable<bool> isPlayer1Turn = new NetworkVariable<bool>();
+    [SerializeField] private int cardsInDeck = 30;
+    [SerializeField] TurnManager turnManager;//handles everything related to managing whose turn it is and what phase someone is in
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +35,6 @@ public class CardsControllerNetwork : NetworkBehaviour
     public void StartGame()
     {
         cardsInDeck = 30;
-        startFirstDraw = false;
         widthOfCardsContainer = cardsContainer.GetComponent<SpriteRenderer>().bounds.size.x;
         mobCardsWidth = mobCard.GetComponent<SpriteRenderer>().bounds.size.x;
         StartCoroutine("WaitToDraw");
@@ -74,8 +68,12 @@ public class CardsControllerNetwork : NetworkBehaviour
     IEnumerator WaitToDraw()
     {
         yield return new WaitForSeconds(startWait);
-        startFirstDraw = true;
+        //this is just for our first draw
+        DrawCards(false);
+        turnManager.InitializeTurnManagerServerRpc();
     }
+
+    
 
     public void ReOrganizeHand()
     {
@@ -93,8 +91,9 @@ public class CardsControllerNetwork : NetworkBehaviour
         }
     }
 
-    private void DrawCards()
+    private void DrawCards(bool isDeactivated)
     {
+        if (isDeactivated) { return; }
         //make sure only the owner is doing this
         int cardsToDraw = CardsToDraw();
         int prevCardsInHandCount = cardsInHandCount; // for keeping track of which card we are on between the for loops
@@ -159,7 +158,20 @@ public class CardsControllerNetwork : NetworkBehaviour
         }
     }
 
-    private void PlaceSelectedCard()
+    private bool CheckForDeckClick()
+    {
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && hit.collider && hit.collider.tag == "Deck")
+        {
+            Debug.Log("We hit the deck");
+            return true;
+        }
+        return false;
+    }
+
+    private bool PlaceSelectedCard()
     {
         Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
         int cardPlacementBoardIndex = boardManager.GetSelectedBoardIndex();
@@ -191,8 +203,11 @@ public class CardsControllerNetwork : NetworkBehaviour
             //Debug.Log(cardsInHand.Count);
             ReOrganizeHand();//reorganize / relayout cards in hand
             cardsInHandCount = cardsInHand.Count;
+            return true;
+            
         }
-        //do nothing otw
+        //return false otw so we can know not to update the turnManager
+        return false;
     }
 
     [ServerRpc (RequireOwnership = false)]
@@ -222,25 +237,42 @@ public class CardsControllerNetwork : NetworkBehaviour
     void Update()
     {
         //only the owner should be doing this
-        
-        if (startFirstDraw)
+        if (!IsClient) { return; }
+        //draw checks first
+        if (Input.GetKeyDown(KeyCode.Alpha1) || CheckForDeckClick())
         {
-            startFirstDraw = false;
-            DrawCards();
+            if (IsHost && turnManager.GetIsPlayer1Turn() && turnManager.GetTurnActionIndex() == 0 ||
+               !IsHost && IsClient && !turnManager.GetIsPlayer1Turn() && turnManager.GetTurnActionIndex() == 0)
+            {
+                DrawCards(turnManager.GetWaitingForPhaseChangeStatus());
+                StartCoroutine(turnManager.WaitToEndPhase());
+            }
         }
+        //next try card selection
         else if (Input.GetMouseButtonDown(0))
         {
-            SelectCard();
+            if(IsHost && turnManager.GetIsPlayer1Turn() && turnManager.GetTurnActionIndex() == 1  || 
+                !IsHost && IsClient && !turnManager.GetIsPlayer1Turn() && turnManager.GetTurnActionIndex() == 1)
+            {
+                Debug.Log("we met the conditions");
+                SelectCard();
+            }
+            Debug.Log("we are not meeting the conditions to select a card obviously");
+            Debug.Log(IsHost + "host bool");
+            Debug.Log(turnManager.GetIsPlayer1Turn() + " isplayer1bool value");
+            Debug.Log(turnManager.GetTurnActionIndex() + " turnactionindex value");
         }
+        //lastly see if we can place the card selected on the field
         else if (Input.GetMouseButton(1) && selectedCard)
         {
 
-            PlaceSelectedCard();
+            if (PlaceSelectedCard())
+            {
+                //handle turn updates to move to next phase since we successfully placed our card
+                StartCoroutine(turnManager.WaitToEndPhase());
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            DrawCards();//just for testing purposes
-        }
+        
 
 
     }

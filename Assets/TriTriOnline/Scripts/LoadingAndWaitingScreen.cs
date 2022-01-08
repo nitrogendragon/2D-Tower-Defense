@@ -16,7 +16,9 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
     [SerializeField] private GameObject boardManagerNetwork;
     [SerializeField] private GameObject cardsControllerNetwork;//on our UI_Main gameobject now
     [SerializeField] private GameObject cardsContainer;//empty container to hold our card and deck related objects
+    [SerializeField] private GameObject endTurnButton;
     private Color initialButtonNormalColor;
+   
     
     private string[] readyUpTexts = new string[] { "ready up", "ready" };
     //are we player 1? if not we will be player2
@@ -116,7 +118,7 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
         }
         else
         {
-            Debug.Log("We ran the disable version");
+            //Debug.Log("We ran the disable version");
             readyUpText.text = readyUpTexts[0];
             colors.normalColor = initialButtonNormalColor;
             colors.selectedColor = initialButtonNormalColor;
@@ -138,7 +140,7 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
         if (!IsServer) { return; }
         //add if readied up otherwise subtract 1 unless already zero
         playerReadyCount.Value += playerReadiedUp ? 1 : playerReadyCount.Value == 0 ? 0 : -1;
-        Debug.Log(playerReadyCount.Value + " number of players ready");
+        //Debug.Log(playerReadyCount.Value + " number of players ready");
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -148,7 +150,7 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
         if (!IsServer) { return; }
         //add if readied up otherwise subtract 1 unless already zero
         playerReadyCount.Value = 0;
-        Debug.Log(playerReadyCount.Value + " number of players ready");
+        //Debug.Log(playerReadyCount.Value + " number of players ready");
     }
 
     private void OnEnable()
@@ -176,6 +178,7 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
 
             //}
             messageScreen.SetActive(false);
+            endTurnButton.SetActive(true);
             loadingAndWaitingTextObject.text = "";
             SetUpField();
             //we are no longer ready so subtracting

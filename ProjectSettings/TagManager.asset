@@ -12,6 +12,7 @@ TagManager:
   - BoardTile
   - MobCard
   - NetworkManager
+  - Deck
   layers:
   - Default
   - TransparentFX

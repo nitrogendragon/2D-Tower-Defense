@@ -21,7 +21,7 @@ public class CardBoardIndexManager : NetworkBehaviour
     private void Awake()
     {
         int topBottomAttackIndexMod = (int)Mathf.Sqrt(GetFieldSizeCount());
-        Debug.Log("the attack mod for top and bottom is: " + topBottomAttackIndexMod);
+        //Debug.Log("the attack mod for top and bottom is: " + topBottomAttackIndexMod);
 
     }
     public void SetCardIndex(NetworkObject Card, int cardBoardTilePositionIndex)
