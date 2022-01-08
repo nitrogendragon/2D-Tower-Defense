@@ -683,7 +683,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damagePopUp: {fileID: 8887400649608298645}
-  moveRight: 1
 --- !u!1 &8572697605171084845
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,17 +878,21 @@ PrefabInstance:
       propertyPath: m_Text
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5320945202264533514, guid: 8e9991597e98b3e48982b4c263267589, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8299938643377953176, guid: 8e9991597e98b3e48982b4c263267589, type: 3}
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8299938643377953176, guid: 8e9991597e98b3e48982b4c263267589, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.1999998
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8299938643377953176, guid: 8e9991597e98b3e48982b4c263267589, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.1999998
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8299938643377953176, guid: 8e9991597e98b3e48982b4c263267589, type: 3}
       propertyPath: m_LocalPosition.x

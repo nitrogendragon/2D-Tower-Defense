@@ -8,8 +8,6 @@ public class DamagePopUp : NetworkBehaviour
     [SerializeField]  private GameObject damagePopUp;
     private Vector3 initialPosition;
     private float movementRangeX = .01f;
-    [SerializeField] 
-    private bool moveRight = true;
     private float timeTilDeactive = 1.6f;
     private float timePassed;
     private NetworkVariable<bool> tookDamage = new NetworkVariable<bool>(false);
@@ -40,21 +38,7 @@ public class DamagePopUp : NetworkBehaviour
         if(damageTaken.Value > 0) { damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString(); }
     }
 
-    private void ShakePopUp()
-    {
-        
-        if(damagePopUp.transform.position.x <= initialPosition.x + movementRangeX && moveRight)
-        {
-            damagePopUp.transform.position += new Vector3(.1f * Time.deltaTime,0,0);
-        }
-        else { moveRight = false; }
-        if (damagePopUp.transform.position.x >= initialPosition.x - movementRangeX && !moveRight)
-        {
-            damagePopUp.transform.position -= new Vector3(.1f * Time.deltaTime, 0, 0);
-        }
-        else { moveRight = true; }
-        timePassed += Time.deltaTime;
-    }
+
     [ServerRpc(RequireOwnership = false)]
     public void ChangeTextAndSetActiveServerRpc(int value)
     {
@@ -66,11 +50,11 @@ public class DamagePopUp : NetworkBehaviour
         damageTaken.Value = value;
         //damagePopUp.GetComponent<MeshRenderer>().sortingLayerName = "UI";
         //damagePopUp.GetComponent<MeshRenderer>().sortingOrder = 2;
-        initialPosition = transform.position;
+        initialPosition = gameObject.transform.position;
         Debug.Log(initialPosition);
         Debug.Log(damagePopUp.activeSelf);
         damagePopUp.GetComponent<TextMesh>().text = "-" + value;
-        Debug.Log(damagePopUp.GetComponent<TextMesh>().text);
+        //Debug.Log(damagePopUp.GetComponent<TextMesh>().text);
         StartCoroutine(WaitToDisablePopUp());
     }
 
@@ -86,9 +70,10 @@ public class DamagePopUp : NetworkBehaviour
 
     private IEnumerator WaitToDisablePopUp()
     {
-        Debug.Log(Time.time);
-        yield return new WaitForSeconds(2f);
-        Debug.Log(Time.time);
+        //Debug.Log(Time.time);
+        yield return new WaitForSeconds(.7f);
+        //Debug.Log(Time.time);
+        
         DisablePopUpServerRpc();
     }
 
