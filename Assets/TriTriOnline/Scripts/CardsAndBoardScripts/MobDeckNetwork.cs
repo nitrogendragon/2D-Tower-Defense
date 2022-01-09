@@ -13,6 +13,8 @@ public class MobDeckNetwork : MonoBehaviour
     private int[,] mobStats = new int[,] { {/*Cerberus of the Black Flame */ 6, 6, 9, 6, 16 }, {/*Core Kraken */ 7, 7, 4, 8, 17 }, {/*Headless Chicken */ 3, 3, 9, 5, 2 }, {/*Putrid Puddle */ 5, 5, 2, 4, 11 },
         {/*murkblood hydra */ 7, 7, 7, 4, 18 }, {/*Seaweed Hermit */ 4, 4, 6, 2, 4 }, {/*Conspiring Sorceror */ 6, 6, 3, 5, 2 }, {/*Wandering Knight */ 6, 5, 4, 3, 4 }, {/*OtherRealm Tammy */ 6, 7, 5, 9, 15 }};
     private int[] deckCardMobIndexReferences = new int[30];
+    //Lineages include Giant, Celestial, Construct, beast, humanoid, ooze, Aberration, Spectre, Monstrosity, Demon,Elemental, Plant, Dragon
+    private string[] mobLineages = new string[] {"Beast", "Giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid"};
     [SerializeField]private List<Sprite> mobSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> attackValueSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> hpValueSprites = new List<Sprite>();
@@ -72,11 +74,60 @@ public class MobDeckNetwork : MonoBehaviour
 
         //apply to the referenced parameter
         attackAndHpValueSprites = atkAndHpValSprites;
+        //find the index of the sprite we need to pull when rendering the lineage sprite
+        attributeSpriteIndex = DetermineLineage(mobLineages[mobListIndex]);
+        Debug.Log("the first attributeSpriteIndex is: " + attributeSpriteIndex);
         //just going to default to zero index for now
-        attributeSprite = attributeSprites[0];
-        //for now it will be zero
-        attributeSpriteIndex = 0;
+        attributeSprite = attributeSprites[attributeSpriteIndex];
         mobSprite = mobSprites[mobListIndex];
+    }
+    //Giant, Celestial, Construct, beast, humanoid, ooze, Aberration, Spectre, Monstrosity, Demon,Elemental, Plant, Dragon
+    private int DetermineLineage(string lineage)
+    {
+        switch (lineage)
+        {
+            case "Aberration":
+                return 0;
+                
+            case "Beast":
+                return 1;
+                
+            case "Celestial":
+                return 2;
+                
+            case "Construct":
+                return 3;
+                
+            case "Demon":
+                return 4;
+                
+            case "Dragon":
+                return 5;
+                
+            case "Elemental":
+                return 6;
+                
+            case "Giant":
+                return 7;
+                
+            case "Humanoid":
+                return 8;
+                
+            case "Monstrosity":
+                return 9;
+               
+            case "Ooze":
+                return 10;
+                
+            case "Plant":
+                return 11;
+                
+            case "Spectre":
+                return 12;
+            default:
+                return -1;//should never happen
+        }
+        
     }
 
     

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7568603525156830211}
   - component: {fileID: 7670271904948571887}
   m_Layer: 3
-  m_Name: ElementIcon
+  m_Name: LineageIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25,8 +25,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632217239214285626}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 2, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_LocalPosition: {x: -1.7, y: 1.7, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8572697605632815780}
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_SortingLayerID: -18786185
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: cbf67bf32b0b13a438116b9cbe6d1ce0, type: 3}
-  m_Color: {r: 0.1992956, g: 0.8962264, b: 0.23951776, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 496bfe61d0c37c8429b2296e9b35c7e2, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

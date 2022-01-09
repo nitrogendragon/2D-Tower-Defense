@@ -4331,10 +4331,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoardManagerNetwork
       objectReference: {fileID: 0}
-    - target: {fileID: 6679424251816682280, guid: ec7ae5f7fbec3214d9ab80e2dac3dd91, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6679424251816682282, guid: ec7ae5f7fbec3214d9ab80e2dac3dd91, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -4582,12 +4578,19 @@ MonoBehaviour:
   - {fileID: 21300000, guid: be4231e7a102f4847a4a8c44369d15ce, type: 3}
   - {fileID: 21300000, guid: b0c238d691e96aa4eb2a2f3a5b0db7f7, type: 3}
   attributeSprites:
-  - {fileID: 21300000, guid: cbf67bf32b0b13a438116b9cbe6d1ce0, type: 3}
-  - {fileID: 21300000, guid: 5e87829f35a5f7f42878cf71710f33ca, type: 3}
-  - {fileID: 21300000, guid: 5ace3163efb8fa64f8a9684906ea4795, type: 3}
-  - {fileID: 21300000, guid: 69c3aecf1dfac52449d4e5c8069e1e3c, type: 3}
-  - {fileID: 21300000, guid: 1201cbbb56824204faa2c1068aa9c412, type: 3}
-  - {fileID: 21300000, guid: 7a1518f931414e8489c7be37c46cf390, type: 3}
+  - {fileID: 21300000, guid: 111b34cfb139f9c4d95e62c5acac9c92, type: 3}
+  - {fileID: 21300000, guid: 496bfe61d0c37c8429b2296e9b35c7e2, type: 3}
+  - {fileID: 21300000, guid: 763437163e7b4fa4ba949618e9c29ed9, type: 3}
+  - {fileID: 21300000, guid: 91e1576d9b2228d4c9935ca03be06055, type: 3}
+  - {fileID: 21300000, guid: a989e126a90403f488531617ac6ece95, type: 3}
+  - {fileID: 21300000, guid: 1cfa987e2fd9f434bb7327bbb93fba36, type: 3}
+  - {fileID: 21300000, guid: ce1625a83f92fac45bac290d0baf53ad, type: 3}
+  - {fileID: 21300000, guid: 9e2edcb590e2e53428a88be679b3ce5f, type: 3}
+  - {fileID: 21300000, guid: 664d00203edcfb142b6ca4e4c8c6a3bc, type: 3}
+  - {fileID: 21300000, guid: 3eb28dc2ab3e6674da3b4ba6ffc0111d, type: 3}
+  - {fileID: 21300000, guid: 0aae5c2dd5e419c4281c2810eec6fcfd, type: 3}
+  - {fileID: 21300000, guid: dfbf7e8e983030845954a9e548fb3939, type: 3}
+  - {fileID: 21300000, guid: 38814e449e4571e4fb1ce594769e39ab, type: 3}
 --- !u!114 &8754192519461090536
 MonoBehaviour:
   m_ObjectHideFlags: 0
