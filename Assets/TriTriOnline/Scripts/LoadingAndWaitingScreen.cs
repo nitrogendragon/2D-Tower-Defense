@@ -195,7 +195,7 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
 
     private void SetUpField()
     {
-        boardManagerNetwork.GetComponent<BoardManagerNetwork>().CreateBoard(1);
+        boardManagerNetwork.GetComponent<BoardManagerNetwork>().CreateBoard(1.5f,2f);
         cardsContainer.SetActive(true);
         cardsControllerNetwork.GetComponent<CardsControllerNetwork>().StartGame();
     }

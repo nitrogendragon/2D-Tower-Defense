@@ -26,7 +26,12 @@ public class BoardManagerNetwork : MonoBehaviour
         return columns;
     }
 
-    public void CreateBoard(int scale)
+    private void Start()
+    {
+        //CreateBoard(1.5f, 2f);//only for testing purposes when needed
+    }
+
+    public void CreateBoard(float xScale, float yScale)
     {
         SetOffSets(rows, columns);
         for(int row = 0; row < rows; row++)
@@ -34,7 +39,7 @@ public class BoardManagerNetwork : MonoBehaviour
             for (int column = 0; column < columns; column++)
             {
                 GameObject newBoardPiece = Instantiate(boardTile);
-                newBoardPiece.transform.position = new Vector3((horizontalOffset + column) * scale, (verticalOffset + row) * scale, 0);
+                newBoardPiece.transform.position = new Vector3((horizontalOffset + column) * xScale, (verticalOffset + row) * yScale, 0);
                 boardTiles.Add(newBoardPiece);
             }
         }
@@ -54,7 +59,7 @@ public class BoardManagerNetwork : MonoBehaviour
         if ((float)rows % 2.0f == 0.0f)
         {
             //Debug.Log("even board count");
-            verticalOffset = -rows / 2 + .5f;
+            verticalOffset = -rows / 2 + 1f;
             horizontalOffset = -columns / 2 + .5f;
             return;
         }

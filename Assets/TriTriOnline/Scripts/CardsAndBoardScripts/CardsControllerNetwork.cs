@@ -85,7 +85,7 @@ public class CardsControllerNetwork : NetworkBehaviour
                 //very fancy but should adjust to fill space as cards are drawn, will likely use for adjusting when playing cards too
                 cardsInHand[i].transform.position =
                     new Vector3(cardsContainer.transform.position.x + -widthOfCardsContainer / 1.7f + (mobCardsWidth / 2) +
-                    ((mobCardsWidth + .1f) * i + .1f + widthOfCardsContainer / cardsInHandCount),
+                    ((mobCardsWidth + .7f) * i + .1f + widthOfCardsContainer / cardsInHandCount),
                     cardsContainer.transform.position.y, 0);
             }
         }
@@ -135,7 +135,7 @@ public class CardsControllerNetwork : NetworkBehaviour
             //Debug.Log("We didn't have zero cards in hand and are not the only card being drawn");
             myMobCardInstance.transform.position =
                 new Vector3(cardsContainer.transform.position.x + -widthOfCardsContainer / 1.7f + (mobCardsWidth / 2) +
-                ((mobCardsWidth + .1f) * (cardsDrawn + prevCardsInHandCount) + .1f + widthOfCardsContainer / cardsInHandCount),
+                ((mobCardsWidth + .7f) * (cardsDrawn + prevCardsInHandCount) + .1f + widthOfCardsContainer / cardsInHandCount),
                         cardsContainer.transform.position.y, 0);
             
 

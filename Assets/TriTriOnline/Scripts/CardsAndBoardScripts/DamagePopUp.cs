@@ -77,19 +77,12 @@ public class DamagePopUp : NetworkBehaviour
         DisablePopUpServerRpc();
     }
 
+    
+
     // Update is called once per frame
     void Update()
     {
         
-        //if(tookDamage.Value && timeTilDeactive > timePassed)
-        //{
-        //    ShakePopUp();
-        //}
-        //else
-        //{
-        //    timePassed = 0.0f;
-        //    DisablePopUpServerRpc();
-            
-        //}
+
     }
 }
