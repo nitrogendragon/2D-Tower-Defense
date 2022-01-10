@@ -13,10 +13,11 @@ public class MobCard : MonoBehaviour
     public SpriteRenderer mobBackgroundRenderer;
     public SpriteRenderer topStatRenderer, bottomStatRenderer, leftStatRenderer, rightStatRenderer, hitPointTensRenderer, hitPointOnesRenderer, attributeRenderer;
     private bool isPlayer1;
+    private bool isMob;//are we a mob or are we an ability card?
     private int mobSpriteIndex; //will pull to figure out what sprite to place on the networkMobCard since i can't do it on the server.
     private int attributeSpriteIndex;
     
-    public void CreateMobCard(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, Sprite mobSprite, int mobSprteIndex, bool isOwnedByPlayer1,
+    public void CreateMobCard(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, Sprite mobSprite, int mobSprteIndex, bool isOwnedByPlayer1, bool initIsMob,
         Sprite leftStatSprite, Sprite rightStatSprite, Sprite topStatSprite, Sprite bottomStatSprite, Sprite hitPointTensSprite, Sprite hitPointOnesSprite, Sprite attributeSprite, int attrSpriteIndex)
     {
         topStat = initTopStat;
@@ -30,6 +31,7 @@ public class MobCard : MonoBehaviour
         curRightStat = rightStat;
         curHitPoints = hitPoints;
         isPlayer1 = isOwnedByPlayer1;
+        isMob = initIsMob;
         mobSpriteRenderer.sprite = mobSprite;
         mobSpriteIndex = mobSprteIndex;
         attributeSpriteIndex = attrSpriteIndex;
@@ -73,5 +75,10 @@ public class MobCard : MonoBehaviour
     public bool GetPlayer1Owned()
     {
         return isPlayer1;
+    }
+
+    public bool GetIsMob()
+    {
+        return isMob;
     }
 }

@@ -25,8 +25,9 @@ public class MobCardNetwork : NetworkBehaviour
     private NetworkVariable<int> hpOnesSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     private NetworkVariable<int> attributeSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     private NetworkVariable<int> cardPlacementBoardIndex = new NetworkVariable<int>();//the index of the board tile in the boardTiles list that we placed the card on
+    private NetworkVariable<bool> isMob = new NetworkVariable<bool>();//whether the card is a mob or an ability card
     
-    [SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
+    //[SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
     public SpritesLists spritesReferenceHolder;
     public CardBoardIndexManager cardBoardIndexManager;
 
@@ -46,6 +47,7 @@ public class MobCardNetwork : NetworkBehaviour
         hpOnesSpriteIndex.OnValueChanged += OnHpOnesSpriteIndexChanged;
         attributeSpriteIndex.OnValueChanged += OnAttributeSpriteIndexChanged;
         cardPlacementBoardIndex.OnValueChanged += OnCardPlacementBoardIndexChanged;
+        isMob.OnValueChanged += OnIsMobChanged;
     }
 
     private void OnDisable()
@@ -60,6 +62,7 @@ public class MobCardNetwork : NetworkBehaviour
         hpOnesSpriteIndex.OnValueChanged -= OnHpOnesSpriteIndexChanged;
         attributeSpriteIndex.OnValueChanged -= OnAttributeSpriteIndexChanged;
         cardPlacementBoardIndex.OnValueChanged -= OnCardPlacementBoardIndexChanged;
+        isMob.OnValueChanged -= OnIsMobChanged;
 
     }
 
@@ -80,7 +83,9 @@ public class MobCardNetwork : NetworkBehaviour
     private void OnMobSpriteIndexChanged(int oldIndex,int newIndex)
     {
         if (!IsClient) { return; }
-        mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = mobSprites[newIndex];//this should get the sprite from the script and let us set our sprite, hopefully
+        //mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = mobSprites[newIndex];//old version
+        mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = spritesReferenceHolder.GetMobSprite(newIndex);
+
     }
 
     private void OnTopStatSpriteIndexChanged(int oldIndex, int newIndex)
@@ -130,6 +135,11 @@ public class MobCardNetwork : NetworkBehaviour
        
     }
 
+    private void OnIsMobChanged(bool oldBool, bool newBool)
+    {
+        //Idk what to do here atm or if anything should be done
+    }
+
 
 
     [ServerRpc]
@@ -161,7 +171,7 @@ public class MobCardNetwork : NetworkBehaviour
     }
     //will be ran when the card is drawn/instantiated
     [ServerRpc]
-    public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, int mobSpriteIndexReference, int attributeSpriteIndexReference, int cBoardIndex)
+    public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, bool initIsMob, int mobSpriteIndexReference, int attributeSpriteIndexReference, int cBoardIndex)
     {
         if (!IsServer) { return; }
         topStat = initTopStat;
@@ -183,6 +193,7 @@ public class MobCardNetwork : NetworkBehaviour
         bottomStatSpriteIndex.Value = initBottomStat;
         leftStatSpriteIndex.Value = initLeftStat;
         rightStatSpriteIndex.Value = initRightStat;
+        isMob.Value = initIsMob;
         if (initHitPoints < 10)
         {
             hpTensSpriteIndex.Value = 0;//will use this for when we don't want to render a sprite for the ten's digit
@@ -200,7 +211,10 @@ public class MobCardNetwork : NetworkBehaviour
             hpOnesSpriteIndex.Value = initHitPoints - 20;
         }
         //Debug.Log("The board position we are going to be placed at is: " + cBoardIndex);
-        Attack(cBoardIndex);//could use cBoardIndex but want to try this first
+
+        //we don't want to attack if we are not a mob
+        if (!isMob.Value) { return; }
+        Attack(cBoardIndex);
     }
 
    
@@ -230,7 +244,8 @@ public class MobCardNetwork : NetworkBehaviour
         int topAttackTargetBoardIndex = cardBoardPosIndex + topBottomAttackIndexMod;
         int bottomAttackTargetBoardIndex = cardBoardPosIndex - topBottomAttackIndexMod;
         // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
-        //checkcardindex notes: we are currently using a 6x6 board so obv left right add subtract 1, but top bottom could change later if size changes so be aware of that, for now though plus minus 3
+        //checkcardindex notes: we are currently using a 6x6 board so obv left right add subtract 1, but top bottom could change later if size changes so be aware of that, for now though plus minus 6
+
         //left attack
         //make sure there is a card to our left and specifically to our left not just in the index 1 below us in the list/array
         if (cardBoardIndexManager.CheckIfCardAtIndex(leftAttackTargetBoardIndex) && cardBoardPosIndex != 0 && cardBoardPosIndex % topBottomAttackIndexMod != 0)
@@ -244,6 +259,7 @@ public class MobCardNetwork : NetworkBehaviour
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, leftAttackTargetBoardIndex, 2);
             }
         }
+
         //right attack
         //make sure there is a card to our right and specifically to our right not just in the index 1 above us in the list/array
         if (cardBoardIndexManager.CheckIfCardAtIndex(rightAttackTargetBoardIndex))

@@ -54,6 +54,12 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9f9ab5cf9fbbfc94b9b41ea529de2996, type: 3}
   - {fileID: 21300000, guid: a8428cd9eb49f0e4e92f594c04eaec72, type: 3}
   - {fileID: 21300000, guid: 602ce352593f677459e409e41b8d9aa1, type: 3}
+  - {fileID: 21300000, guid: cbf67bf32b0b13a438116b9cbe6d1ce0, type: 3}
+  - {fileID: 21300000, guid: 5ace3163efb8fa64f8a9684906ea4795, type: 3}
+  - {fileID: 21300000, guid: 69c3aecf1dfac52449d4e5c8069e1e3c, type: 3}
+  - {fileID: 21300000, guid: 1201cbbb56824204faa2c1068aa9c412, type: 3}
+  - {fileID: 21300000, guid: 7a1518f931414e8489c7be37c46cf390, type: 3}
+  - {fileID: 21300000, guid: 5e87829f35a5f7f42878cf71710f33ca, type: 3}
   attackValueSprites:
   - {fileID: 21300000, guid: 05469c97335bd1b4599a449a9c2b9831, type: 3}
   - {fileID: 21300000, guid: c5252780c18d16e4ca59914842b713b5, type: 3}

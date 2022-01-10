@@ -9,12 +9,22 @@ public class MobDeckNetwork : MonoBehaviour
     private int currentDeckCardIndex = 0;
     private int typesOfMobs = 9;
     // Start is called before the first frame update
-    private string[] mobNames = new string[] { "Cerberus of the black flame", "Core Kraken", "Headless Chicken", "PutridPuddle", "Murkblood Hydra", "Seaweed Hermit", "Conspiring Sorceror", "Wandering Knight", "OtherRealm Tammy" };
+    //try to keep mobs first and magic stuff after
+    private string[] mobNames = new string[] { "Cerberus of the black flame", "Core Kraken", "Headless Chicken", "PutridPuddle", "Murkblood Hydra", "Seaweed Hermit", "Conspiring Sorceror", "Wandering Knight", "OtherRealm Tammy",
+        /*start ability cards here*/ "Dark Orb", "Flame Ball", "Holy", "Aqua Blast", "Tempest Whirl", "Rock Slide" };
+
     private int[,] mobStats = new int[,] { {/*Cerberus of the Black Flame */ 6, 6, 9, 6, 16 }, {/*Core Kraken */ 7, 7, 4, 8, 17 }, {/*Headless Chicken */ 3, 3, 9, 5, 2 }, {/*Putrid Puddle */ 5, 5, 2, 4, 11 },
-        {/*murkblood hydra */ 7, 7, 7, 4, 18 }, {/*Seaweed Hermit */ 4, 4, 6, 2, 4 }, {/*Conspiring Sorceror */ 6, 6, 3, 5, 2 }, {/*Wandering Knight */ 6, 5, 4, 3, 4 }, {/*OtherRealm Tammy */ 6, 7, 5, 9, 15 }};
+        {/*murkblood hydra */ 7, 7, 7, 4, 18 }, {/*Seaweed Hermit */ 4, 4, 6, 2, 4 }, {/*Conspiring Sorceror */ 6, 6, 3, 5, 2 }, {/*Wandering Knight */ 6, 5, 4, 3, 4 }, {/*OtherRealm Tammy */ 6, 7, 5, 9, 15 },
+        /*start ability cards here*/{/*Dark Orb*/ 3,3,3,3,4}, {/*Flame Ball*/ 3,3,3,3,4 }, {/*Holy*/ 3,3,3,3,4 }, {/*Aqua Blast*/ 3,3,3,3,4 }, {/*Tempest Whirl*/ 3,3,3,3,4 }, {/*Rock Slide*/ 3,3,3,3,4 } };
+
+    private bool[] isMob = new bool[] { true, true, true, true, true, true, true, true, true,
+        /*start ability cards here*/false, false, false, false, false, false };
+
     private int[] deckCardMobIndexReferences = new int[30];
     //Lineages include Giant, Celestial, Construct, beast, humanoid, ooze, Aberration, Spectre, Monstrosity, Demon,Elemental, Plant, Dragon
-    private string[] mobLineages = new string[] {"Beast", "Giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid"};
+    private string[] mobLineages = new string[] {"Beast", "Giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid",
+    /*start ability cards here*/ "Spectre", "Elemental", "Celestial", "Elemental", "Elemental", "Elemental"};
+    //will include sprites for ability cards to keep things simple, mobs first then abilities
     [SerializeField]private List<Sprite> mobSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> attackValueSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> hpValueSprites = new List<Sprite>();
@@ -30,6 +40,7 @@ public class MobDeckNetwork : MonoBehaviour
         for(int i = 0; i < deckCardInitialCount; i++)
         {
             //get a reference index for the card to be used to create it on draw later;
+            //deckCardMobIndexReferences[i] = 9;//just for testing to make sure the ability cards are functioning properly
             deckCardMobIndexReferences[i] = Random.Range(0, mobNames.Length);
         }
         //Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
@@ -41,12 +52,13 @@ public class MobDeckNetwork : MonoBehaviour
         return tempSprite;
     }
 
-    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite, ref int attributeSpriteIndex)
+    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite, ref int attributeSpriteIndex, ref bool isAMob)
     {
 
         //get the mob index from our decks mob Index List
         int mobListIndex = deckCardMobIndexReferences[currentDeckCardIndex];
         mobSpritesListSpriteIndex = mobListIndex;//this should get us the index that we want for grabbing the appropriate sprite later
+        isAMob = isMob[mobListIndex];//grabs our isMob bool at the index of the mob being set up
         //increment currentDeckcard
         currentDeckCardIndex += 1;
         //get our stats for the mob
