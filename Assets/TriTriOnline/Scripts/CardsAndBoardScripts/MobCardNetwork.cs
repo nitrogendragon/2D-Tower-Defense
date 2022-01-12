@@ -6,6 +6,7 @@ using Unity.Netcode;
 public class MobCardNetwork : NetworkBehaviour
 {
     public bool isInHand = true;
+
     //all the impoortant stats for the mob to display and use for interactions
     private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints;
     private Color player1mobBackgroundColor = new Color(.4f,0,0);
@@ -143,7 +144,7 @@ public class MobCardNetwork : NetworkBehaviour
 
 
     [ServerRpc]
-    private void DestroyNetworkObjectServerRpc()
+    public void DestroyNetworkObjectServerRpc()
     {
         //one option is to despawn the network object, stays on server but disappears for the clients
         //GetComponent<NetworkObject>().Despawn();
@@ -174,6 +175,9 @@ public class MobCardNetwork : NetworkBehaviour
     public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, bool initIsMob, int mobSpriteIndexReference, int attributeSpriteIndexReference, int cBoardIndex)
     {
         if (!IsServer) { return; }
+        
+        
+        //handle stat setup and other card setup
         topStat = initTopStat;
         bottomStat = initBottomStat;
         rightStat = initRightStat;
@@ -194,6 +198,8 @@ public class MobCardNetwork : NetworkBehaviour
         leftStatSpriteIndex.Value = initLeftStat;
         rightStatSpriteIndex.Value = initRightStat;
         isMob.Value = initIsMob;
+        if (!initIsMob) { this.tag = "AbilityCard"; }
+        Debug.Log(this.tag);
         if (initHitPoints < 10)
         {
             hpTensSpriteIndex.Value = 0;//will use this for when we don't want to render a sprite for the ten's digit
@@ -211,7 +217,7 @@ public class MobCardNetwork : NetworkBehaviour
             hpOnesSpriteIndex.Value = initHitPoints - 20;
         }
         //Debug.Log("The board position we are going to be placed at is: " + cBoardIndex);
-
+        
         //we don't want to attack if we are not a mob
         if (!isMob.Value) { return; }
         Attack(cBoardIndex);
@@ -229,6 +235,16 @@ public class MobCardNetwork : NetworkBehaviour
     {
         //1 is player 1 and 2 is player 2 ezpz
         return playerOwnerIndex.Value;
+    }
+
+    public bool GetIsMob()
+    {
+        return isMob.Value;
+    }
+
+    public int GrabCardPlacementBoardIndex()
+    {
+        return cardPlacementBoardIndex.Value;
     }
 
     //handles attacks for all four directions 

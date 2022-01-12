@@ -88,7 +88,7 @@ public class MobDeckNetwork : MonoBehaviour
         attackAndHpValueSprites = atkAndHpValSprites;
         //find the index of the sprite we need to pull when rendering the lineage sprite
         attributeSpriteIndex = DetermineLineage(mobLineages[mobListIndex]);
-        Debug.Log("the first attributeSpriteIndex is: " + attributeSpriteIndex);
+        //Debug.Log("the first attributeSpriteIndex is: " + attributeSpriteIndex);
         //just going to default to zero index for now
         attributeSprite = attributeSprites[attributeSpriteIndex];
         mobSprite = mobSprites[mobListIndex];

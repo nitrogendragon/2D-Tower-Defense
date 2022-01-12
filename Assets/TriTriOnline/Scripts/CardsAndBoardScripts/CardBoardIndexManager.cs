@@ -26,6 +26,7 @@ public class CardBoardIndexManager : NetworkBehaviour
     }
     public void SetCardIndex(NetworkObject Card, int cardBoardTilePositionIndex)
     {
+        
         cardsOnField[cardBoardTilePositionIndex] = Card;
         //Debug.Log(cardsOnField[cardBoardTilePositionIndex].name);
     }
@@ -34,6 +35,7 @@ public class CardBoardIndexManager : NetworkBehaviour
     {
         //we can't check for negative indexes or indexes greater than or equal to our list length
         if (cardBoardIndex < 0 || cardBoardIndex >= cardsOnField.Length) { return false; }
+        
         if (cardsOnField[cardBoardIndex]) { return true; }
         return false;
     }

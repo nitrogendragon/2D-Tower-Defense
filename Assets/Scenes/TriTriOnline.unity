@@ -633,6 +633,11 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 4431682996288282755}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
@@ -3391,37 +3396,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
---- !u!1 &1722098062 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1439205078385752821, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-  m_PrefabInstance: {fileID: 1914408944}
-  m_PrefabAsset: {fileID: 0}
---- !u!61 &1722098065
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1722098062}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.05, y: 2.94}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.05, y: 2.94}
-  m_EdgeRadius: 0
 --- !u!1 &1731704498
 GameObject:
   m_ObjectHideFlags: 0
@@ -3633,21 +3607,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1439205078385752821, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_TagString
-      value: Deck
-      objectReference: {fileID: 0}
     - target: {fileID: 3405284982315401506, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
       propertyPath: m_RootOrder
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982315401506, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982315401506, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3405284982315401506, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3692,14 +3654,6 @@ PrefabInstance:
     - target: {fileID: 3405284982315401507, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
       propertyPath: m_Name
       value: CardsContainer
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982315401507, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405284982858896309, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
-      propertyPath: m_TagString
-      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
@@ -4274,6 +4228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CardBoardIndexManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4431682994649708781, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4431682994649708786, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -4320,6 +4278,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
+--- !u!1 &4431682996288282755 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4431682994649708781, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
+  m_PrefabInstance: {fileID: 4431682996288282754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6679424251117447261
 PrefabInstance:
   m_ObjectHideFlags: 0

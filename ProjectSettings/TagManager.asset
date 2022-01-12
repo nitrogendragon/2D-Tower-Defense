@@ -13,6 +13,7 @@ TagManager:
   - MobCard
   - NetworkManager
   - Deck
+  - AbilityCard
   layers:
   - Default
   - TransparentFX

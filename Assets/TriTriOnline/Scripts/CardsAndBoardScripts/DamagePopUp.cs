@@ -51,8 +51,8 @@ public class DamagePopUp : NetworkBehaviour
         //damagePopUp.GetComponent<MeshRenderer>().sortingLayerName = "UI";
         //damagePopUp.GetComponent<MeshRenderer>().sortingOrder = 2;
         initialPosition = gameObject.transform.position;
-        Debug.Log(initialPosition);
-        Debug.Log(damagePopUp.activeSelf);
+        //Debug.Log(initialPosition);
+        //Debug.Log(damagePopUp.activeSelf);
         damagePopUp.GetComponent<TextMesh>().text = "-" + value;
         //Debug.Log(damagePopUp.GetComponent<TextMesh>().text);
         StartCoroutine(WaitToDisablePopUp());
@@ -65,7 +65,7 @@ public class DamagePopUp : NetworkBehaviour
         tookDamage.Value = false;
         damageTaken.Value = 0;
         damagePopUp.GetComponent<MeshRenderer>().enabled = false;
-        Debug.Log(damagePopUp.activeSelf);
+        //Debug.Log(damagePopUp.activeSelf);
     }
 
     private IEnumerator WaitToDisablePopUp()

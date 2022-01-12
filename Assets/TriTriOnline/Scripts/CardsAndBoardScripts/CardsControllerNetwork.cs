@@ -23,7 +23,6 @@ public class CardsControllerNetwork : NetworkBehaviour
     [SerializeField] MobDeckNetwork mobDeckNetwork;//on our DeckCardBack GameObject
     [SerializeField] private int cardsInDeck = 30;
     [SerializeField] TurnManager turnManager;//handles everything related to managing whose turn it is and what phase someone is in
-
     // Start is called before the first frame update
     void Start()
     {
@@ -172,10 +171,43 @@ public class CardsControllerNetwork : NetworkBehaviour
         return false;
     }
 
+    private bool CheckForAbilityCard()
+    {
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+        if (hit.collider && hit.collider.tag == "AbilityCard")
+        {
+            
+            Debug.Log("We hit the ability card and will run it's ability function... for now it's just attacking");
+            hit.collider.GetComponent<MobCardNetwork>().Attack(hit.collider.GetComponent<MobCardNetwork>().GrabCardPlacementBoardIndex());
+            //destroy the card afterwards
+            hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
+            return true;
+        }
+        
+        return false;
+    }
+
+    private bool CheckForTile()
+    {
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+        if (hit.collider && hit.collider.tag == "BoardTile")
+        {
+            return true;
+        }
+        return false;
+    }
+
     private bool PlaceSelectedCard()
     {
         Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
         int cardPlacementBoardIndex = boardManager.GetSelectedBoardIndex();
+
+        
+        
+        
         //Debug.Log(cardPlacementBoardIndex + " is our cardPlacementBoardIndex");
         if(cardPlacementPosition.x != 9999 && cardPlacementBoardIndex != 9999)//our invalid placement tile position that our function returns if not hitting a boardtile
         {
@@ -264,8 +296,8 @@ public class CardsControllerNetwork : NetworkBehaviour
             //Debug.Log(turnManager.GetIsPlayer1Turn() + " isplayer1bool value");
             //Debug.Log(turnManager.GetTurnActionIndex() + " turnactionindex value");
         }
-        //lastly see if we can place the card selected on the field
-        else if (Input.GetMouseButton(1) && selectedCard)
+        //lastly see if we can place the card selected on the field and also if we have
+        else if (Input.GetMouseButton(1) && selectedCard && (CheckForAbilityCard() || CheckForTile()) )
         {
 
             if (PlaceSelectedCard())
