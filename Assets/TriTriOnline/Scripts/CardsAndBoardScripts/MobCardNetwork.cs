@@ -138,14 +138,17 @@ public class MobCardNetwork : NetworkBehaviour
 
     private void OnIsMobChanged(bool oldBool, bool newBool)
     {
+        //if not a mob change tag to be a mob
+        if (!newBool) { this.tag = "AbilityCard"; }
         //Idk what to do here atm or if anything should be done
     }
 
 
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void DestroyNetworkObjectServerRpc()
     {
+        if (!IsServer) { return; }
         //one option is to despawn the network object, stays on server but disappears for the clients
         //GetComponent<NetworkObject>().Despawn();
         //as long as we do this on the server it will update for everyone
@@ -220,7 +223,7 @@ public class MobCardNetwork : NetworkBehaviour
         
         //we don't want to attack if we are not a mob
         if (!isMob.Value) { return; }
-        Attack(cBoardIndex);
+        AttackServerRpc(cBoardIndex);
     }
 
    
@@ -248,8 +251,10 @@ public class MobCardNetwork : NetworkBehaviour
     }
 
     //handles attacks for all four directions 
-    public void Attack(int cardBoardPosIndex)
+    [ServerRpc(RequireOwnership =false)]
+    public void AttackServerRpc(int cardBoardPosIndex)
     {
+        if(!IsServer){return;}
         int fieldSize = cardBoardIndexManager.GetFieldSizeCount();
         //the value we need to adjust our cardBoardPosIndex by to get the top and bottom attack target board positions
         int topBottomAttackIndexMod = (int)Mathf.Sqrt(fieldSize);

@@ -20,6 +20,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     private float widthOfCardsContainer;
     private float mobCardsWidth;
     private float timePassed = 0;
+    private bool updateTime = false;
     [SerializeField] MobDeckNetwork mobDeckNetwork;//on our DeckCardBack GameObject
     [SerializeField] private int cardsInDeck = 30;
     [SerializeField] TurnManager turnManager;//handles everything related to managing whose turn it is and what phase someone is in
@@ -176,11 +177,10 @@ public class CardsControllerNetwork : NetworkBehaviour
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
-        if (hit.collider && hit.collider.tag == "AbilityCard")
+        if (hit.collider && hit.collider.tag == "AbilityCard" )
         {
             
-            Debug.Log("We hit the ability card and will run it's ability function... for now it's just attacking");
-            hit.collider.GetComponent<MobCardNetwork>().Attack(hit.collider.GetComponent<MobCardNetwork>().GrabCardPlacementBoardIndex());
+            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AttackServerRpc(hit.collider.GetComponent<MobCardNetwork>().GrabCardPlacementBoardIndex());
             //destroy the card afterwards
             hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
             return true;
@@ -202,6 +202,7 @@ public class CardsControllerNetwork : NetworkBehaviour
 
     private bool PlaceSelectedCard()
     {
+        CheckForAbilityCard();
         Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
         int cardPlacementBoardIndex = boardManager.GetSelectedBoardIndex();
 
@@ -297,7 +298,7 @@ public class CardsControllerNetwork : NetworkBehaviour
             //Debug.Log(turnManager.GetTurnActionIndex() + " turnactionindex value");
         }
         //lastly see if we can place the card selected on the field and also if we have
-        else if (Input.GetMouseButton(1) && selectedCard && (CheckForAbilityCard() || CheckForTile()) )
+        else if (Input.GetMouseButtonDown(1) && selectedCard )
         {
 
             if (PlaceSelectedCard())
@@ -305,6 +306,7 @@ public class CardsControllerNetwork : NetworkBehaviour
                 //handle turn updates to move to next phase since we successfully placed our card
                 StartCoroutine(turnManager.WaitToEndPhase());
             }
+            
         }
         
 
