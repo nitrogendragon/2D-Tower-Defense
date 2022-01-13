@@ -19,8 +19,8 @@ public class CardsControllerNetwork : NetworkBehaviour
     private List<GameObject> cardsInHand = new List<GameObject>();
     private float widthOfCardsContainer;
     private float mobCardsWidth;
-    private float timePassed = 0;
-    private bool updateTime = false;
+    
+    [SerializeField]private bool canPlaceCard = false;
     [SerializeField] MobDeckNetwork mobDeckNetwork;//on our DeckCardBack GameObject
     [SerializeField] private int cardsInDeck = 30;
     [SerializeField] TurnManager turnManager;//handles everything related to managing whose turn it is and what phase someone is in
@@ -116,14 +116,17 @@ public class CardsControllerNetwork : NetworkBehaviour
             int[] tempStatList = new int[5];
             int tempMobSpriteIndex = 0;
             int tempAttributeSpriteIndex = 0;
-            mobDeckNetwork.setUpCardOnDraw(ref tempMobSprite, ref tempStatList, ref tempMobSpriteIndex,ref tempAttackAndHpValueSpritesList, ref tempAttributeSprite, ref tempAttributeSpriteIndex, ref isMob);
+            int tempAbilityIndex = 0;
+            int tempAbilityRankMod = 0;
+            mobDeckNetwork.setUpCardOnDraw(ref tempMobSprite, ref tempStatList, ref tempMobSpriteIndex,ref tempAttackAndHpValueSpritesList, ref tempAttributeSprite, ref tempAttributeSpriteIndex, ref isMob,
+                ref tempAbilityIndex, ref tempAbilityRankMod);
             //Debug.Log("Prev cards in hand: " + prevCardsInHandCount);
             //Debug.Log("cards to draw: " + cardsToDraw);
             //Debug.Log("we are drawing our cards, card number being drawn: " + (cardsDrawn+1));
             GameObject myMobCardInstance = Instantiate(mobCardOffServer);
             myMobCardInstance.GetComponent<MobCard>().CreateMobCard(tempStatList[0], tempStatList[1], tempStatList[2], tempStatList[3], tempStatList[4], tempMobSprite,tempMobSpriteIndex, isPlayer1, isMob,
                 tempAttackAndHpValueSpritesList[0], tempAttackAndHpValueSpritesList[1], tempAttackAndHpValueSpritesList[2],tempAttackAndHpValueSpritesList[3], tempAttackAndHpValueSpritesList[4],
-                tempAttackAndHpValueSpritesList[5], tempAttributeSprite, tempAttributeSpriteIndex);
+                tempAttackAndHpValueSpritesList[5], tempAttributeSprite, tempAttributeSpriteIndex, tempAbilityIndex, tempAbilityRankMod);
 
             cardsInHand.Add(myMobCardInstance);
             //special exception to formula when only 1 card because otherwise it shows up in a weird place, so we center here
@@ -185,8 +188,16 @@ public class CardsControllerNetwork : NetworkBehaviour
             hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
             return true;
         }
-        
         return false;
+        
+        
+    }
+
+    private IEnumerator WaitAfterAbilityCardCheck()
+    {
+        Debug.Log("started post ability waiter");
+        yield return new WaitForSeconds(.1f);
+        
     }
 
     private bool CheckForTile()
@@ -195,14 +206,18 @@ public class CardsControllerNetwork : NetworkBehaviour
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
         if (hit.collider && hit.collider.tag == "BoardTile")
         {
+            boardManager.SetSelectedTileAfterAbilityCardActivated(hit.collider);
+            Debug.Log("This ran");
             return true;
         }
         return false;
     }
-
+    
     private bool PlaceSelectedCard()
     {
-        CheckForAbilityCard();
+
+        
+        CheckForTile();
         Vector3 cardPlacementPosition = boardManager.GetSelectedBoardCoordinates();
         int cardPlacementBoardIndex = boardManager.GetSelectedBoardIndex();
 
@@ -219,8 +234,11 @@ public class CardsControllerNetwork : NetworkBehaviour
             bool tempIsMob = selectedCard.GetComponent<MobCard>().GetIsMob();
             int tempMobSpriteIndexRef = selectedCard.GetComponent<MobCard>().GetMobSpriteIndex();
             int tempAttributeSpriteIndexRef = selectedCard.GetComponent<MobCard>().GetAttributeSpriteIndex();
+            int tempAbilityIndex = selectedCard.GetComponent<MobCard>().GetAbilityIndex();
+            int tempAbilityRankMod = selectedCard.GetComponent<MobCard>().GetAbilityRankMod();
             selectedCard.GetComponent<MobCard>().isInHand = false;
-            SpawnMobCardOnBoardServerRpc(cardPlacementPosition, cardPlacementBoardIndex, tempStats, tempIsPlayer1, tempIsMob, tempMobSpriteIndexRef, tempAttributeSpriteIndexRef);
+            SpawnMobCardOnBoardServerRpc(cardPlacementPosition, cardPlacementBoardIndex, tempStats, tempIsPlayer1, tempIsMob, tempMobSpriteIndexRef, tempAttributeSpriteIndexRef,
+                tempAbilityIndex, tempAbilityRankMod);
 
             //update cards in hand list
             List<GameObject> tempList = new List<GameObject>();
@@ -246,7 +264,8 @@ public class CardsControllerNetwork : NetworkBehaviour
     }
 
     [ServerRpc (RequireOwnership = false)]
-    private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos,int cardPlacementBoardIndex, int[] tempStats, bool isPlayer1, bool tempIsMob, int mobSpriteIndexRef, int attributeSpriteIndexRef)
+    private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos,int cardPlacementBoardIndex, int[] tempStats, bool isPlayer1, bool tempIsMob, int mobSpriteIndexRef, int attributeSpriteIndexRef,
+        int tempAbilityIndex, int tempAbilityRankMod)
     {
         //we can't do this if we aren't the server
         //if (!IsServer) { Debug.Log(" we got stuck in the not server if statement"); return; }
@@ -257,7 +276,8 @@ public class CardsControllerNetwork : NetworkBehaviour
 
         int playerOwnerIndex = isPlayer1 ? 1 : 2;
 
-        myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex, tempIsMob, mobSpriteIndexRef, attributeSpriteIndexRef, cardPlacementBoardIndex);
+        myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex, tempIsMob, mobSpriteIndexRef,
+            attributeSpriteIndexRef, cardPlacementBoardIndex, tempAbilityIndex, tempAbilityRankMod);
 
         
        
@@ -300,15 +320,31 @@ public class CardsControllerNetwork : NetworkBehaviour
         //lastly see if we can place the card selected on the field and also if we have
         else if (Input.GetMouseButtonDown(1) && selectedCard )
         {
-
+            canPlaceCard = CheckForAbilityCard();
+            //if false we can place the card normally
+            if (!canPlaceCard)
+            {
+                if (PlaceSelectedCard())
+                {
+                    //handle turn updates to move to next phase since we successfully placed our card
+                    StartCoroutine(turnManager.WaitToEndPhase());
+                }
+            }
+            return;
+            
+        }
+        //if we had an ability card in the spot last frame we will run the place card this frame2
+        else if (canPlaceCard)
+        {
             if (PlaceSelectedCard())
             {
                 //handle turn updates to move to next phase since we successfully placed our card
+                canPlaceCard = false;
                 StartCoroutine(turnManager.WaitToEndPhase());
             }
-            
         }
         
+
 
 
     }

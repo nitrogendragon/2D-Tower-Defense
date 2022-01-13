@@ -6,7 +6,7 @@ public class MobCard : MonoBehaviour
 {
     public bool isInHand = true;
     //all the impoortant stats for the mob to display and use for interactions
-    private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints;
+    private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints, abilityIndex, abilityRankMod;
     private Color player1mobBackgroundColor = new Color(.4f, 0, 0);
     private Color player2mobBackgroundColor = new Color(.1f, .1f, 1);
     public SpriteRenderer mobSpriteRenderer;
@@ -18,7 +18,8 @@ public class MobCard : MonoBehaviour
     private int attributeSpriteIndex;
     
     public void CreateMobCard(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, Sprite mobSprite, int mobSprteIndex, bool isOwnedByPlayer1, bool initIsMob,
-        Sprite leftStatSprite, Sprite rightStatSprite, Sprite topStatSprite, Sprite bottomStatSprite, Sprite hitPointTensSprite, Sprite hitPointOnesSprite, Sprite attributeSprite, int attrSpriteIndex)
+        Sprite leftStatSprite, Sprite rightStatSprite, Sprite topStatSprite, Sprite bottomStatSprite, Sprite hitPointTensSprite, Sprite hitPointOnesSprite, Sprite attributeSprite, int attrSpriteIndex,
+        int initAbilityIndex, int initAbilityRankMod)
     {
         topStat = initTopStat;
         bottomStat = initBottomStat;
@@ -43,6 +44,9 @@ public class MobCard : MonoBehaviour
         hitPointTensRenderer.sprite = hitPointTensSprite;
         hitPointOnesRenderer.sprite = hitPointOnesSprite;
         attributeRenderer.sprite = attributeSprite;
+        abilityIndex = initAbilityIndex;
+        abilityRankMod = initAbilityRankMod;
+
 
     }
 
@@ -80,5 +84,15 @@ public class MobCard : MonoBehaviour
     public bool GetIsMob()
     {
         return isMob;
+    }
+
+    public int GetAbilityIndex()
+    {
+        return abilityIndex;
+    }
+
+    public int GetAbilityRankMod()
+    {
+        return abilityRankMod;
     }
 }

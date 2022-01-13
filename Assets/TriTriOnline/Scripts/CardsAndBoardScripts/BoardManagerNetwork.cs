@@ -78,6 +78,17 @@ public class BoardManagerNetwork : MonoBehaviour
         lastHoveredBoardTileSpriteRenderer.color = Color.green;
     }
 
+    //only to be ran after an ability card tile is selected
+    public void SetSelectedTileAfterAbilityCardActivated(Collider2D collider)
+    {
+        //just abit of failsafe
+        if (lastHoveredBoardTileSpriteRenderer)
+        {
+            lastHoveredBoardTileSpriteRenderer.color = initialBoardColor;
+        }
+        selectedBoardTile = collider.gameObject;
+    }
+
     public Vector3 GetSelectedBoardCoordinates()
     {
         if (selectedBoardTile)

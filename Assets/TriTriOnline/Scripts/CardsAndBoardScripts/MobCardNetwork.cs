@@ -8,7 +8,7 @@ public class MobCardNetwork : NetworkBehaviour
     public bool isInHand = true;
 
     //all the impoortant stats for the mob to display and use for interactions
-    private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints;
+    private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints, abilityIndex, abilityRankMod;
     private Color player1mobBackgroundColor = new Color(.4f,0,0);
     private Color player2mobBackgroundColor = new Color(.1f, .1f, 1);
     [SerializeField]private GameObject mobSpriteRenderer;
@@ -175,7 +175,8 @@ public class MobCardNetwork : NetworkBehaviour
     }
     //will be ran when the card is drawn/instantiated
     [ServerRpc]
-    public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, bool initIsMob, int mobSpriteIndexReference, int attributeSpriteIndexReference, int cBoardIndex)
+    public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, bool initIsMob, int mobSpriteIndexReference,
+        int attributeSpriteIndexReference, int cBoardIndex, int initAbilityIndex, int initAbilityRankMod )
     {
         if (!IsServer) { return; }
         
@@ -191,6 +192,8 @@ public class MobCardNetwork : NetworkBehaviour
         curLeftStat = leftStat;
         curRightStat = rightStat;
         curHitPoints = hitPoints;
+        abilityIndex = initAbilityIndex;
+        abilityRankMod = initAbilityRankMod;
         cardPlacementBoardIndex.Value = cBoardIndex;
         playerOwnerIndex.Value = playerOwnrIndex;
         mobSpriteIndex.Value = mobSpriteIndexReference;

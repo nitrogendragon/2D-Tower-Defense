@@ -19,7 +19,11 @@ public class MobDeckNetwork : MonoBehaviour
 
     private bool[] isMob = new bool[] { true, true, true, true, true, true, true, true, true,
         /*start ability cards here*/false, false, false, false, false, false };
-
+    //if 0, we don't have an ability, otw we will use the number to reference functons
+    private int[] abilityIndexes = new int[] {0,0,0,0,0,0,0,0,0,
+    /*start ability cards here*/ 1,2,3,4,5,6};
+    private int[] abilityRankMods = new int[] {0,0,0,0,0,0,0,0,0,
+    /*start ability cards here*/ 1,1,3,2,2,1};
     private int[] deckCardMobIndexReferences = new int[30];
     //Lineages include Giant, Celestial, Construct, beast, humanoid, ooze, Aberration, Spectre, Monstrosity, Demon,Elemental, Plant, Dragon
     private string[] mobLineages = new string[] {"Beast", "Giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid",
@@ -52,13 +56,16 @@ public class MobDeckNetwork : MonoBehaviour
         return tempSprite;
     }
 
-    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite, ref int attributeSpriteIndex, ref bool isAMob)
+    public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite,
+        ref int attributeSpriteIndex, ref bool isAMob, ref int abilityIndex, ref int abilityRankMod)
     {
 
-        //get the mob index from our decks mob Index List
+        //get the mob index from our decks mob Index List, since everything lines up, it is usable for finding the mob in questions index for anything
         int mobListIndex = deckCardMobIndexReferences[currentDeckCardIndex];
         mobSpritesListSpriteIndex = mobListIndex;//this should get us the index that we want for grabbing the appropriate sprite later
         isAMob = isMob[mobListIndex];//grabs our isMob bool at the index of the mob being set up
+        abilityIndex = abilityIndexes[mobListIndex];//set up the index for our ability
+        abilityRankMod = abilityRankMods[mobListIndex];
         //increment currentDeckcard
         currentDeckCardIndex += 1;
         //get our stats for the mob
