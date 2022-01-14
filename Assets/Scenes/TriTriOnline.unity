@@ -619,22 +619,12 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 4124259684207612145, guid: 7494a84b74d04a04897dbe05e2ef6154, type: 3}
     NetworkPrefabs:
     - Override: 0
-      Prefab: {fileID: 8754192519461090532}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
       Prefab: {fileID: 913685401}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 8572697604928018494, guid: 5e1f5d9963e3e684b92e98d7a668e412, type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 4431682996288282755}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -2731,12 +2721,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -3655,6 +3645,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CardsContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 3405284982315401507, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5923ca67f4266649a93474f7d8ad842, type: 3}
 --- !u!1 &1914408945 stripped
@@ -4278,11 +4272,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
---- !u!1 &4431682996288282755 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4431682994649708781, guid: 33688f002c67e034ba2dc7abcc8bc3bf, type: 3}
-  m_PrefabInstance: {fileID: 4431682996288282754}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6679424251117447261
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4576,6 +4565,7 @@ MonoBehaviour:
   boardManager: {fileID: 1448446838}
   cardsContainer: {fileID: 531717841}
   mobCardOffServer: {fileID: 8572697604928018494, guid: 4619b87295280404fa1e7ecb84d23487, type: 3}
+  canPlaceCard: 0
   mobDeckNetwork: {fileID: 8754192519461090535}
   cardsInDeck: 30
   turnManager: {fileID: 8754192519461090537}
