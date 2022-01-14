@@ -30,7 +30,10 @@ public class DamagePopUp : NetworkBehaviour
     private void OnTookDamageChanged(bool oldVal, bool newVal)
     {
         //if we didn't take damage then we will change text to nothing
-        if (newVal) { damagePopUp.GetComponent<MeshRenderer>().enabled = true; }
+        if (newVal) { 
+            damagePopUp.GetComponent<MeshRenderer>().enabled = true;
+            Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        }
         else { damagePopUp.GetComponent<MeshRenderer>().enabled = false; }
     }
 
@@ -39,7 +42,7 @@ public class DamagePopUp : NetworkBehaviour
         if(damageTaken.Value > 0) 
         { 
             damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString();
-            Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+            
         }
     }
 
@@ -60,7 +63,7 @@ public class DamagePopUp : NetworkBehaviour
         //Debug.Log(damagePopUp.activeSelf);
         damagePopUp.GetComponent<TextMesh>().text = "-" + value;
         //Debug.Log(damagePopUp.GetComponent<TextMesh>().text);
-        Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        //Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
         
         StartCoroutine(WaitToDisablePopUp());
     }
@@ -78,7 +81,7 @@ public class DamagePopUp : NetworkBehaviour
     private IEnumerator WaitToDisablePopUp()
     {
         //Debug.Log(Time.time);
-        yield return new WaitForSeconds(.7f);
+        yield return new WaitForSeconds(2f);
         //Debug.Log(Time.time);
         
         DisablePopUpServerRpc();

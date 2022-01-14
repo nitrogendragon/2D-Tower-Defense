@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2984965651292124238}
   - component: {fileID: 183644460767229088}
   - component: {fileID: -6680378346847526657}
-  - component: {fileID: -2821221688281931076}
+  - component: {fileID: -124506392137183613}
   m_Layer: 0
   m_Name: BloodSplatterSheet_0
   m_TagString: Untagged
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2869085161483479770}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
   m_Name: 
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Animator: {fileID: 2984965651292124238}
   m_ParameterSendBits: 0
   m_SendRate: 0.1
---- !u!114 &-2821221688281931076
+--- !u!114 &-124506392137183613
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

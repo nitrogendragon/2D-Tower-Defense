@@ -673,7 +673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damagePopUp: {fileID: 8887400649608298645}
-  damageSpriteAnimation: {fileID: -2821221688281931076, guid: e758f60a597021b48ba52d4e9744bc1b, type: 3}
+  damageSpriteAnimation: {fileID: -124506392137183613, guid: e758f60a597021b48ba52d4e9744bc1b, type: 3}
 --- !u!1 &8572697605171084845
 GameObject:
   m_ObjectHideFlags: 0
