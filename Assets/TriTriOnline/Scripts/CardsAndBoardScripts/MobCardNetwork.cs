@@ -281,6 +281,7 @@ public class MobCardNetwork : NetworkBehaviour
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their right stat so we need the defense stst index to be the right, thus 2
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, leftAttackTargetBoardIndex, 2);
+               
             }
         }
 
@@ -295,6 +296,7 @@ public class MobCardNetwork : NetworkBehaviour
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their left stat so we need the defense stat index to be the left, thus 1
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, rightAttackTargetBoardIndex, 1);
+                
             }
         }
         //top attack
@@ -308,6 +310,7 @@ public class MobCardNetwork : NetworkBehaviour
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their top stat so we need the defense stat index to be the bottom, thus 4
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, topAttackTargetBoardIndex, 4);
+                
             }
         }
         //bottom attack
@@ -321,6 +324,8 @@ public class MobCardNetwork : NetworkBehaviour
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their bottom stat so we need the defense stat index to be the bottom, thus 3
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, bottomAttackTargetBoardIndex, 3);
+                
+                
             }
         }
 

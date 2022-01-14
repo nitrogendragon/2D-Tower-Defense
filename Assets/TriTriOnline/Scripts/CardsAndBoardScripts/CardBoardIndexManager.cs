@@ -40,6 +40,11 @@ public class CardBoardIndexManager : NetworkBehaviour
         return false;
     }
 
+    public Vector3 GetCardPositionAtIndex(int cardBoardIndex)
+    {
+       return cardsOnField[cardBoardIndex].GetComponent<NetworkObject>().GetComponent<Transform>().transform.position;
+    }
+
     //when doing something whether attacking or otw, pass through our cards playerOwnerIndex/Id (aka player 1 or 2?) and compare to the target card on the board playerIndex/Id
     public bool CheckIfCardAtIndexIsOwnedByMe(int myCardPlayerOwnerIndex, int targetCardBoardIndex)
     {

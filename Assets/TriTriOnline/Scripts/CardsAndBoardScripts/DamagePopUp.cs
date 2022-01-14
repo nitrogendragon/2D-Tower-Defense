@@ -10,6 +10,7 @@ public class DamagePopUp : NetworkBehaviour
     private float movementRangeX = .01f;
     private float timeTilDeactive = 1.6f;
     private float timePassed;
+    [SerializeField] private NetworkObject damageSpriteAnimation;
     private NetworkVariable<bool> tookDamage = new NetworkVariable<bool>(false);
     private NetworkVariable<int> damageTaken = new NetworkVariable<int>();
     // Start is called before the first frame update
@@ -35,7 +36,11 @@ public class DamagePopUp : NetworkBehaviour
 
     private void OnDamageTakenChanged(int oldVal, int newVal)
     {
-        if(damageTaken.Value > 0) { damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString(); }
+        if(damageTaken.Value > 0) 
+        { 
+            damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString();
+            Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        }
     }
 
 
@@ -55,6 +60,8 @@ public class DamagePopUp : NetworkBehaviour
         //Debug.Log(damagePopUp.activeSelf);
         damagePopUp.GetComponent<TextMesh>().text = "-" + value;
         //Debug.Log(damagePopUp.GetComponent<TextMesh>().text);
+        Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+        
         StartCoroutine(WaitToDisablePopUp());
     }
 
