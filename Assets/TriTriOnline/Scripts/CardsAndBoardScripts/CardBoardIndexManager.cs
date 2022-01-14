@@ -61,8 +61,8 @@ public class CardBoardIndexManager : NetworkBehaviour
         return cardsOnField.Length;
     }
 
-    public void RunTargetCardsDamageCalculations(int myStat, int targetCardBoardIndex, int defenseStatIndex)
+    public void RunTargetCardsDamageCalculations(int myStat,int myAbilityIndex, int targetCardBoardIndex, int defenseStatIndex)
     {
-        cardsOnField[targetCardBoardIndex].GetComponent<MobCardNetwork>().TakeDamage(myStat, defenseStatIndex);
+        cardsOnField[targetCardBoardIndex].GetComponent<MobCardNetwork>().TakeDamage(myStat, defenseStatIndex, myAbilityIndex);
     }
 }

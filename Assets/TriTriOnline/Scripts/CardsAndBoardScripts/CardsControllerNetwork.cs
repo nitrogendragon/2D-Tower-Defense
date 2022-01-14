@@ -183,7 +183,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         if (hit.collider && hit.collider.tag == "AbilityCard" )
         {
             
-            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AttackServerRpc(hit.collider.GetComponent<MobCardNetwork>().GrabCardPlacementBoardIndex());
+            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AttackServerRpc();
             //destroy the card afterwards
             hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
             return true;

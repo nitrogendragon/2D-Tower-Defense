@@ -673,7 +673,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damagePopUp: {fileID: 8887400649608298645}
-  damageSpriteAnimation: {fileID: -124506392137183613, guid: e758f60a597021b48ba52d4e9744bc1b, type: 3}
+  damageSpriteAnimation: {fileID: -7402118324278030242, guid: fb2fe15f19a58e046b415d257b75acca, type: 3}
+  spriteAnimator: {fileID: 2984965651292124238, guid: fb2fe15f19a58e046b415d257b75acca, type: 3}
+  skillAnimations: {fileID: 7476679494878854509, guid: c98623b4e43e08546bc80d39a83b988c, type: 3}
 --- !u!1 &8572697605171084845
 GameObject:
   m_ObjectHideFlags: 0
