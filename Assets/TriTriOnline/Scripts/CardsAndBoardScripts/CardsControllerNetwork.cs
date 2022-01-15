@@ -155,10 +155,10 @@ public class CardsControllerNetwork : NetworkBehaviour
         {
             if (selectedCard)
             {
-                selectedCard.GetComponent<SpriteRenderer>().color = Color.gray;
+                selectedCard.GetComponent<MobCard>().mobCardBorderRenderer.color = Color.black;
             }
             selectedCard = hit.collider.gameObject;
-            selectedCard.GetComponent<SpriteRenderer>().color = Color.green;
+            selectedCard.GetComponent<MobCard>().mobCardBorderRenderer.color = Color.green;
         }
     }
 

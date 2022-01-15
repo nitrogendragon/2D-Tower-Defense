@@ -7,10 +7,11 @@ public class MobCard : MonoBehaviour
     public bool isInHand = true;
     //all the impoortant stats for the mob to display and use for interactions
     private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints, abilityIndex, abilityRankMod;
-    private Color player1mobBackgroundColor = new Color(.4f, 0, 0);
-    private Color player2mobBackgroundColor = new Color(.1f, .1f, 1);
+    private Color player1mobBackgroundColor = new Color(.6f, .3f, .3f);
+    private Color player2mobBackgroundColor = new Color(.3f,.3f,.6f);
     public SpriteRenderer mobSpriteRenderer;
     public SpriteRenderer mobBackgroundRenderer;
+    public SpriteRenderer mobCardBorderRenderer;
     public SpriteRenderer topStatRenderer, bottomStatRenderer, leftStatRenderer, rightStatRenderer, hitPointTensRenderer, hitPointOnesRenderer, attributeRenderer;
     private bool isPlayer1;
     private bool isMob;//are we a mob or are we an ability card?

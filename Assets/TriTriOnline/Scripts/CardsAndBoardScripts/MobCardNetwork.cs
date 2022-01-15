@@ -9,8 +9,8 @@ public class MobCardNetwork : NetworkBehaviour
 
     //all the impoortant stats for the mob to display and use for interactions
     private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, curHitPoints, hitPoints, abilityIndex, abilityRankMod;
-    private Color player1mobBackgroundColor = new Color(.4f,0,0);
-    private Color player2mobBackgroundColor = new Color(.1f, .1f, 1);
+    private Color player1mobBackgroundColor = new Color(.6f, .3f, .3f);
+    private Color player2mobBackgroundColor = new Color(.3f, .3f, .6f);
     [SerializeField]private GameObject mobSpriteRenderer;
     [SerializeField]private GameObject topStatSprite,bottomStatSprite,leftStatSprite, rightStatSprite, hpTensSprite, hpOnesSprite, attributeSprite;//technically renderers but for some reason i named them as just xSprite
     [SerializeField]private GameObject mobBackground;
