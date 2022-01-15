@@ -22,8 +22,8 @@ public class MobDeckNetwork : MonoBehaviour
     //if 0, we don't have an ability, otw we will use the number to reference functons
     private int[] abilityIndexes = new int[] {0,0,0,0,0,0,0,0,0,
     /*start ability cards here*/ 1,2,3,4,5,6};
-    private int[] abilityRankMods = new int[] {0,0,0,0,0,0,0,0,0,
-    /*start ability cards here*/ 1,1,3,2,2,1};
+    private int[] abilityRankMods = new int[] {6,6,3,3,3,0,3,0,6,
+    /*start ability cards here*/ 1,3,3,6,6,3};
     private int[] deckCardMobIndexReferences = new int[30];
     //Lineages include Giant, Celestial, Construct, beast, humanoid, ooze, Aberration, Spectre, Monstrosity, Demon,Elemental, Plant, Dragon
     private string[] mobLineages = new string[] {"Beast", "Giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid",

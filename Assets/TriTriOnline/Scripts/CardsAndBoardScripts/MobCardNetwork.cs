@@ -205,7 +205,7 @@ public class MobCardNetwork : NetworkBehaviour
         rightStatSpriteIndex.Value = initRightStat;
         isMob.Value = initIsMob;
         if (!initIsMob) { this.tag = "AbilityCard"; }
-        Debug.Log(this.tag);
+        //Debug.Log(this.tag);
         if (initHitPoints < 10)
         {
             hpTensSpriteIndex.Value = 0;//will use this for when we don't want to render a sprite for the ten's digit
@@ -323,7 +323,7 @@ public class MobCardNetwork : NetworkBehaviour
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, bottomAttackTargetBoardIndex))
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
-                //we are attacking their bottom stat so we need the defense stat index to be the bottom, thus 3
+                //we are attacking their bottom stat so we need the defense stat index to be the top, thus 3
                 cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, abilityIndex, bottomAttackTargetBoardIndex, 3);
                 
                 
@@ -341,17 +341,94 @@ public class MobCardNetwork : NetworkBehaviour
         int topBottomAttackIndexMod = (int)Mathf.Sqrt(fieldSize);
         //Debug.Log(topBottomAttackIndexMod + "is the topbottomattackindexMod");
         //Debug.Log("our card is at board index: " + cardBoardPosIndex);
-        int leftAttackTargetBoardIndex = cardPlacementBoardIndex.Value - 1;
-        int rightAttackTargetBoardIndex = cardPlacementBoardIndex.Value + 1;
-        int topAttackTargetBoardIndex = cardPlacementBoardIndex.Value + topBottomAttackIndexMod;
-        int bottomAttackTargetBoardIndex = cardPlacementBoardIndex.Value - topBottomAttackIndexMod;
+        //don't get confused by the names, leftAttack refers to our left side attacking their right, rightAttack means our right attacking their left, top attacks their bottom and bottom attacks their top
+        int myCardPlacementBoardIndex = cardPlacementBoardIndex.Value;
+        int leftAttackTargetBoardIndexMod = -1;//decreasing thus negative
+        int rightAttackTargetBoardIndexMod = 1;
+        int topAttackTargetBoardIndexMod = topBottomAttackIndexMod;
+        int bottomAttackTargetBoardIndexMod = -topBottomAttackIndexMod;//decreasing thus negative
+        int upperRightAttackTargetBoardIndexMod = topBottomAttackIndexMod + 1;
+        int upperLeftAttackTargetBoardIndexMod = topBottomAttackIndexMod - 1;
+        int lowerRightAttackTargetBoardIndexMod = -(topBottomAttackIndexMod - 1);//decreasing thus negative
+        int lowerLeftAttackTargetBoardIndexMod = -(topBottomAttackIndexMod + 1);//decreasing thus negative
+        int[] attackDirectionMods = new int[] {leftAttackTargetBoardIndexMod, rightAttackTargetBoardIndexMod, topAttackTargetBoardIndexMod, bottomAttackTargetBoardIndexMod,
+            lowerLeftAttackTargetBoardIndexMod, lowerRightAttackTargetBoardIndexMod, upperLeftAttackTargetBoardIndexMod, upperRightAttackTargetBoardIndexMod};
+        int[] defenseSideIndexes = new int[] {2, 1, 4, 3, 5, 6, 7, 8 };//gets the appropriate index for the take damage function to figure out which stat side the target uses for defense
+        int[] myAttackSideStats = new int[] {curLeftStat, curRightStat, curTopStat, curBottomStat, (curLeftStat + curBottomStat) / 2, (curRightStat + curBottomStat) / 2,
+        (curLeftStat + curTopStat) / 2, (curRightStat + curTopStat) / 2};
+        int range = abilityRankMod < 3 ? 1 : abilityRankMod < 5 ? 2 : 3; //below 3 only go 1 in 4 basic directions, otw add 1 tile in all directions and then again add one more once abilityRankMod hits 6 
+        //we will go through each 'side' of the card and handle the abilities for the respective indexes, there are 8 angles of attack thus we go until i is 8 
+        for(int i = 0; i < 8; i++)
+        {
+            // we will increase cards to check for by 1 at rank 3 and 5, note that they start at zero
+            for(int y = 0; y < range; y++)
+            {
+                if(i > 3 && y == 0) { }//do nothing
+                else
+                {
+                    //to simplify the logic below, we will store the target in this attackTargetBoardIndex integer variable
+                    int attackTargetBoardIndex;
+                    // in case i > 3 thus dealing with angle/corner attacks do this way otw do the other version
+                    if (i > 3)
+                    {
+                        attackTargetBoardIndex = y == 1 ? myCardPlacementBoardIndex + attackDirectionMods[i] :
+                            myCardPlacementBoardIndex + attackDirectionMods[i] + attackDirectionMods[i] * (y - 1);
+                    }
+                    //for basic attacks left, right, top and bottom that don't have an exception of not activating when range is 1
+                    else
+                    {
+                        attackTargetBoardIndex = y == 0 ? myCardPlacementBoardIndex + attackDirectionMods[i] :
+                        myCardPlacementBoardIndex + attackDirectionMods[i] + attackDirectionMods[i] * y;
+                    }
+                    Debug.Log(attackTargetBoardIndex);
+                    //should handle y = 0 where we just add base mod otw add directionMod + directionMod * y
+                    if (cardBoardIndexManager.CheckIfCardAtIndex(attackTargetBoardIndex))
+                    {
+                        Debug.Log("There is a card at index: " + attackTargetBoardIndex);
+                        
+                        //handle left, lower left and upper left edge target exceptions
+                        if ( (i == 0 || i == 4 || i == 6)  && ( (attackTargetBoardIndex) % topBottomAttackIndexMod == 5 || attackTargetBoardIndex  < 0) ) { Debug.Log("We reached an exception on the left side");  break; }
+                        //handle right, lower right and upper right edge target exceptions
+                        if ( (i == 1 || i == 3 || i == 7) && ((attackTargetBoardIndex) % topBottomAttackIndexMod == 0 ) || attackTargetBoardIndex >= fieldSize) { Debug.Log("We reached an exception on the right side"); break; }
+                        ////handle lower left edge target exceptions
+                        //if(i == 4 && (attackTargetBoardIndex  % topBottomAttackIndexMod == 5 || attackTargetBoardIndex + 1 == 0)) { break; }
+                        ////handle lower right edge target exceptions
+                        //if (i == 5 && (attackTargetBoardIndex % topBottomAttackIndexMod == 0)) { break; }
+                        ////handle upper left edge target exceptions
+                        //if (i == 6 && (attackTargetBoardIndex % topBottomAttackIndexMod == 5 || attackTargetBoardIndex + 1 == 0)) { break; }
+                        ////handle upper right edge target exceptions
+                        //if (i == 7 && (attackTargetBoardIndex % topBottomAttackIndexMod == 0)) { break; }
+
+
+                        //Debug.Log("There is a card below");
+                        //make sure we don't own the card we are targeting
+                        if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex))
+                        {
+                            //Debug.Log("The card we are attacking is not ours so we should deal damage");
+                            //handles all attacks taking in whatever our attackside stat is, the ability Index for determining the sprite atm, the targets board location index, and defense side index for figuring out
+                            //which stat to use for defending later in the takeDamage function
+                            if(i > 4 && y > 0) { Debug.Log("We're getting to the end from time to time at the very least"); }
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, attackTargetBoardIndex, defenseSideIndexes[i]);
+
+
+                        }
+                    }
+                    
+
+                }
+
+            }
+
+        }
     }
 
     public void TakeDamage(int attackersValue,int defenseSideIndex, int attackersSkillIndex)
     {
         int defendersValue = 0;
         // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
-        defendersValue = defenseSideIndex == 1 ? leftStat : defenseSideIndex == 2 ? rightStat : defenseSideIndex == 3 ? topStat : bottomStat;
+        defendersValue = defenseSideIndex == 1 ? curLeftStat : defenseSideIndex == 2 ? curRightStat : defenseSideIndex == 3 ? curTopStat : defenseSideIndex == 4 ? curBottomStat :
+             defenseSideIndex == 4 ? (curRightStat + curBottomStat) / 2 : defenseSideIndex == 5 ? (curLeftStat + curBottomStat) / 2:
+         defenseSideIndex == 6 ? (curRightStat + curTopStat) / 2 : (curLeftStat + curTopStat) / 2;
        
         //if our attack is higher than their attack stat or the atk/2 is greater than or equal to their curHitPoints, we defeat them
         if(attackersValue - defendersValue > 0 || curHitPoints - (attackersValue/2) <= 0)

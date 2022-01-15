@@ -183,7 +183,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         if (hit.collider && hit.collider.tag == "AbilityCard" )
         {
             
-            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AttackServerRpc();
+            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().abilityAttackServerRpc();
             //destroy the card afterwards
             hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
             return true;
@@ -207,7 +207,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         if (hit.collider && hit.collider.tag == "BoardTile")
         {
             boardManager.SetSelectedTileAfterAbilityCardActivated(hit.collider);
-            Debug.Log("This ran");
+            //Debug.Log("This ran");
             return true;
         }
         return false;
