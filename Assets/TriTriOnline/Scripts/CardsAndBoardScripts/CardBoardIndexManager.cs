@@ -71,7 +71,7 @@ public class CardBoardIndexManager : NetworkBehaviour
         foreach (NetworkObject card in cardsOnField)
         {
             //if there isn't a card or it has the same playerOwnerIndex as us, do nothing
-            if (card == null || myPlayerOwnerIndex == card.GetComponent<MobCardNetwork>().GetPlayerOwner()) {  }//check next card
+            if (card == null || myPlayerOwnerIndex != card.GetComponent<MobCardNetwork>().GetPlayerOwner()) {  }//check next card
             else
             {
                 //run through our status effects and deal appropriate damage and update their turns remaining
