@@ -61,8 +61,22 @@ public class CardBoardIndexManager : NetworkBehaviour
         return cardsOnField.Length;
     }
 
-    public void RunTargetCardsDamageCalculations(int myStat,int myAbilityIndex, int targetCardBoardIndex, int defenseStatIndex)
+    public void RunTargetCardsDamageCalculations(int myStat,int myAbilityIndex, int myAbilityRankMod, int targetCardBoardIndex, int defenseStatIndex)
     {
-        cardsOnField[targetCardBoardIndex].GetComponent<MobCardNetwork>().TakeDamage(myStat, defenseStatIndex, myAbilityIndex);
+        cardsOnField[targetCardBoardIndex].GetComponent<MobCardNetwork>().TakeDamage(myStat, defenseStatIndex, myAbilityIndex, myAbilityRankMod);
+    }
+
+    public void UpdateMyCardsStatusEffects(int myPlayerOwnerIndex)
+    {
+        foreach (NetworkObject card in cardsOnField)
+        {
+            //if there isn't a card or it has the same playerOwnerIndex as us, do nothing
+            if (card == null || myPlayerOwnerIndex == card.GetComponent<MobCardNetwork>().GetPlayerOwner()) {  }//check next card
+            else
+            {
+                //run through our status effects and deal appropriate damage and update their turns remaining
+                card.GetComponent<MobCardNetwork>().CheckStatusEffectsAndUpdateServerRpc();
+            }
+        }
     }
 }

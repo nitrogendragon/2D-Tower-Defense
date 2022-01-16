@@ -27,14 +27,23 @@ public class MobCardNetwork : NetworkBehaviour
     private NetworkVariable<int> attributeSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     private NetworkVariable<int> cardPlacementBoardIndex = new NetworkVariable<int>();//the index of the board tile in the boardTiles list that we placed the card on
     private NetworkVariable<bool> isMob = new NetworkVariable<bool>();//whether the card is a mob or an ability card
-    private bool isCharmed = false, isPoisoned = false, isBurnt = false, isDebuffed = false;
-    //[SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
+    private bool[] myStatusEffectBools = new bool[] { false /*poison*/, false /*burn*/ };
+    private int[] myStatusEffectTurnsRemaining = new int[] { 0, 0 };
+    private int[] myStatusEffectRanks = new int[] { 0, 0 };
+    //note that multiple abilities can cause poison potentially so even if the ability has an ability index of 15 and another 4, the status effect index will be the same for all abilities that inflict poison, currently don't have animation specifically
+    //for status effects though so these are temps
+    private int[] myStatusEffectAbilityIndex = new int[] { 1 /*poison*/, 2 /*burn*/};
+    //all the ability indexes that cause poison
+    private int[] poisonAbilityIndexes = new int[] {0,7 };
+    //all the ability indexes that cause burn
+    private int[] burnAbilityIndexes = new int[] {8 };
+
     public SpritesLists spritesReferenceHolder;
     public CardBoardIndexManager cardBoardIndexManager;
 
     private void Start()
     {
-        
+       
     }
     private void OnEnable()
     {
@@ -223,12 +232,14 @@ public class MobCardNetwork : NetworkBehaviour
             hpOnesSpriteIndex.Value = initHitPoints - 20;
         }
         //Debug.Log("The board position we are going to be placed at is: " + cBoardIndex);
-        
+        //we will play a card every turn so we want to go through each mob on the board and update their status effect counters if they are ours that is
+        cardBoardIndexManager.UpdateMyCardsStatusEffects(playerOwnrIndex);
         //we don't want to attack if we are not a mob
         if (!isMob.Value) { return; }
         AttackServerRpc();
     }
 
+    
    
 
     public int[] GrabStats()
@@ -280,7 +291,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their right stat so we need the defense stst index to be the right, thus 2
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, abilityIndex, leftAttackTargetBoardIndex, 2);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, abilityIndex, abilityRankMod, leftAttackTargetBoardIndex, 2);
                
             }
         }
@@ -296,7 +307,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their left stat so we need the defense stat index to be the left, thus 1
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, abilityIndex, rightAttackTargetBoardIndex, 1);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, abilityIndex, abilityRankMod, rightAttackTargetBoardIndex, 1);
                 
             }
         }
@@ -310,7 +321,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their top stat so we need the defense stat index to be the bottom, thus 4
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, abilityIndex, topAttackTargetBoardIndex, 4);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, abilityIndex, abilityRankMod, topAttackTargetBoardIndex, 4);
                 
             }
         }
@@ -324,7 +335,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their bottom stat so we need the defense stat index to be the top, thus 3
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, abilityIndex, bottomAttackTargetBoardIndex, 3);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, abilityIndex, abilityRankMod, bottomAttackTargetBoardIndex, 3);
                 
                 
             }
@@ -380,7 +391,7 @@ public class MobCardNetwork : NetworkBehaviour
                         attackTargetBoardIndex = y == 0 ? myCardPlacementBoardIndex + attackDirectionMods[i] :
                         myCardPlacementBoardIndex + attackDirectionMods[i] + attackDirectionMods[i] * y;
                     }
-                    Debug.Log(attackTargetBoardIndex);
+                    //Debug.Log(attackTargetBoardIndex);
                     //should handle y = 0 where we just add base mod otw add directionMod + directionMod * y
                     if (cardBoardIndexManager.CheckIfCardAtIndex(attackTargetBoardIndex))
                     {
@@ -408,7 +419,7 @@ public class MobCardNetwork : NetworkBehaviour
                             //handles all attacks taking in whatever our attackside stat is, the ability Index for determining the sprite atm, the targets board location index, and defense side index for figuring out
                             //which stat to use for defending later in the takeDamage function
                             if(i > 4 && y > 0) { Debug.Log("We're getting to the end from time to time at the very least"); }
-                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, attackTargetBoardIndex, defenseSideIndexes[i]);
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i]);
 
 
                         }
@@ -422,13 +433,15 @@ public class MobCardNetwork : NetworkBehaviour
         }
     }
 
-    public void TakeDamage(int attackersValue,int defenseSideIndex, int attackersSkillIndex)
+    public void TakeDamage(int attackersValue,int defenseSideIndex, int attackersAbilityIndex, int abilityRankM)
     {
+        HandleApplyingStatusEffects(attackersAbilityIndex, abilityRankM);
         int defendersValue = 0;
         // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
         defendersValue = defenseSideIndex == 1 ? curLeftStat : defenseSideIndex == 2 ? curRightStat : defenseSideIndex == 3 ? curTopStat : defenseSideIndex == 4 ? curBottomStat :
              defenseSideIndex == 4 ? (curRightStat + curBottomStat) / 2 : defenseSideIndex == 5 ? (curLeftStat + curBottomStat) / 2:
-         defenseSideIndex == 6 ? (curRightStat + curTopStat) / 2 : (curLeftStat + curTopStat) / 2;
+         defenseSideIndex == 6 ? (curRightStat + curTopStat) / 2 : defenseSideIndex == 7 ? (curLeftStat + curTopStat) / 2 :
+         (curLeftStat + curRightStat + curTopStat + curBottomStat) / 4 /*this is for taking ability damage so we will take the average of our 4 stats*/;
        
         //if our attack is higher than their attack stat or the atk/2 is greater than or equal to their curHitPoints, we defeat them
         if(attackersValue - defendersValue > 0 || curHitPoints - (attackersValue/2) <= 0)
@@ -440,9 +453,60 @@ public class MobCardNetwork : NetworkBehaviour
         { 
             curHitPoints -= attackersValue / 2;
             int damageDealt = attackersValue / 2;
-            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersSkillIndex);
+            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersAbilityIndex);
         }
         UpdateHpSpritesServerRpc(curHitPoints);
+    }
+
+    private void HandleApplyingStatusEffects(int abilityIndex, int abilityRankMod)
+    {
+        //check to see if abilityIndex matches any valid indexes in the poisonAbilityIndexes array
+        for(int i = 0; i < poisonAbilityIndexes.Length; i++)
+        {
+            if(abilityIndex == poisonAbilityIndexes[i]) 
+            {
+                myStatusEffectBools[0] = true;
+                myStatusEffectTurnsRemaining[0] = 3;//we will have all status effects default to 3 turns, for now no exceptions
+                myStatusEffectRanks[0] = abilityRankMod;
+                Debug.Log("the ability was a poison ability and we now have it.");
+                break;
+            }
+        }
+
+        //check to see if abilityIndex matches any valid indexes in the poisonAbilityIndexes array
+        for (int i = 0; i < burnAbilityIndexes.Length; i++)
+        {
+            if (abilityIndex == burnAbilityIndexes[i])
+            {
+                myStatusEffectBools[0] = true;
+                myStatusEffectTurnsRemaining[0] = 3;//we will have all status effects default to 3 turns, for now no exceptions
+                myStatusEffectRanks[0] = abilityRankMod;
+                Debug.Log("the ability was a burn ability and we now have it.");
+                break;
+            }
+        }
+
+
+    }
+
+    [ServerRpc (RequireOwnership = false)]
+    public void CheckStatusEffectsAndUpdateServerRpc()
+    {
+        if (!IsServer) { return; }
+        //go through through every status effect and update
+        for(int i = 0; i < myStatusEffectBools.Length; i++)
+        {
+            if (!myStatusEffectBools[i]) { }//do nothing if we don't have the status effect
+            //if we have the status effect update our turns remaining and deal appropriate dmg
+            else
+            {
+                Debug.Log("We have a status effect and thusly should be about to run takeDamage");
+                Debug.Log("The damage that should be dealt by this status effect is: " + ((myStatusEffectRanks[i] + 1) / 2 + 1));
+                myStatusEffectTurnsRemaining[i] -= 1;
+                TakeDamage((myStatusEffectRanks[i] + 1) / 2 + 1, 8, myStatusEffectAbilityIndex[i], myStatusEffectRanks[i]);
+                if(myStatusEffectTurnsRemaining[i] == 0) { myStatusEffectBools[i] = false; }
+            }
+        }
     }
 
     
