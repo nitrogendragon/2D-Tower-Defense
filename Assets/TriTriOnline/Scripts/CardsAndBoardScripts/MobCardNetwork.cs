@@ -27,17 +27,30 @@ public class MobCardNetwork : NetworkBehaviour
     private NetworkVariable<int> attributeSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     private NetworkVariable<int> cardPlacementBoardIndex = new NetworkVariable<int>();//the index of the board tile in the boardTiles list that we placed the card on
     private NetworkVariable<bool> isMob = new NetworkVariable<bool>();//whether the card is a mob or an ability card
-    private bool[] myStatusEffectBools = new bool[] { false /*poison*/, false /*burn*/ };
-    private int[] myStatusEffectTurnsRemaining = new int[] { 0, 0 };
-    private int[] myStatusEffectRanks = new int[] { 0, 0 };
+    //we will have 7 types of status effects in total, poison, burn, corrosion, regen, weakened, buffed and charmed.
+    private bool[] myStatusEffectBools = new bool[] { false /*poison*/, false /*burn*/, false /*corrosion*/, false /*regen*/, false /*weakened*/, false /*buffed*/, false/*charmed*/ };
+    private int[] myStatusEffectTurnsRemaining = new int[] { 0, 0, 0, 0, 0, 0 };
+    private int[] myStatusEffectRanks = new int[] { 0, 0, 0, 0, 0, 0, 0 };
     //note that multiple abilities can cause poison potentially so even if the ability has an ability index of 15 and another 4, the status effect index will be the same for all abilities that inflict poison, currently don't have animation specifically
     //for status effects though so these are temps
-    private int[] myStatusEffectAbilityIndex = new int[] { 1 /*poison*/, 2 /*burn*/};
+    private int[] myStatusEffectAbilityAnimationIndex = new int[] { 7 /*poison*/, 8 /*burn*/, 9 /*corrosion*/, 10 /*regen*/, 11 /*weakened*/, 12 /*buffed*/, 13 /*charmed*/};
     //all the ability indexes that cause poison
-    private int[] poisonAbilityIndexes = new int[] {0,7 };
+    private int[] poisonAbilityIndexes = new int[] {1,7 };
     //all the ability indexes that cause burn
-    private int[] burnAbilityIndexes = new int[] {8 };
-
+    private int[] burnAbilityIndexes = new int[] {0,8 };
+    //all the ability indexes that cause corrosion
+    private int[] corrosionAbilityIndexes = new int[] {9 };
+    //all the ability indexes that cause regen
+    private int[] regenAbilityIndexes = new int[] {10 };
+    //all the ability indexes that cause weakened
+    private int[] weakenedAbilityIndexes = new int[] {11 };
+    //all the ability indexes that cause buffed
+    private int[] buffedAbilityIndexes = new int[] {12 };
+    //all the ability indexes that cause charm
+    private int[] charmAbilityIndexes = new int[] {13 };
+    //the messages for logging purposes for now to use when a status effect is inflicted
+    private string[] myStatusEffectMessages = new string[] { "the ability was a poison ability and we now have it." , "the ability was a burn ability and we now have it." , "the ability was a corrosion ability and we now have it." ,
+        "the ability was a regen ability and we now have it.","the ability was a weakened ability and we now have it.","the ability was a buffed ability and we now have it.","the ability was a charmed ability and we now have it." };
     public SpritesLists spritesReferenceHolder;
     public CardBoardIndexManager cardBoardIndexManager;
 
@@ -446,6 +459,8 @@ public class MobCardNetwork : NetworkBehaviour
         //if our attack is higher than their attack stat or the atk/2 is greater than or equal to their curHitPoints, we defeat them
         if(attackersValue - defendersValue > 0 || curHitPoints - (attackersValue/2) <= 0)
         {
+            int damageDealt = attackersValue;
+            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersAbilityIndex);
             curHitPoints = hitPoints / 2;//revive with half health
             ChangePlayerOwnerAndColorServerRpc();
         }
@@ -460,31 +475,49 @@ public class MobCardNetwork : NetworkBehaviour
 
     private void HandleApplyingStatusEffects(int abilityIndex, int abilityRankMod)
     {
-        //check to see if abilityIndex matches any valid indexes in the poisonAbilityIndexes array
-        for(int i = 0; i < poisonAbilityIndexes.Length; i++)
+        Debug.Log("The attackers ability index was: " + abilityIndex);
+        int[][] statusEffectAbilityIndexLists = new int[][] { poisonAbilityIndexes, burnAbilityIndexes/*,corrosionAbilityIndexes, regenAbilityIndexes, weakenedAbilityIndexes, buffedAbilityIndexes, charmAbilityIndexes*/ };
+        for (int i = 0; i < statusEffectAbilityIndexLists.Length; i++)
         {
-            if(abilityIndex == poisonAbilityIndexes[i]) 
+            for (int y = 0; y < statusEffectAbilityIndexLists[i].Length; y++)
             {
-                myStatusEffectBools[0] = true;
-                myStatusEffectTurnsRemaining[0] = 3;//we will have all status effects default to 3 turns, for now no exceptions
-                myStatusEffectRanks[0] = abilityRankMod;
-                Debug.Log("the ability was a poison ability and we now have it.");
-                break;
-            }
-        }
 
-        //check to see if abilityIndex matches any valid indexes in the poisonAbilityIndexes array
-        for (int i = 0; i < burnAbilityIndexes.Length; i++)
-        {
-            if (abilityIndex == burnAbilityIndexes[i])
-            {
-                myStatusEffectBools[0] = true;
-                myStatusEffectTurnsRemaining[0] = 3;//we will have all status effects default to 3 turns, for now no exceptions
-                myStatusEffectRanks[0] = abilityRankMod;
-                Debug.Log("the ability was a burn ability and we now have it.");
-                break;
+
+                if (abilityIndex == statusEffectAbilityIndexLists[i][y])
+                {
+                    myStatusEffectBools[i] = true;
+                    myStatusEffectTurnsRemaining[i] = 3;//we will have all status effects default to 3 turns, for now no exceptions
+                    myStatusEffectRanks[i] = abilityRankMod;
+                    Debug.Log(myStatusEffectMessages[i]);
+                    break;
+                }
             }
         }
+        ////check to see if abilityIndex matches any valid indexes in the poisonAbilityIndexes array
+        //for (int i = 0; i < poisonAbilityIndexes.Length; i++)
+        //{
+        //    if(abilityIndex == poisonAbilityIndexes[i]) 
+        //    {
+        //        myStatusEffectBools[0] = true;
+        //        myStatusEffectTurnsRemaining[0] = 3;//we will have all status effects default to 3 turns, for now no exceptions
+        //        myStatusEffectRanks[0] = abilityRankMod;
+        //        Debug.Log("the ability was a poison ability and we now have it.");
+        //        break;
+        //    }
+        //}
+
+        ////check to see if abilityIndex matches any valid indexes in the poisonAbilityIndexes array
+        //for (int i = 0; i < burnAbilityIndexes.Length; i++)
+        //{
+        //    if (abilityIndex == burnAbilityIndexes[i])
+        //    {
+        //        myStatusEffectBools[0] = true;
+        //        myStatusEffectTurnsRemaining[0] = 3;//we will have all status effects default to 3 turns, for now no exceptions
+        //        myStatusEffectRanks[0] = abilityRankMod;
+        //        Debug.Log("the ability was a burn ability and we now have it.");
+        //        break;
+        //    }
+        //}
 
 
     }
@@ -501,9 +534,9 @@ public class MobCardNetwork : NetworkBehaviour
             else
             {
                 Debug.Log("We have a status effect and thusly should be about to run takeDamage");
-                Debug.Log("The damage that should be dealt by this status effect is: " + ((myStatusEffectRanks[i] + 1) / 2 + 1));
+                Debug.Log("The damage that should be dealt by this status effect is: " + ((myStatusEffectRanks[i] + 1) / 2 + 2));
                 myStatusEffectTurnsRemaining[i] -= 1;
-                TakeDamage((myStatusEffectRanks[i] + 1) / 2 + 1, 8, myStatusEffectAbilityIndex[i], myStatusEffectRanks[i]);
+                TakeDamage((myStatusEffectRanks[i] + 1) / 2 + 2, 8, myStatusEffectAbilityAnimationIndex[i], myStatusEffectRanks[i]);
                 if(myStatusEffectTurnsRemaining[i] == 0) { myStatusEffectBools[i] = false; }
             }
         }

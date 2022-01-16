@@ -13,7 +13,7 @@ public class TurnManager : NetworkBehaviour
     private NetworkVariable<bool> isPlayer1Turn = new NetworkVariable<bool>(true);
 
     //time to wait til ending turn
-    private float endTurnWait = 1.2f;
+    private float endTurnWait = .7f;
 
     private bool isWaitingToChangePhase = false;
 
