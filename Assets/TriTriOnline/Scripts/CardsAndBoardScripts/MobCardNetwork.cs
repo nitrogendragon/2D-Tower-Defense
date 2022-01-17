@@ -37,11 +37,11 @@ public class MobCardNetwork : NetworkBehaviour
     //all the ability indexes that cause poison
     private int[] poisonAbilityIndexes = new int[] {1,7 };
     //all the ability indexes that cause burn
-    private int[] burnAbilityIndexes = new int[] {0,8 };
+    private int[] burnAbilityIndexes = new int[] {2,8 };
     //all the ability indexes that cause corrosion
-    private int[] corrosionAbilityIndexes = new int[] {9 };
+    private int[] corrosionAbilityIndexes = new int[] {6,9 };
     //all the ability indexes that cause regen
-    private int[] regenAbilityIndexes = new int[] {10 };
+    private int[] regenAbilityIndexes = new int[] {3,4,5,10 };
     //all the ability indexes that cause weakened
     private int[] weakenedAbilityIndexes = new int[] {11 };
     //all the ability indexes that cause buffed
@@ -183,6 +183,7 @@ public class MobCardNetwork : NetworkBehaviour
     {
         //only server can do the work to be done
         if (!IsServer) { return; }
+        
         //switch to player 2 and change color to player 2 color
         if(playerOwnerIndex.Value == 1)
         {
@@ -277,7 +278,7 @@ public class MobCardNetwork : NetworkBehaviour
         return cardPlacementBoardIndex.Value;
     }
 
-    //handles attacks for all four directions 
+    //handles attacks for all four directions, mobs run this, we will never run a heal ability or anything but attack through here
     [ServerRpc(RequireOwnership =false)]
     public void AttackServerRpc()
     {
@@ -304,7 +305,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their right stat so we need the defense stst index to be the right, thus 2
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, abilityIndex, abilityRankMod, leftAttackTargetBoardIndex, 2);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, abilityIndex, abilityRankMod, leftAttackTargetBoardIndex, 2, 0);
                
             }
         }
@@ -313,14 +314,14 @@ public class MobCardNetwork : NetworkBehaviour
         //make sure there is a card to our right and specifically to our right not just in the index 1 above us in the list/array
         if (cardBoardIndexManager.CheckIfCardAtIndex(rightAttackTargetBoardIndex) && (cardPlacementBoardIndex.Value + 1) % topBottomAttackIndexMod != 0)
         {
-            Debug.Log(cardPlacementBoardIndex.Value % topBottomAttackIndexMod);
+            //Debug.Log(cardPlacementBoardIndex.Value % topBottomAttackIndexMod);
             //Debug.Log("There is a card to our right");
             //make sure we don't own the card we are targeting
             if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, rightAttackTargetBoardIndex))
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their left stat so we need the defense stat index to be the left, thus 1
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, abilityIndex, abilityRankMod, rightAttackTargetBoardIndex, 1);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, abilityIndex, abilityRankMod, rightAttackTargetBoardIndex, 1, 0);
                 
             }
         }
@@ -334,7 +335,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their top stat so we need the defense stat index to be the bottom, thus 4
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, abilityIndex, abilityRankMod, topAttackTargetBoardIndex, 4);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, abilityIndex, abilityRankMod, topAttackTargetBoardIndex, 4, 0);
                 
             }
         }
@@ -348,7 +349,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their bottom stat so we need the defense stat index to be the top, thus 3
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, abilityIndex, abilityRankMod, bottomAttackTargetBoardIndex, 3);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, abilityIndex, abilityRankMod, bottomAttackTargetBoardIndex, 3, 0);
                 
                 
             }
@@ -424,17 +425,35 @@ public class MobCardNetwork : NetworkBehaviour
                         //if (i == 7 && (attackTargetBoardIndex % topBottomAttackIndexMod == 0)) { break; }
 
 
+
+                        //create an int for extraConditions 0 means attack, 1 is regen, 2 is buff, 3 is debuff, 4 is charm
+                        int extraCondition = 0;
+                        //make sure this isn't a regen ability
+                        for (int i2 = 0; i2 < regenAbilityIndexes.Length; i2++)
+                        {
+                            if (abilityIndex == regenAbilityIndexes[i2])
+                            {
+                                extraCondition = 1;
+                            }
+                        }
+                        Debug.Log("the extra condition on ability cards is: " + extraCondition);
+
+
                         //Debug.Log("There is a card below");
-                        //make sure we don't own the card we are targeting
-                        if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex))
+                        //make sure we don't own the card we are targeting and we are attacking
+                        if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 0)
                         {
                             //Debug.Log("The card we are attacking is not ours so we should deal damage");
                             //handles all attacks taking in whatever our attackside stat is, the ability Index for determining the sprite atm, the targets board location index, and defense side index for figuring out
                             //which stat to use for defending later in the takeDamage function
                             if(i > 4 && y > 0) { Debug.Log("We're getting to the end from time to time at the very least"); }
-                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i]);
-
-
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
+                        }
+                        //in case we are activating a healing ability we want to target our cards and heal them
+                        else if(cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 1)
+                        {
+                            Debug.Log("we activated a regen ability card on an ally");
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                     }
                     
@@ -446,45 +465,75 @@ public class MobCardNetwork : NetworkBehaviour
         }
     }
 
-    public void TakeDamage(int attackersValue,int defenseSideIndex, int attackersAbilityIndex, int abilityRankM)
+    public void TakeDamage(int attackersValue,int defenseSideIndex, int attackersAbilityIndex, int abilityRankM, int extraConditions)
     {
         HandleApplyingStatusEffects(attackersAbilityIndex, abilityRankM);
+        //handle buffs, debuffs,regen and charm here
+
+
         int defendersValue = 0;
         // defenseSideIndex notes: 1 means leftStat, 2 means RightStat, 3 means TopStat, otherwise 4 means BottomStat but we don't show that in the logic below
         defendersValue = defenseSideIndex == 1 ? curLeftStat : defenseSideIndex == 2 ? curRightStat : defenseSideIndex == 3 ? curTopStat : defenseSideIndex == 4 ? curBottomStat :
              defenseSideIndex == 4 ? (curRightStat + curBottomStat) / 2 : defenseSideIndex == 5 ? (curLeftStat + curBottomStat) / 2:
          defenseSideIndex == 6 ? (curRightStat + curTopStat) / 2 : defenseSideIndex == 7 ? (curLeftStat + curTopStat) / 2 :
          (curLeftStat + curRightStat + curTopStat + curBottomStat) / 4 /*this is for taking ability damage so we will take the average of our 4 stats*/;
-       
-        //if our attack is higher than their attack stat or the atk/2 is greater than or equal to their curHitPoints, we defeat them
-        if(attackersValue - defendersValue > 0 || curHitPoints - (attackersValue/2) <= 0)
+        
+        //Handle restoring hp
+        if(extraConditions == 1)
         {
+            int hpRestored = attackersValue;
+            //check to make sure our hp isn't going to go over 50
+            if (curHitPoints + hpRestored <= 50)
+            {
+                curHitPoints += hpRestored;
+                
+                
+                GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(hpRestored, attackersAbilityIndex, true);
+            }
+
+        }
+
+        //if our attack is higher than their attack stat or the atk/2 is greater than or equal to their curHitPoints, we defeat them
+        else if(attackersValue - defendersValue > 0 || curHitPoints - (attackersValue/2) <= 0 && extraConditions == 0)
+        {
+            //reset all status effects on death
+            for (int i = 0; i < myStatusEffectBools.Length; i++)
+            {
+                myStatusEffectBools[i] = false;
+                Debug.Log(myStatusEffectBools[i]);
+            }
             int damageDealt = attackersValue;
-            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersAbilityIndex);
+            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersAbilityIndex, false);
             curHitPoints = hitPoints / 2;//revive with half health
             ChangePlayerOwnerAndColorServerRpc();
         }
+        //handle dealing damage
         else
-        { 
-            curHitPoints -= attackersValue / 2;
-            int damageDealt = attackersValue / 2;
-            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersAbilityIndex);
+        {
+            //check to make sure our hp isn't going to go over 50
+            if (curHitPoints - attackersValue / 2 <= 50)
+            {
+                curHitPoints -= attackersValue / 2;
+                int damageDealt = attackersValue / 2;
+                GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersAbilityIndex, false);
+            }
         }
         UpdateHpSpritesServerRpc(curHitPoints);
     }
 
     private void HandleApplyingStatusEffects(int abilityIndex, int abilityRankMod)
     {
-        Debug.Log("The attackers ability index was: " + abilityIndex);
-        int[][] statusEffectAbilityIndexLists = new int[][] { poisonAbilityIndexes, burnAbilityIndexes/*,corrosionAbilityIndexes, regenAbilityIndexes, weakenedAbilityIndexes, buffedAbilityIndexes, charmAbilityIndexes*/ };
+        //Debug.Log("The attackers ability index was: " + abilityIndex);
+        int[][] statusEffectAbilityIndexLists = new int[][] { poisonAbilityIndexes, burnAbilityIndexes,corrosionAbilityIndexes, regenAbilityIndexes/*, weakenedAbilityIndexes, buffedAbilityIndexes, charmAbilityIndexes*/ };
         for (int i = 0; i < statusEffectAbilityIndexLists.Length; i++)
         {
             for (int y = 0; y < statusEffectAbilityIndexLists[i].Length; y++)
             {
 
-
-                if (abilityIndex == statusEffectAbilityIndexLists[i][y])
+                //hopefully will make sure that this only runs when we don't yet have the status effect
+                if (abilityIndex == statusEffectAbilityIndexLists[i][y] && myStatusEffectBools[i] == false)
                 {
+
                     myStatusEffectBools[i] = true;
                     myStatusEffectTurnsRemaining[i] = 3;//we will have all status effects default to 3 turns, for now no exceptions
                     myStatusEffectRanks[i] = abilityRankMod;
@@ -493,6 +542,7 @@ public class MobCardNetwork : NetworkBehaviour
                 }
             }
         }
+        
         ////check to see if abilityIndex matches any valid indexes in the poisonAbilityIndexes array
         //for (int i = 0; i < poisonAbilityIndexes.Length; i++)
         //{
@@ -533,10 +583,23 @@ public class MobCardNetwork : NetworkBehaviour
             //if we have the status effect update our turns remaining and deal appropriate dmg
             else
             {
-                Debug.Log("We have a status effect and thusly should be about to run takeDamage");
-                Debug.Log("The damage that should be dealt by this status effect is: " + ((myStatusEffectRanks[i] + 1) / 2 + 2));
+                //Debug.Log("We have a status effect and thusly should be about to run takeDamage");
+                //Debug.Log("The damage that should be dealt by this status effect is: " + ((myStatusEffectRanks[i] + 1) / 2 + 2));
                 myStatusEffectTurnsRemaining[i] -= 1;
-                TakeDamage((myStatusEffectRanks[i] + 1) / 2 + 2, 8, myStatusEffectAbilityAnimationIndex[i], myStatusEffectRanks[i]);
+                Debug.Log("turns remaining: " + myStatusEffectTurnsRemaining[i]);
+                ////handle regen
+                if (i == 3)
+                {
+                    Debug.Log("We are healing");
+                    //take negative damage
+                    TakeDamage((myStatusEffectRanks[i] + 1) / 2 + 2, 8, myStatusEffectAbilityAnimationIndex[i], myStatusEffectRanks[i],1);
+
+                }
+                ////otw take damage
+                else
+                {
+                    TakeDamage((myStatusEffectRanks[i] + 1) / 2 + 2, 8, myStatusEffectAbilityAnimationIndex[i], myStatusEffectRanks[i],0);
+                }
                 if(myStatusEffectTurnsRemaining[i] == 0) { myStatusEffectBools[i] = false; }
             }
         }
@@ -560,10 +623,25 @@ public class MobCardNetwork : NetworkBehaviour
             hpOnesSpriteIndex.Value = newCurHitPoints - 10;
 
         }
-        else
+        else if (newCurHitPoints < 30)
         {
             hpTensSpriteIndex.Value = 2;
             hpOnesSpriteIndex.Value = newCurHitPoints - 20;
+        }
+        else if(newCurHitPoints < 40)
+        {
+            hpTensSpriteIndex.Value = 3;
+            hpOnesSpriteIndex.Value = newCurHitPoints - 30;
+        }
+        else if (newCurHitPoints < 50)
+        {
+            hpTensSpriteIndex.Value = 4;
+            hpOnesSpriteIndex.Value = newCurHitPoints - 40;
+        }
+        else
+        {
+            hpTensSpriteIndex.Value = 5;
+            hpOnesSpriteIndex.Value = newCurHitPoints - 50;
         }
     }
 

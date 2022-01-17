@@ -50,31 +50,40 @@ public class DamagePopUp : NetworkBehaviour
 
     private void OnDamageTakenChanged(int oldVal, int newVal)
     {
-        if(damageTaken.Value > 0) 
+        if(damageTaken.Value >= 0) 
         { 
-            damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString();
-            
+
+            damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString();     
+        }
+        else
+        {
+            Debug.Log("our value was below zero");
+            int valToUse = newVal * -1;
+            damagePopUp.GetComponent<TextMesh>().text = "+" + valToUse.ToString();
         }
     }
 
 
     [ServerRpc(RequireOwnership = false)]
-    public void ChangeTextAndSetActiveServerRpc(int value, int abilIndex)
+    public void ChangeTextAndSetActiveServerRpc(int value, int abilIndex, bool isHealing)
     {
         if (!IsServer) { return; }
         if(value <= 0) { return; }
         abilityIndex.Value = abilIndex;
         //Debug.Log("abilIndex is: " + abilIndex + " abilityIndex.Value is: " + abilityIndex.Value);
-        //Debug.Log("The damage value should is: " + value);
+        //Debug.Log("The damage value should be: " + value);
         tookDamage.Value = true;//change this first so the meshrenderer gets enabled and the damage animation starts playing
-        damageTaken.Value = value;
         
+        damageTaken.Value = isHealing ?  -value : value;
+        Debug.Log("damagetaken value is:" + damageTaken.Value);
         //damagePopUp.GetComponent<MeshRenderer>().sortingLayerName = "UI";
         //damagePopUp.GetComponent<MeshRenderer>().sortingOrder = 2;
         initialPosition = gameObject.transform.position;
         //Debug.Log(initialPosition);
         //Debug.Log(damagePopUp.activeSelf);
-        damagePopUp.GetComponent<TextMesh>().text = "-" + value;
+        
+        //damagePopUp.GetComponent<TextMesh>().text = isHealing ? "+" + value : "-" + value;
+        
         //Debug.Log(damagePopUp.GetComponent<TextMesh>().text);
         
         
