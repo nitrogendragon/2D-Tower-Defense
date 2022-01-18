@@ -247,14 +247,25 @@ public class MobCardNetwork : NetworkBehaviour
             hpOnesSpriteIndex.Value = initHitPoints - 20;
         }
         //Debug.Log("The board position we are going to be placed at is: " + cBoardIndex);
+        
+        //attack if we are a mob, not an ability card
+        if (isMob.Value)
+        {
+            AttackServerRpc();
+        }
         //we will play a card every turn so we want to go through each mob on the board and update their status effect counters if they are ours that is
-        cardBoardIndexManager.UpdateMyCardsStatusEffects(playerOwnrIndex);
-        //we don't want to attack if we are not a mob
-        if (!isMob.Value) { return; }
-        AttackServerRpc();
+        //we are delaying so that there is hopefully no issues with other animations and damage or buff/debuff calculations etc
+        StartCoroutine(DelayStatusEffectChecks(playerOwnrIndex));
+
     }
 
-    
+    private IEnumerator DelayStatusEffectChecks(int playerOwnrIndex)
+    {
+        //run statuseffect update ater 2 seconds
+        yield return new WaitForSeconds(2f);
+        Debug.Log("we waited 2 seconds and will now check status effects and update them");
+        cardBoardIndexManager.UpdateMyCardsStatusEffects(playerOwnrIndex);
+    }
    
 
     public int[] GrabStats()

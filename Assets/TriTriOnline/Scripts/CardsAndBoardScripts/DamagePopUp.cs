@@ -14,7 +14,7 @@ public class DamagePopUp : NetworkBehaviour
     [SerializeField] private Animator spriteAnimator;// the sprite sheet animation we want to use when firing off an attack/skill
     [SerializeField] private SkillAnimations skillAnimations;
     private NetworkVariable<bool> tookDamage = new NetworkVariable<bool>(false);
-    private NetworkVariable<bool> tookBuffDebuffCharm = new NetworkVariable<bool>(false);
+    //private NetworkVariable<bool> tookBuffDebuffCharm = new NetworkVariable<bool>(false);
     private NetworkVariable<int> damageTaken = new NetworkVariable<int>();
     private NetworkVariable<int> abilityIndex = new NetworkVariable<int>();
     // Start is called before the first frame update
@@ -24,7 +24,7 @@ public class DamagePopUp : NetworkBehaviour
         tookDamage.OnValueChanged += OnTookDamageChanged;
         damageTaken.OnValueChanged += OnDamageTakenChanged;
         abilityIndex.OnValueChanged += OnSkillIndexChanged;
-        tookBuffDebuffCharm.OnValueChanged += OnTookBuffDebuffCharmChanged;
+        //tookBuffDebuffCharm.OnValueChanged += OnTookBuffDebuffCharmChanged;
     }
 
     private void OnDisable()
@@ -32,17 +32,17 @@ public class DamagePopUp : NetworkBehaviour
         tookDamage.OnValueChanged -= OnTookDamageChanged;
         damageTaken.OnValueChanged -= OnDamageTakenChanged;
         abilityIndex.OnValueChanged += OnSkillIndexChanged;
-        tookBuffDebuffCharm.OnValueChanged += OnTookBuffDebuffCharmChanged;
+        //tookBuffDebuffCharm.OnValueChanged += OnTookBuffDebuffCharmChanged;
     }
 
-    private void OnTookBuffDebuffCharmChanged(bool oldBool, bool newBool)
-    {
-        if (newBool)
-        {
-            Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
-            Debug.Log("We should have instantiated an ability icon");
-        }
-    }
+    //private void OnTookBuffDebuffCharmChanged(bool oldBool, bool newBool)
+    //{
+    //    if (newBool)
+    //    {
+    //        Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
+    //        Debug.Log("We should have instantiated an ability icon");
+    //    }
+    //}
 
     private void OnSkillIndexChanged(int oldIndex, int newIndex)
     {
@@ -113,7 +113,7 @@ public class DamagePopUp : NetworkBehaviour
     {
         if (!IsServer) { return; }
         tookDamage.Value = false;
-        tookBuffDebuffCharm.Value = false;
+        //tookBuffDebuffCharm.Value = false;
         damageTaken.Value = 0;
         damagePopUp.GetComponent<MeshRenderer>().enabled = false;
         //Debug.Log(damagePopUp.activeSelf);
@@ -122,7 +122,7 @@ public class DamagePopUp : NetworkBehaviour
     private IEnumerator WaitToDisablePopUp()
     {
         //Debug.Log(Time.time);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.5f);
         //Debug.Log(Time.time);
         
         DisablePopUpServerRpc();
