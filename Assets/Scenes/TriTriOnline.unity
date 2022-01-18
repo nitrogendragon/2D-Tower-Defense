@@ -4513,6 +4513,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1201cbbb56824204faa2c1068aa9c412, type: 3}
   - {fileID: 21300000, guid: 7a1518f931414e8489c7be37c46cf390, type: 3}
   - {fileID: 21300000, guid: 5e87829f35a5f7f42878cf71710f33ca, type: 3}
+  - {fileID: 21300000, guid: da909f04f2d9ede44ade995d01280b9f, type: 3}
   attackValueSprites:
   - {fileID: 21300000, guid: 05469c97335bd1b4599a449a9c2b9831, type: 3}
   - {fileID: 21300000, guid: c5252780c18d16e4ca59914842b713b5, type: 3}

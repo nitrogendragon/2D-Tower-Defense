@@ -55,7 +55,7 @@ public class DamagePopUp : NetworkBehaviour
         if (newVal) { 
             damagePopUp.GetComponent<MeshRenderer>().enabled = true;
             Instantiate(damageSpriteAnimation, gameObject.transform.position, new Quaternion(0, 0, 0, 0));
-            Debug.Log("We should have instantiated an ability icon");
+            //Debug.Log("We should have instantiated an ability icon");
             
         }
         else { damagePopUp.GetComponent<MeshRenderer>().enabled = false; }
@@ -63,16 +63,22 @@ public class DamagePopUp : NetworkBehaviour
 
     private void OnDamageTakenChanged(int oldVal, int newVal)
     {
-        if(damageTaken.Value >= 0) 
+        if(damageTaken.Value > 0) 
         { 
 
             damagePopUp.GetComponent<TextMesh>().text = "-" + newVal.ToString();     
         }
-        else
+        //healing
+        else if(damageTaken.Value < 0)
         {
             Debug.Log("our value was below zero");
             int valToUse = newVal * -1;
             damagePopUp.GetComponent<TextMesh>().text = "+" + valToUse.ToString();
+        }
+        //charm or regen for example on activation do/show nothing
+        else
+        {
+            damagePopUp.GetComponent<TextMesh>().text = "";
         }
     }
 
@@ -90,7 +96,7 @@ public class DamagePopUp : NetworkBehaviour
         {
             //tookDamage.Value = true;//change this first so the meshrenderer gets enabled and the damage animation starts playing
             damageTaken.Value = value;
-            Debug.Log("damagetaken value is:" + damageTaken.Value);
+            //Debug.Log("damagetaken value is:" + damageTaken.Value);
 
         }
         

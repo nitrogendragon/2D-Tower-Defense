@@ -11,23 +11,23 @@ public class MobDeckNetwork : MonoBehaviour
     // Start is called before the first frame update
     //try to keep mobs first and magic stuff after
     private string[] mobNames = new string[] { "Cerberus of the black flame", "Core Kraken", "Headless Chicken", "PutridPuddle", "Murkblood Hydra", "Seaweed Hermit", "Conspiring Sorceror", "Wandering Knight", "OtherRealm Tammy",
-        /*start ability cards here*/ "Dark Orb", "Flame Ball", "Holy", "Aqua Blast", "Tempest Whirl", "Rock Slide" };
+        /*start ability cards here*/ "Dark Orb", "Flame Ball", "Holy", "Aqua Blast", "Tempest Whirl", "Rock Slide", "Temptation" };
 
     private int[,] mobStats = new int[,] { {/*Cerberus of the Black Flame */ 6, 6, 9, 6, 16 }, {/*Core Kraken */ 7, 7, 4, 8, 17 }, {/*Headless Chicken */ 3, 3, 9, 5, 2 }, {/*Putrid Puddle */ 5, 5, 2, 4, 11 },
         {/*murkblood hydra */ 7, 7, 7, 4, 18 }, {/*Seaweed Hermit */ 4, 4, 6, 2, 4 }, {/*Conspiring Sorceror */ 6, 6, 3, 5, 2 }, {/*Wandering Knight */ 6, 5, 4, 3, 4 }, {/*OtherRealm Tammy */ 6, 7, 5, 9, 15 },
-        /*start ability cards here*/{/*Dark Orb*/ 3,3,3,3,4}, {/*Flame Ball*/ 3,3,3,3,4 }, {/*Holy*/ 3,3,3,3,4 }, {/*Aqua Blast*/ 3,3,3,3,4 }, {/*Tempest Whirl*/ 3,3,3,3,4 }, {/*Rock Slide*/ 3,3,3,3,4 } };
+        /*start ability cards here*/{/*Dark Orb*/ 3,3,3,3,4}, {/*Flame Ball*/ 3,3,3,3,4 }, {/*Holy*/ 3,3,3,3,4 }, {/*Aqua Blast*/ 3,3,3,3,4 }, {/*Tempest Whirl*/ 3,3,3,3,4 }, {/*Rock Slide*/ 3,3,3,3,4 }, {/*Temptation*/ 3,3,3,3,4 } };
 
     private bool[] isMob = new bool[] { true, true, true, true, true, true, true, true, true,
-        /*start ability cards here*/false, false, false, false, false, false };
+        /*start ability cards here*/false, false, false, false, false, false, false };
     //if 0, we don't have an ability, otw we will use the number to reference functons
     private int[] abilityIndexes = new int[] {0,0,0,0,0,0,0,0,0,
-    /*start ability cards here*/ 1,2,3,4,5,6};
+    /*start ability cards here*/ 1,2,3,4,5,6,7};
     private int[] abilityRankMods = new int[] {6,6,3,3,3,0,3,0,6,
-    /*start ability cards here*/ 1,1,1,1,1,1};
+    /*start ability cards here*/ 1,1,1,1,1,1,3};
     private int[] deckCardMobIndexReferences = new int[30];
     //Lineages include Giant, Celestial, Construct, beast, humanoid, ooze, Aberration, Spectre, Monstrosity, Demon,Elemental, Plant, Dragon
     private string[] mobLineages = new string[] {"Beast", "Giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid",
-    /*start ability cards here*/ "Spectre", "Elemental", "Celestial", "Elemental", "Elemental", "Elemental"};
+    /*start ability cards here*/ "Spectre", "Elemental", "Celestial", "Elemental", "Elemental", "Elemental", "Demon"};
     //will include sprites for ability cards to keep things simple, mobs first then abilities
     [SerializeField]private List<Sprite> mobSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> attackValueSprites = new List<Sprite>();

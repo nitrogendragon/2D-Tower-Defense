@@ -30,25 +30,25 @@ public class MobCardNetwork : NetworkBehaviour
     private NetworkVariable<bool> isMob = new NetworkVariable<bool>();//whether the card is a mob or an ability card
     //we will have 7 types of status effects in total, poison, burn, corrosion, regen, weakened, buffed and charmed.
     private bool[] myStatusEffectBools = new bool[] { false /*poison*/, false /*burn*/, false /*corrosion*/, false /*regen*/, false /*weakened*/, false /*buffed*/, false/*charmed*/ };
-    private int[] myStatusEffectTurnsRemaining = new int[] { 0, 0, 0, 0, 0, 0 };
+    private int[] myStatusEffectTurnsRemaining = new int[] { 0, 0, 0, 0, 0, 0, 0 };
     private int[] myStatusEffectRanks = new int[] { 0, 0, 0, 0, 0, 0, 0 };
     //note that multiple abilities can cause poison potentially so even if the ability has an ability index of 15 and another 4, the status effect index will be the same for all abilities that inflict poison, currently don't have animation specifically
     //for status effects though so these are temps
-    private int[] myStatusEffectAbilityAnimationIndex = new int[] { 7 /*poison*/, 8 /*burn*/, 9 /*corrosion*/, 10 /*regen*/, 11 /*weakened*/, 12 /*buffed*/, 13 /*charmed*/};
+    private int[] myStatusEffectAbilityAnimationIndex = new int[] { 8 /*poison*/, 9 /*burn*/, 10 /*corrosion*/, 11 /*regen*/, 12 /*weakened*/, 13 /*buffed*/, 14 /*charmed*/};
     //all the ability indexes that cause poison
-    private int[] poisonAbilityIndexes = new int[] {1,7 };
+    private int[] poisonAbilityIndexes = new int[] {1,8 };
     //all the ability indexes that cause burn
-    private int[] burnAbilityIndexes = new int[] {2,8 };
+    private int[] burnAbilityIndexes = new int[] {2,9 };
     //all the ability indexes that cause corrosion
-    private int[] corrosionAbilityIndexes = new int[] {6,9 };
+    private int[] corrosionAbilityIndexes = new int[] {6,10 };
     //all the ability indexes that cause regen
-    private int[] regenAbilityIndexes = new int[] {3,10 };
+    private int[] regenAbilityIndexes = new int[] {3,11 };
     //all the ability indexes that cause weakened
-    private int[] weakenedAbilityIndexes = new int[] {4,11 };
+    private int[] weakenedAbilityIndexes = new int[] {4,12 };
     //all the ability indexes that cause buffed
-    private int[] buffedAbilityIndexes = new int[] {5,12 };
+    private int[] buffedAbilityIndexes = new int[] {5,13 };
     //all the ability indexes that cause charm
-    private int[] charmAbilityIndexes = new int[] {13 };
+    private int[] charmAbilityIndexes = new int[] {7,14 };
     //the messages for logging purposes for now to use when a status effect is inflicted
     private string[] myStatusEffectMessages = new string[] { "the ability was a poison ability and we now have it." , "the ability was a burn ability and we now have it." , "the ability was a corrosion ability and we now have it." ,
         "the ability was a regen ability and we now have it.","the ability was a weakened ability and we now have it.","the ability was a buffed ability and we now have it.","the ability was a charmed ability and we now have it." };
@@ -261,9 +261,9 @@ public class MobCardNetwork : NetworkBehaviour
 
     private IEnumerator DelayStatusEffectChecks(int playerOwnrIndex)
     {
-        //run statuseffect update ater 2 seconds
-        yield return new WaitForSeconds(2f);
-        Debug.Log("we waited 2 seconds and will now check status effects and update them");
+        //run statuseffect update ater 1 seconds
+        yield return new WaitForSeconds(.5f);
+        //Debug.Log("we waited .5 seconds and will now check status effects and update them");
         cardBoardIndexManager.UpdateMyCardsStatusEffects(playerOwnrIndex);
     }
    
@@ -421,7 +421,7 @@ public class MobCardNetwork : NetworkBehaviour
                     //should handle y = 0 where we just add base mod otw add directionMod + directionMod * y
                     if (cardBoardIndexManager.CheckIfCardAtIndex(attackTargetBoardIndex))
                     {
-                        Debug.Log("There is a card at index: " + attackTargetBoardIndex);
+                        //Debug.Log("There is a card at index: " + attackTargetBoardIndex);
                         
                         //handle left, lower left and upper left edge target exceptions
                         if ( (i == 0 || i == 4 || i == 6)  && ( (attackTargetBoardIndex) % topBottomAttackIndexMod == 5 || attackTargetBoardIndex  < 0) ) { Debug.Log("We reached an exception on the left side");  break; }
@@ -455,7 +455,7 @@ public class MobCardNetwork : NetworkBehaviour
                             
                         }
                         
-                        Debug.Log("the extra condition on ability cards is: " + extraCondition);
+                        //Debug.Log("the extra condition on ability cards is: " + extraCondition);
 
 
                         //Debug.Log("There is a card below");
@@ -465,7 +465,7 @@ public class MobCardNetwork : NetworkBehaviour
                             //Debug.Log("The card we are attacking is not ours so we should deal damage");
                             //handles all attacks taking in whatever our attackside stat is, the ability Index for determining the sprite atm, the targets board location index, and defense side index for figuring out
                             //which stat to use for defending later in the takeDamage function
-                            if(i > 4 && y > 0) { Debug.Log("We're getting to the end from time to time at the very least"); }
+                            //if(i > 4 && y > 0) { Debug.Log("We're getting to the end from time to time at the very least"); }
                             cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                         //in case we are activating a healing ability we want to target our cards and heal them
@@ -489,7 +489,7 @@ public class MobCardNetwork : NetworkBehaviour
                         //in case we are activating a debuff ability we want to target our opponents cards and debuff them
                         else if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 4)
                         {
-                            Debug.Log("we activated a debuff ability card on an enemy card");
+                            Debug.Log("we activated a charm ability card on an enemy card");
                             cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                     }
@@ -520,7 +520,7 @@ public class MobCardNetwork : NetworkBehaviour
         {
             int hpRestored = attackersValue;
             //check to make sure our hp isn't going to go over 50
-            if (curHitPoints + hpRestored <= 50)
+            if (curHitPoints + hpRestored <= 50 )
             {
                 curHitPoints += hpRestored;
 
@@ -559,15 +559,17 @@ public class MobCardNetwork : NetworkBehaviour
         else if(attackersValue - defendersValue > 0 || curHitPoints - (attackersValue/2) <= 0 && extraConditions == 0)
         {
             //reset all status effects on death
-            for (int i = 0; i < myStatusEffectBools.Length; i++)
-            {
-                myStatusEffectBools[i] = false;
-                //Debug.Log(myStatusEffectBools[i]);
-                //make sure everything gets properly cleared
-                CheckStatusEffectsAndUpdateServerRpc();
-            }
-            int damageDealt = attackersValue;
-            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(damageDealt, attackersAbilityIndex);
+            ResetStatusEffectsServerRpc();
+            //for (int i = 0; i < myStatusEffectBools.Length; i++)
+            //{
+            //    myStatusEffectBools[i] = false;
+            //    //Debug.Log(myStatusEffectBools[i]);
+            //    //make sure everything gets properly cleared
+            //}
+            ////run this once only
+            //CheckStatusEffectsAndUpdateServerRpc();
+
+            GetComponent<DamagePopUp>().ChangeTextAndSetActiveServerRpc(0, attackersAbilityIndex);
             curHitPoints = hitPoints / 2;//revive with half health
             ChangePlayerOwnerAndColorServerRpc();
         }
@@ -616,10 +618,10 @@ public class MobCardNetwork : NetworkBehaviour
         rightStatSpriteIndex.Value = curRightStat;
         topStatSpriteIndex.Value = curTopStat;
         bottomStatSpriteIndex.Value = curBottomStat;
-        Debug.Log("left stat is now " + leftStatSpriteIndex.Value);
-        Debug.Log("right stat is now " + rightStatSpriteIndex.Value);
-        Debug.Log("top stat is now " + topStatSpriteIndex.Value);
-        Debug.Log("bottom stat is now " + bottomStatSpriteIndex.Value);
+        //Debug.Log("left stat is now " + leftStatSpriteIndex.Value);
+        //Debug.Log("right stat is now " + rightStatSpriteIndex.Value);
+        //Debug.Log("top stat is now " + topStatSpriteIndex.Value);
+        //Debug.Log("bottom stat is now " + bottomStatSpriteIndex.Value);
     }
 
     //Handles buffing or debuffing mobs and updating their statSprites to reflect it
@@ -694,14 +696,14 @@ public class MobCardNetwork : NetworkBehaviour
         //rightStatSpriteIndex.Value = curRightStat;
         //topStatSpriteIndex.Value = curTopStat;
         //bottomStatSpriteIndex.Value = curBottomStat;
-        Debug.Log("left stat is now " + curLeftStat);
-        Debug.Log("right stat is now " + curRightStat);
-        Debug.Log("top stat is now " + curTopStat);
-        Debug.Log("bottom stat is now " + curBottomStat);
-        Debug.Log("left sprite stat is now " + leftStatSpriteIndex.Value);
-        Debug.Log("right sprite stat is now " + rightStatSpriteIndex.Value);
-        Debug.Log("top sprite stat is now " + topStatSpriteIndex.Value);
-        Debug.Log("bottom sprite stat is now " + bottomStatSpriteIndex.Value);
+        //Debug.Log("left stat is now " + curLeftStat);
+        //Debug.Log("right stat is now " + curRightStat);
+        //Debug.Log("top stat is now " + curTopStat);
+        //Debug.Log("bottom stat is now " + curBottomStat);
+        //Debug.Log("left sprite stat is now " + leftStatSpriteIndex.Value);
+        //Debug.Log("right sprite stat is now " + rightStatSpriteIndex.Value);
+        //Debug.Log("top sprite stat is now " + topStatSpriteIndex.Value);
+        //Debug.Log("bottom sprite stat is now " + bottomStatSpriteIndex.Value);
     }
 
 
@@ -757,6 +759,19 @@ public class MobCardNetwork : NetworkBehaviour
 
     }
 
+    [ServerRpc(RequireOwnership=false)]
+    private void ResetStatusEffectsServerRpc()
+    {
+        if (!IsServer) { return; }
+        for(int i = 0; i < myStatusEffectBools.Length; i++)
+        {
+            myStatusEffectBools[i] = false;
+            myStatusEffectTurnsRemaining[i] = 0;
+        }
+        Debug.Log("We reset all our status effects and their turn counts");
+    }
+
+    
     [ServerRpc (RequireOwnership = false)]
     public void CheckStatusEffectsAndUpdateServerRpc()
     {
@@ -787,28 +802,29 @@ public class MobCardNetwork : NetworkBehaviour
                 {
                     TakeDamage((myStatusEffectRanks[i] + 1) / 2 + 2, 8, myStatusEffectAbilityAnimationIndex[i], myStatusEffectRanks[i],0);
                 }
-                if(myStatusEffectTurnsRemaining[i] == 0 )
+
+                if (myStatusEffectTurnsRemaining[i] == 0)
                 {
                     Debug.Log("ability: " + i + " ran out");
-                    myStatusEffectBools[i] = false; 
-                    if(i == 4/*buff*/)
+                    myStatusEffectBools[i] = false;
+                    if (i == 4/*buff*/)
                     {
                         UndoBuffOrDebuffServerRpc(false);
                         Debug.Log("We undid debuffs");
                     }
-                    if(i == 5/*debuff*/)
+                    if (i == 5/*debuff*/)
                     {
                         UndoBuffOrDebuffServerRpc(true);
                         Debug.Log("We undid buffs");
                     }
-                    if(i == 6)
+                    if (i == 6)
                     {
                         //go back to what we were before
                         ChangePlayerOwnerAndColorServerRpc();
                     }
                 }
-
             }
+            
         }
     }
 
