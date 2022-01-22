@@ -16,6 +16,7 @@ public class MobCardNetwork : NetworkBehaviour
     [SerializeField]private GameObject topStatSprite,bottomStatSprite,leftStatSprite, rightStatSprite, hpTensSprite, hpOnesSprite, attributeSprite;//technically renderers but for some reason i named them as just xSprite
     [SerializeField]private GameObject mobBackground;
     [SerializeField] private GameObject damagePopUp;
+    [SerializeField]private List<GameObject> statusIcons = new List<GameObject>();
     private NetworkVariable<Color> mobBackgroundColor = new NetworkVariable<Color>(new Color(.4f,0,0));//default is player 1 color
     private NetworkVariable<int> playerOwnerIndex = new NetworkVariable<int>(0);//0 for no ownership by default
     private NetworkVariable<int> mobSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
@@ -724,6 +725,8 @@ public class MobCardNetwork : NetworkBehaviour
                     myStatusEffectBools[i] = true;
                     myStatusEffectTurnsRemaining[i] = 3;//we will have all status effects default to 3 turns, for now no exceptions
                     myStatusEffectRanks[i] = abilityRankMod;
+                    statusIcons[i].SetActive(true);//turn on the respective status icon 
+                    UpdateStatusIconsClientRpc(i, true);//the server/host is taken care of above, now we update the client
                     Debug.Log(myStatusEffectMessages[i]);
                     break;
                 }
@@ -767,8 +770,19 @@ public class MobCardNetwork : NetworkBehaviour
         {
             myStatusEffectBools[i] = false;
             myStatusEffectTurnsRemaining[i] = 0;
+            UndoBuffOrDebuffServerRpc(false);
+            UndoBuffOrDebuffServerRpc(true);
+            statusIcons[i].SetActive(false);//we don't want our status icons showing anymore
+            UpdateStatusIconsClientRpc(i, false);//the server/host is taken care of above, now we update the client
         }
         Debug.Log("We reset all our status effects and their turn counts");
+    }
+
+    [ClientRpc]
+    private void UpdateStatusIconsClientRpc(int index, bool activeState)
+    {
+        if (IsServer) { return; }
+        statusIcons[index].SetActive(activeState);
     }
 
     
@@ -807,6 +821,8 @@ public class MobCardNetwork : NetworkBehaviour
                 {
                     Debug.Log("ability: " + i + " ran out");
                     myStatusEffectBools[i] = false;
+                    statusIcons[i].SetActive(false);//we shouldn't have this status icon showing anymore
+                    UpdateStatusIconsClientRpc(i, false);//the server/host is taken care of above, now we update the client
                     if (i == 4/*buff*/)
                     {
                         UndoBuffOrDebuffServerRpc(false);
