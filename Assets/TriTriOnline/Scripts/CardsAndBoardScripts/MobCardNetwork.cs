@@ -766,12 +766,13 @@ public class MobCardNetwork : NetworkBehaviour
     private void ResetStatusEffectsServerRpc()
     {
         if (!IsServer) { return; }
-        for(int i = 0; i < myStatusEffectBools.Length; i++)
+        UndoBuffOrDebuffServerRpc(false);
+        UndoBuffOrDebuffServerRpc(true);
+        for (int i = 0; i < myStatusEffectBools.Length; i++)
         {
             myStatusEffectBools[i] = false;
             myStatusEffectTurnsRemaining[i] = 0;
-            UndoBuffOrDebuffServerRpc(false);
-            UndoBuffOrDebuffServerRpc(true);
+            
             statusIcons[i].SetActive(false);//we don't want our status icons showing anymore
             UpdateStatusIconsClientRpc(i, false);//the server/host is taken care of above, now we update the client
         }

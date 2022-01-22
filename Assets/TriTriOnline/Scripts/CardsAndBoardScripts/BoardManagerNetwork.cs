@@ -39,7 +39,7 @@ public class BoardManagerNetwork : MonoBehaviour
             for (int column = 0; column < columns; column++)
             {
                 GameObject newBoardPiece = Instantiate(boardTile);
-                newBoardPiece.transform.position = new Vector3((horizontalOffset + column) * xScale, (verticalOffset + row) * yScale, 0);
+                newBoardPiece.transform.position = new Vector3((horizontalOffset + column) * xScale, (verticalOffset + row) * yScale+.5f, 0);
                 boardTiles.Add(newBoardPiece);
             }
         }
