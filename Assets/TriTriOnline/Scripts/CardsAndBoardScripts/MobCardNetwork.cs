@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Collections;
 
 public class MobCardNetwork : NetworkBehaviour
 {
@@ -9,7 +10,9 @@ public class MobCardNetwork : NetworkBehaviour
 
     //all the impoortant stats for the mob to display and use for interactions
     private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, leftStatBuff, rightStatBuff, topStatBuff, bottomStatBuff,
-        leftStatDebuff, rightStatDebuff, topStatDebuff, bottomStatDebuff, curHitPoints, hitPoints, abilityIndex, abilityRankMod;
+        leftStatDebuff, rightStatDebuff, topStatDebuff, bottomStatDebuff, curHitPoints, hitPoints, abilityRankMod;
+    private NetworkVariable<int> abilityIndex = new NetworkVariable<int>();
+    private NetworkVariable<FixedString64Bytes> mobName = new NetworkVariable<FixedString64Bytes>();
     private Color player1mobBackgroundColor = new Color(.6f, .3f, .3f);
     private Color player2mobBackgroundColor = new Color(.3f, .3f, .6f);
     [SerializeField]private GameObject mobSpriteRenderer;
@@ -29,6 +32,7 @@ public class MobCardNetwork : NetworkBehaviour
     private NetworkVariable<int> attributeSpriteIndex = new NetworkVariable<int>();//won't initialize to start on this one
     private NetworkVariable<int> cardPlacementBoardIndex = new NetworkVariable<int>();//the index of the board tile in the boardTiles list that we placed the card on
     private NetworkVariable<bool> isMob = new NetworkVariable<bool>();//whether the card is a mob or an ability card
+    private NetworkVariable<bool>[] myStatusEffectBoolsNV = new NetworkVariable<bool>[7];
     //we will have 7 types of status effects in total, poison, burn, corrosion, regen, weakened, buffed and charmed.
     private bool[] myStatusEffectBools = new bool[] { false /*poison*/, false /*burn*/, false /*corrosion*/, false /*regen*/, false /*weakened*/, false /*buffed*/, false/*charmed*/ };
     private int[] myStatusEffectTurnsRemaining = new int[] { 0, 0, 0, 0, 0, 0, 0 };
@@ -201,7 +205,7 @@ public class MobCardNetwork : NetworkBehaviour
     //will be ran when the card is drawn/instantiated
     [ServerRpc]
     public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, bool initIsMob, int mobSpriteIndexReference,
-        int attributeSpriteIndexReference, int cBoardIndex, int initAbilityIndex, int initAbilityRankMod )
+        int attributeSpriteIndexReference, int cBoardIndex, int initAbilityIndex, int initAbilityRankMod, string initMobName )
     {
         if (!IsServer) { return; }
         
@@ -217,7 +221,8 @@ public class MobCardNetwork : NetworkBehaviour
         curLeftStat = leftStat;
         curRightStat = rightStat;
         curHitPoints = hitPoints;
-        abilityIndex = initAbilityIndex;
+        abilityIndex.Value = initAbilityIndex;
+        Debug.Log(abilityIndex + " is the ability index of this card");
         abilityRankMod = initAbilityRankMod;
         cardPlacementBoardIndex.Value = cBoardIndex;
         playerOwnerIndex.Value = playerOwnrIndex;
@@ -228,6 +233,7 @@ public class MobCardNetwork : NetworkBehaviour
         bottomStatSpriteIndex.Value = initBottomStat;
         leftStatSpriteIndex.Value = initLeftStat;
         rightStatSpriteIndex.Value = initRightStat;
+        mobName.Value = initMobName;
         isMob.Value = initIsMob;
         if (!initIsMob) { this.tag = "AbilityCard"; }
         //Debug.Log(this.tag);
@@ -291,6 +297,29 @@ public class MobCardNetwork : NetworkBehaviour
         return cardPlacementBoardIndex.Value;
     }
 
+    public bool[] GetStatusEffectStates()
+    {
+        Debug.Log(myStatusEffectBools[2] + " " + myStatusEffectBools[5]);
+        return myStatusEffectBools;
+    }
+
+    public int GetAbilityIndex()
+    {
+        return abilityIndex.Value;
+    }
+    
+    public string GetCardName()
+    {
+
+        Debug.Log(mobName);
+        return mobName.Value.ToString();
+    }
+
+    public Sprite GetCardSprite()
+    {
+        return mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite;
+    }
+
     //handles attacks for all four directions, mobs run this, we will never run a heal ability or anything but attack through here
     [ServerRpc(RequireOwnership =false)]
     public void AttackServerRpc()
@@ -318,7 +347,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their right stat so we need the defense stst index to be the right, thus 2
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, abilityIndex, abilityRankMod, leftAttackTargetBoardIndex, 2, 0);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(leftStat, abilityIndex.Value, abilityRankMod, leftAttackTargetBoardIndex, 2, 0);
                
             }
         }
@@ -334,7 +363,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their left stat so we need the defense stat index to be the left, thus 1
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, abilityIndex, abilityRankMod, rightAttackTargetBoardIndex, 1, 0);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(rightStat, abilityIndex.Value, abilityRankMod, rightAttackTargetBoardIndex, 1, 0);
                 
             }
         }
@@ -348,7 +377,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their top stat so we need the defense stat index to be the bottom, thus 4
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, abilityIndex, abilityRankMod, topAttackTargetBoardIndex, 4, 0);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(topStat, abilityIndex.Value, abilityRankMod, topAttackTargetBoardIndex, 4, 0);
                 
             }
         }
@@ -362,7 +391,7 @@ public class MobCardNetwork : NetworkBehaviour
             {
                 //Debug.Log("The card we are attacking is not ours so we should deal damage");
                 //we are attacking their bottom stat so we need the defense stat index to be the top, thus 3
-                cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, abilityIndex, abilityRankMod, bottomAttackTargetBoardIndex, 3, 0);
+                cardBoardIndexManager.RunTargetCardsDamageCalculations(bottomStat, abilityIndex.Value, abilityRankMod, bottomAttackTargetBoardIndex, 3, 0);
                 
                 
             }
@@ -447,7 +476,7 @@ public class MobCardNetwork : NetworkBehaviour
                         {
                             for(int y2 = 0; y2 < statusEffectAbilityIndexesLists[i2].Length; y2++)
                             {
-                                if (abilityIndex == statusEffectAbilityIndexesLists[i2][y2])
+                                if (abilityIndex.Value == statusEffectAbilityIndexesLists[i2][y2])
                                 {
                                     //if i2 is 0 then extraCondition is 1 for regen, then 1 is 2 for buffing, 2 is 3 for weakening and otw it will be 3 is 4 for charm
                                     extraCondition = i2 == 0 ? 1: i2 == 1 ? 2: i2 == 2 ? 3: 4;
@@ -467,31 +496,31 @@ public class MobCardNetwork : NetworkBehaviour
                             //handles all attacks taking in whatever our attackside stat is, the ability Index for determining the sprite atm, the targets board location index, and defense side index for figuring out
                             //which stat to use for defending later in the takeDamage function
                             //if(i > 4 && y > 0) { Debug.Log("We're getting to the end from time to time at the very least"); }
-                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                         //in case we are activating a healing ability we want to target our cards and heal them
                         else if(cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 1)
                         {
                             Debug.Log("we activated a regen ability card on an ally");
-                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                         //in case we are activating a buff ability we want to target our cards and buff them
                         else if(cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 2)
                         {
                             Debug.Log("we activated a buff ability card on an ally card");
-                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                         //in case we are activating a debuff ability we want to target our opponents cards and debuff them
                         else if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 3)
                         {
                             Debug.Log("we activated a debuff ability card on an enemy card");
-                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                         //in case we are activating a debuff ability we want to target our opponents cards and debuff them
                         else if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 4)
                         {
                             Debug.Log("we activated a charm ability card on an enemy card");
-                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
+                            cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
                     }
                     
@@ -784,6 +813,8 @@ public class MobCardNetwork : NetworkBehaviour
     {
         if (IsServer) { return; }
         statusIcons[index].SetActive(activeState);
+        //additional update client side so hopefully when we click on it as a client the info will be accurate and show up in our card info status effect area on the side of the screen
+        myStatusEffectBools[index] = activeState; 
     }
 
     

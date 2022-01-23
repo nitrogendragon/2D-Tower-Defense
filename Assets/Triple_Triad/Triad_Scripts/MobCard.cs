@@ -17,10 +17,11 @@ public class MobCard : MonoBehaviour
     private bool isMob;//are we a mob or are we an ability card?
     private int mobSpriteIndex; //will pull to figure out what sprite to place on the networkMobCard since i can't do it on the server.
     private int attributeSpriteIndex;
+    private string mobName;
     
     public void CreateMobCard(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, Sprite mobSprite, int mobSprteIndex, bool isOwnedByPlayer1, bool initIsMob,
         Sprite leftStatSprite, Sprite rightStatSprite, Sprite topStatSprite, Sprite bottomStatSprite, Sprite hitPointTensSprite, Sprite hitPointOnesSprite, Sprite attributeSprite, int attrSpriteIndex,
-        int initAbilityIndex, int initAbilityRankMod)
+        int initAbilityIndex, int initAbilityRankMod, string initMobName)
     {
         topStat = initTopStat;
         bottomStat = initBottomStat;
@@ -47,7 +48,7 @@ public class MobCard : MonoBehaviour
         attributeRenderer.sprite = attributeSprite;
         abilityIndex = initAbilityIndex;
         abilityRankMod = initAbilityRankMod;
-
+        mobName = initMobName;
 
     }
 
@@ -95,5 +96,9 @@ public class MobCard : MonoBehaviour
     public int GetAbilityRankMod()
     {
         return abilityRankMod;
+    }
+    public string GetMobName()
+    {
+        return mobName;
     }
 }

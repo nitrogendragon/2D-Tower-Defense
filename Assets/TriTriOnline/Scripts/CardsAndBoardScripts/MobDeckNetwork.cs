@@ -57,7 +57,7 @@ public class MobDeckNetwork : MonoBehaviour
     }
 
     public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite,
-        ref int attributeSpriteIndex, ref bool isAMob, ref int abilityIndex, ref int abilityRankMod)
+        ref int attributeSpriteIndex, ref bool isAMob, ref int abilityIndex, ref int abilityRankMod, ref string mobName)
     {
 
         //get the mob index from our decks mob Index List, since everything lines up, it is usable for finding the mob in questions index for anything
@@ -66,6 +66,7 @@ public class MobDeckNetwork : MonoBehaviour
         isAMob = isMob[mobListIndex];//grabs our isMob bool at the index of the mob being set up
         abilityIndex = abilityIndexes[mobListIndex];//set up the index for our ability
         abilityRankMod = abilityRankMods[mobListIndex];
+        mobName = mobNames[mobListIndex];
         //increment currentDeckcard
         currentDeckCardIndex += 1;
         //get our stats for the mob
