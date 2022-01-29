@@ -13,9 +13,9 @@ public class CardInfoOnHover : NetworkBehaviour
     [SerializeField]  private TMP_Text abilityInfo;
     [SerializeField]  private TMP_Text statusText;
     private string[] abilityDescriptions = new string[] {"A basic attack using any available means necessary.", "Poisons all who come in contact, slowly leading any creature injected to an unenviable demise.", 
-        "Burns any entity foolish or unfortunate enough to be licked by this searing flame", "Corrodes all who come in contact. Metal or not, corrosion comes for all afflicted by this strange ability", 
-        "The spriits gather to rejoice the beauty of life and tend to the wounds, Grants Regen", "A threatening battle cry causes all who hear it to cower in fear, Weakens those in range", "A rallying call to allies, raises fighting abilities of those in range", 
-            "The call of the tender sweet night. Fall prey to the luschious wilds of the night and find yourself fighting friend for foe."};
+        "Burns any entity foolish or unfortunate enough to be licked by this searing flame", "The spriits gather to rejoice the beauty of life and tend to the wounds, Grants Regen", 
+        "A threatening battle cry causes all who hear it to cower in fear, Weakens those in range", "A rallying call to allies, raises fighting abilities of those in range",
+            "Corrodes all who come in contact. Metal or not, corrosion comes for all afflicted by this strange ability","The call of the tender sweet night. Fall prey to the luschious wilds of the night and find yourself fighting friend for foe."};
     // Start is called before the first frame update
     void Start()
     {
@@ -67,9 +67,29 @@ public class CardInfoOnHover : NetworkBehaviour
                 int abilityIndexTemp = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetAbilityIndex();
                 abilityInfo.text = " Ability Info: " + abilityDescriptions[abilityIndexTemp];
             }
+            else
+            {
+                //set everything to enabled for now
+                CleanAndHideOrRevealInfo(true);
+                //MobCardNetwork hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>() = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>();
+                //set the card name text
+                string tempName = "";
+                tempName = hit.collider.GetComponent<MobCard>().GetMobName();
+                Debug.Log("our tempname is " + tempName);
+                cardName.text = tempName;
+                //set the card art sprite
+                cardArt.sprite = hit.collider.GetComponent<MobCard>().GetSprite();
+                for (int i = 0; i < statusIcons.Count; i++)
+                {
+                    statusIcons[i].enabled = false;
+                }
+                //determine ability index and update ability Info text
+                int abilityIndexTemp = hit.collider.GetComponent<MobCard>().GetAbilityIndex();
+                abilityInfo.text = " Ability Info: " + abilityDescriptions[abilityIndexTemp];
+            }
             
         }
-        else { CleanAndHideOrRevealInfo(false); }
+        //else { CleanAndHideOrRevealInfo(false); }
 
     }
 

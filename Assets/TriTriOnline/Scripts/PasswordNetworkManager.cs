@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.Netcode;
 using System.Text;
+using UnityEngine.SceneManagement;
 
 public class PasswordNetworkManager : MonoBehaviour
 {
@@ -69,7 +70,9 @@ public class PasswordNetworkManager : MonoBehaviour
 
     public void Leave()
     {
+        
         ShutdownEveryone();
+
     }
 
     //[ServerRpc(RequireOwnership =false)]
@@ -89,12 +92,11 @@ public class PasswordNetworkManager : MonoBehaviour
         //Debug.Log("The host or a client is setting active states");
 
         //everyone does this clean up
-        passwordEntryUI.SetActive(true);
-        playerIconPickerUI.SetActive(false);
-        leaveButton.SetActive(false);
-        playerCanvas.SetActive(false);
-       
-
+        //passwordEntryUI.SetActive(true);
+        //playerIconPickerUI.SetActive(false);
+        //leaveButton.SetActive(false);
+        //playerCanvas.SetActive(false);
+        SceneManager.LoadScene("TriTriOnline");
     }
 
     private void HandleServerStarted()
@@ -155,10 +157,11 @@ public class PasswordNetworkManager : MonoBehaviour
         // Are we the client that is disconnecting?
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
-            passwordEntryUI.SetActive(true);
-            leaveButton.SetActive(false);
-            playerIconPickerUI.SetActive(false);
-            playerCanvas.SetActive(false);
+            //Leave();
+            //passwordEntryUI.SetActive(true);
+            //leaveButton.SetActive(false);
+            //playerIconPickerUI.SetActive(false);
+            //playerCanvas.SetActive(false);
         }
     }
 

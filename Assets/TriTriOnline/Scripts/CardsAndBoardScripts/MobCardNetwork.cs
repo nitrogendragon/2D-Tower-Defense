@@ -59,10 +59,14 @@ public class MobCardNetwork : NetworkBehaviour
         "the ability was a regen ability and we now have it.","the ability was a weakened ability and we now have it.","the ability was a buffed ability and we now have it.","the ability was a charmed ability and we now have it." };
     public SpritesLists spritesReferenceHolder;
     public CardBoardIndexManager cardBoardIndexManager;
+    private VictoryConditionsManager VCManager;
+    
 
     private void Start()
     {
-       
+        VCManager = GameObject.Find("UI_Main").GetComponent<NetworkObject>().GetComponent<VictoryConditionsManager>();
+        
+        
     }
     private void OnEnable()
     {
@@ -103,10 +107,12 @@ public class MobCardNetwork : NetworkBehaviour
         if(newPlayerOwnerIndex == 1)
         {
             mobBackground.GetComponent<SpriteRenderer>().color = player1mobBackgroundColor;
+            
+            
             return;
         }
         mobBackground.GetComponent<SpriteRenderer>().color = player2mobBackgroundColor;
-
+        
     }
 
     private void OnMobSpriteIndexChanged(int oldIndex,int newIndex)
@@ -182,6 +188,14 @@ public class MobCardNetwork : NetworkBehaviour
         //as long as we do this on the server it will update for everyone
         Destroy(gameObject);
     }
+    
+    private void UpdateVictorySliders(bool isP1, bool isPlacingCard)
+    {
+        VCManager = GameObject.Find("UI_Main").GetComponent<NetworkObject>().GetComponent<VictoryConditionsManager>();
+        Debug.Log(VCManager);
+        VCManager.UpdateSliderClientRpc(isP1, isPlacingCard);
+    }
+
 
     //could work well for changing colors /owners when a unit dies for example and switches teams
     [ServerRpc(RequireOwnership = false)]
@@ -195,12 +209,13 @@ public class MobCardNetwork : NetworkBehaviour
         {
             playerOwnerIndex.Value = 2;
             mobBackgroundColor.Value = player2mobBackgroundColor;
+            UpdateVictorySliders(false, false);
             return;
         }
         //otw we go to player 1 and change color to player 1 color
         playerOwnerIndex.Value = 1;
         mobBackgroundColor.Value = player1mobBackgroundColor;
-       
+        UpdateVictorySliders(true, false);
     }
     //will be ran when the card is drawn/instantiated
     [ServerRpc]
@@ -222,10 +237,13 @@ public class MobCardNetwork : NetworkBehaviour
         curRightStat = rightStat;
         curHitPoints = hitPoints;
         abilityIndex.Value = initAbilityIndex;
-        Debug.Log(abilityIndex + " is the ability index of this card");
+        //Debug.Log(abilityIndex + " is the ability index of this card");
         abilityRankMod = initAbilityRankMod;
         cardPlacementBoardIndex.Value = cBoardIndex;
         playerOwnerIndex.Value = playerOwnrIndex;
+        //based on the playerOwnerIndex update our cards controlled sliders to represent the new card on the field for player 1 or 2
+        if(playerOwnrIndex == 1) { UpdateVictorySliders(true, true); }
+        else { UpdateVictorySliders(false, true); }
         mobSpriteIndex.Value = mobSpriteIndexReference;
         //new stuff added that needs onChange listeners and functions
         attributeSpriteIndex.Value = attributeSpriteIndexReference;
@@ -621,7 +639,7 @@ public class MobCardNetwork : NetworkBehaviour
     private void UndoBuffOrDebuffServerRpc(bool isBuff)
     {
         if (!IsServer) { return; }
-        Debug.Log("The server is going through the undobuffordebuff function");
+        //Debug.Log("The server is going through the undobuffordebuff function");
         if (isBuff)
         {
             curLeftStat -= leftStatBuff;
@@ -805,7 +823,7 @@ public class MobCardNetwork : NetworkBehaviour
             statusIcons[i].SetActive(false);//we don't want our status icons showing anymore
             UpdateStatusIconsClientRpc(i, false);//the server/host is taken care of above, now we update the client
         }
-        Debug.Log("We reset all our status effects and their turn counts");
+        //Debug.Log("We reset all our status effects and their turn counts");
     }
 
     [ClientRpc]

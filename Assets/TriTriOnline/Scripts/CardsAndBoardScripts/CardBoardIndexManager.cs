@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class CardBoardIndexManager : NetworkBehaviour
 {
     public BoardManagerNetwork boardManagerNetwork;
-
+    
     //for now we have 9 board tiles so size of 9. the index will relate to position on field
     /**
      * 6 7 8
@@ -24,6 +24,9 @@ public class CardBoardIndexManager : NetworkBehaviour
         //Debug.Log("the attack mod for top and bottom is: " + topBottomAttackIndexMod);
 
     }
+
+    
+
     public void SetCardIndex(NetworkObject Card, int cardBoardTilePositionIndex)
     {
         
