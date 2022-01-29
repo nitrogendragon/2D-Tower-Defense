@@ -74,14 +74,14 @@ public class VictoryConditionsManager : NetworkBehaviour
     IEnumerator CheckForVictoryConditionsMet()
     {
         yield return new WaitForSeconds(1.2f);
-        if(player1Count >= 4)
+        if(player1Count >= 20)
         {
             player1ScoresContainer.SetActive(false);
             player2ScoresContainer.SetActive(false);
             VictoryTextContainer.SetActive(true);
             VictoryText.text = "Player 1 Wins!";
         }
-        else if(player2Count >= 4)
+        else if(player2Count >= 20)
         {
             player1ScoresContainer.SetActive(false);
             player2ScoresContainer.SetActive(false);
