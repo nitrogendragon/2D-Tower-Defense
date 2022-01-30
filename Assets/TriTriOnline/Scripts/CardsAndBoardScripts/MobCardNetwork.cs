@@ -472,9 +472,11 @@ public class MobCardNetwork : NetworkBehaviour
                         //Debug.Log("There is a card at index: " + attackTargetBoardIndex);
                         
                         //handle left, lower left and upper left edge target exceptions
-                        if ( (i == 0 || i == 4 || i == 6)  && ( (attackTargetBoardIndex) % topBottomAttackIndexMod == 5 || attackTargetBoardIndex  < 0) ) { Debug.Log("We reached an exception on the left side");  break; }
+                        if ( (i == 0 || i == 4 || i == 6)  && ( (attackTargetBoardIndex) % topBottomAttackIndexMod == 5 || attackTargetBoardIndex  < 0) ) { 
+                            Debug.Log("We reached an exception on the left side, index is: " + attackTargetBoardIndex + "i is: " + i); break; }
                         //handle right, lower right and upper right edge target exceptions
-                        if ( (i == 1 || i == 3 || i == 7) && ((attackTargetBoardIndex) % topBottomAttackIndexMod == 0 ) || attackTargetBoardIndex >= fieldSize) { Debug.Log("We reached an exception on the right side"); break; }
+                        if ( (i == 1 || i == 5 || i == 7) && ((attackTargetBoardIndex) % topBottomAttackIndexMod == 0 ) || attackTargetBoardIndex >= fieldSize) { 
+                            Debug.Log("We reached an exception on the right side, index is: " + attackTargetBoardIndex + "i is: " + i); break; }
                         ////handle lower left edge target exceptions
                         //if(i == 4 && (attackTargetBoardIndex  % topBottomAttackIndexMod == 5 || attackTargetBoardIndex + 1 == 0)) { break; }
                         ////handle lower right edge target exceptions
