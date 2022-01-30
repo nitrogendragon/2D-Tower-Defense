@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TriTriOnline.unity
     guid: 8f485c98be1d2cd42b5f1f98cc90d697
+  - enabled: 1
+    path: Assets/Scenes/TriTriOnlineRelayServer.unity
+    guid: bafd14460d0c05048ac9c05d11ede767
   m_configObjects: {}

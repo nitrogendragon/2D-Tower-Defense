@@ -7,6 +7,7 @@ using Unity.Netcode;
 using System.Text;
 using UnityEngine.SceneManagement;
 
+
 public class PasswordNetworkManager : MonoBehaviour
 {
     
@@ -16,6 +17,10 @@ public class PasswordNetworkManager : MonoBehaviour
     [SerializeField] private GameObject leaveButton;
     [SerializeField] private GameObject playerCanvas;
     [SerializeField] private GameObject uiMain;
+    [SerializeField] private Button startHostButton;
+    [SerializeField] private Button startClientButton;
+    [SerializeField] private RelayManager reManager;
+
     
     
 
@@ -28,7 +33,44 @@ public class PasswordNetworkManager : MonoBehaviour
         NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
         NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
-       
+
+        // START HOST
+        startHostButton?.onClick.AddListener(async () =>
+        {
+            // this allows the UnityMultiplayer and UnityMultiplayerRelay scene to work with and without
+            // relay features - if the Unity transport is found and is relay protocol then we redirect all the 
+            // traffic through the relay, else it just uses a LAN type (UNET) communication.
+            if (reManager.IsRelayEnabled)
+            {
+                await reManager.SetupRelay();
+                uiMain.GetComponent<LoadingAndWaitingScreen>().ReadyUp(true);
+                Host();
+            }
+            
+            
+            //    Logger.Instance.LogInfo("Host started...");
+            //else
+            //    Logger.Instance.LogInfo("Unable to start host...");
+        });
+
+        // START CLIENT
+        startClientButton?.onClick.AddListener(async () =>
+        {
+            if (reManager.IsRelayEnabled && !string.IsNullOrEmpty(passwordInputField.GetComponent<TMP_InputField>().text))
+            {
+                await reManager.JoinRelay(passwordInputField.GetComponent<TMP_InputField>().text);
+                uiMain.GetComponent<LoadingAndWaitingScreen>().ReadyUp(true);
+                Client();
+            }
+
+
+                
+            
+            //    Logger.Instance.LogInfo("Client started...");
+            //else
+            //    Logger.Instance.LogInfo("Unable to start client...");
+        });
+
     }
 
     private void Update()
@@ -50,20 +92,25 @@ public class PasswordNetworkManager : MonoBehaviour
         NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnect;
     }
 
+    
+
     public void Host()
     {
+
         // Hook up password approval check
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.StartHost();
         
+
     }
 
     public void Client()
     {
+        
         // Set password ready to send to the server to validate
         NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(passwordInputField.GetComponent<TMP_InputField>().text);
         NetworkManager.Singleton.StartClient();
-        
+
     }
 
    
@@ -96,7 +143,7 @@ public class PasswordNetworkManager : MonoBehaviour
         //playerIconPickerUI.SetActive(false);
         //leaveButton.SetActive(false);
         //playerCanvas.SetActive(false);
-        SceneManager.LoadScene("TriTriOnline");
+        SceneManager.LoadScene("TriTriOnlineRelayServer");
     }
 
     private void HandleServerStarted()
@@ -198,12 +245,9 @@ public class PasswordNetworkManager : MonoBehaviour
                 spawnPos = new Vector3(12f, -8f, 0f);
                 spawnRot = Quaternion.Euler(0f, 0f, 0f);
                 break;
-            //case 2:
-            //    spawnPos = new Vector3(2f, 0f, 0f);
-            //    spawnRot = Quaternion.Euler(0f, 0f, 0f);
-            //    break;
-        }
-        callback(true, null, approveConnection, spawnPos, spawnRot);
+           
+        }      
+        callback(true, null, true, spawnPos, spawnRot);
     }
 
     
