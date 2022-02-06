@@ -107,7 +107,6 @@ public class MobDeckNetwork : MonoBehaviour
         isMob = tempIsMobBools.ToArray();
         //foreach(var e in isMob) { Debug.Log(e); }
         //handle stat assignment
-        ArrayList stats = new();
         int[,] stats2DArray = new int[553,5];
         int leftTemp;
         int rightTemp;
@@ -170,12 +169,18 @@ public class MobDeckNetwork : MonoBehaviour
     //creates a random deck of cards 
     private void CreateDeck()
     {
+        int targetRank = 1;
         for(int i = 0; i < deckCardInitialCount; i++)
         {
             //get a reference index for the card to be used to create it on draw later;
             //deckCardMobIndexReferences[i] = 9;//just for testing to make sure the ability cards are functioning properly
-           
+            targetRank = i < 5 ? 1 : i < 9 ? 2 : i < 13 ? 3 : i < 16 ? 4 : i < 18 ? 5 : i < 19 ? 6 : 7;
             deckCardMobIndexReferences[i] = i<20 ? Random.Range(0, mobNames.Length) : Random.Range(546,mobNames.Length);
+            while(abilityRankMods[deckCardMobIndexReferences[i]] != targetRank && i<20)
+            {
+                deckCardMobIndexReferences[i] = i < 20 ? Random.Range(0, mobNames.Length) : Random.Range(546, mobNames.Length);
+            }
+            Debug.Log("we got the mob reference index for card: " + i);
             //Debug.Log(deckCardMobIndexReferences[i]);
         }
         RandomizeArray(ref deckCardMobIndexReferences, 150);

@@ -193,7 +193,7 @@ public class MobCardNetwork : NetworkBehaviour
     private void UpdateVictorySliders(bool isP1, bool isPlacingCard)
     {
         VCManager = GameObject.Find("UI_Main").GetComponent<NetworkObject>().GetComponent<VictoryConditionsManager>();
-        Debug.Log(VCManager);
+        //Debug.Log(VCManager);
         VCManager.UpdateSliderClientRpc(isP1, isPlacingCard);
     }
 
