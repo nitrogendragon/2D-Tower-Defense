@@ -29,6 +29,8 @@ public class MobDeckNetwork : MonoBehaviour
     private string[] mobNames = new string[] { /*"Cerberus of the black flame", "Core Kraken", "Headless Chicken", "PutridPuddle", "Murkblood Hydra", "Seaweed Hermit", "Conspiring Sorceror", "Wandering Knight", "OtherRealm Tammy",*/
         /*start ability cards here*/ "Dark Orb", "Flame Ball", "Holy", "Aqua Blast", "Tempest Whirl", "Rock Slide", "Temptation" };
 
+    private string[] abilityNames = new string[] { };
+
     private int[,] mobStats = new int[,] { {/*Cerberus of the Black Flame */ 6, 6, 9, 6, 16 }, {/*Core Kraken */ 7, 7, 4, 8, 17 }, {/*Headless Chicken */ 3, 3, 9, 5, 2 }, {/*Putrid Puddle */ 5, 5, 2, 4, 11 },
         {/*murkblood hydra */ 7, 7, 7, 4, 18 }, {/*Seaweed Hermit */ 4, 4, 6, 2, 4 }, {/*Conspiring Sorceror */ 6, 6, 3, 5, 2 }, {/*Wandering Knight */ 6, 5, 4, 3, 4 }, {/*OtherRealm Tammy */ 6, 7, 5, 9, 15 },
         /*start ability cards here*/{/*Dark Orb*/ 3,3,3,3,4}, {/*Flame Ball*/ 3,3,3,3,4 }, {/*Holy*/ 3,3,3,3,4 }, {/*Aqua Blast*/ 3,3,3,3,4 }, {/*Tempest Whirl*/ 3,3,3,3,4 }, {/*Rock Slide*/ 3,3,3,3,4 }, {/*Temptation*/ 3,3,3,3,4 } };
@@ -59,6 +61,14 @@ public class MobDeckNetwork : MonoBehaviour
         mobNamesTemp = mobNamesTemp.Concat(spellNamesTemp).ToArray();
         mobNames = mobNamesTemp;
         //foreach(var e in mobNames) { Debug.Log(e); }
+        //handle abilityNames
+        mobDataList = JsonUtility.FromJson<MobData>(mobJsonData.text);
+        //handle ability names
+        string[] abilityNamesTemp = mobDataList.Abilities;
+        string[] spellAbilityNamesTemp = new string[] { "Dark Orb", "Flame Ball", "Holy", "Aqua Blast", "Tempest Whirl", "Rock Slide", "Temptation" };
+        abilityNamesTemp = abilityNamesTemp.Concat(spellAbilityNamesTemp).ToArray();
+        abilityNames = abilityNamesTemp;
+        //foreach (var e in abilityNames) { Debug.Log(e); }
         //handle mobLineages
         string[] mobLineagesTemp = mobDataList.Lineages;
         string[] spellLineagesTemp = new string[] { "spectre", "elemental", "celestial", "elemental", "elemental", "elemental", "demon" };
@@ -166,12 +176,12 @@ public class MobDeckNetwork : MonoBehaviour
             //deckCardMobIndexReferences[i] = 9;//just for testing to make sure the ability cards are functioning properly
            
             deckCardMobIndexReferences[i] = i<20 ? Random.Range(0, mobNames.Length) : Random.Range(546,mobNames.Length);
-            Debug.Log(deckCardMobIndexReferences[i]);
+            //Debug.Log(deckCardMobIndexReferences[i]);
         }
         RandomizeArray(ref deckCardMobIndexReferences, 150);
-        Debug.Log("randomized below");
-        foreach(int e in deckCardMobIndexReferences) { Debug.Log(e); }
-        Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
+        //Debug.Log("randomized below");
+        //foreach(int e in deckCardMobIndexReferences) { Debug.Log(e); }
+        //Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
     }
 
     private void RandomizeArray(ref int[] targetList, int loopsTotal)
@@ -198,7 +208,7 @@ public class MobDeckNetwork : MonoBehaviour
     }
 
     public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite,
-        ref int attributeSpriteIndex, ref bool isAMob, ref int abilityIndex, ref int abilityRankMod, ref string mobName)
+        ref int attributeSpriteIndex, ref bool isAMob, ref int abilityIndex, ref int abilityRankMod, ref string mobName, ref string abilityName)
     {
 
         //get the mob index from our decks mob Index List, since everything lines up, it is usable for finding the mob in questions index for anything
@@ -208,6 +218,7 @@ public class MobDeckNetwork : MonoBehaviour
         abilityIndex = abilityIndexes[mobListIndex];//set up the index for our ability
         abilityRankMod = abilityRankMods[mobListIndex];
         mobName = mobNames[mobListIndex];
+        abilityName = abilityNames[mobListIndex];
         //increment currentDeckcard
         currentDeckCardIndex += 1;
         //get our stats for the mob

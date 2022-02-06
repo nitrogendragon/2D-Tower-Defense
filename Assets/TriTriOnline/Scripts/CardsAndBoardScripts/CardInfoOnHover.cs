@@ -53,7 +53,7 @@ public class CardInfoOnHover : NetworkBehaviour
                 //set the card name text
                 string tempName = "";
                 tempName = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetCardName();
-                Debug.Log("our tempname is " + tempName);
+                //Debug.Log("our tempname is " + tempName);
                 cardName.text = tempName;
                 //set the card art sprite
                 cardArt.sprite = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetCardSprite();
@@ -65,7 +65,8 @@ public class CardInfoOnHover : NetworkBehaviour
                 }
                 //determine ability index and update ability Info text
                 int abilityIndexTemp = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetAbilityIndex();
-                abilityInfo.text = " Ability Info: " + abilityDescriptions[abilityIndexTemp];
+                string abilityNameTemp = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetAbilityName();
+                abilityInfo.text = abilityNameTemp + ": " + abilityDescriptions[abilityIndexTemp];
             }
             else
             {
@@ -75,7 +76,7 @@ public class CardInfoOnHover : NetworkBehaviour
                 //set the card name text
                 string tempName = "";
                 tempName = hit.collider.GetComponent<MobCard>().GetMobName();
-                Debug.Log("our tempname is " + tempName);
+                //Debug.Log("our tempname is " + tempName);
                 cardName.text = tempName;
                 //set the card art sprite
                 cardArt.sprite = hit.collider.GetComponent<MobCard>().GetSprite();
@@ -85,7 +86,8 @@ public class CardInfoOnHover : NetworkBehaviour
                 }
                 //determine ability index and update ability Info text
                 int abilityIndexTemp = hit.collider.GetComponent<MobCard>().GetAbilityIndex();
-                abilityInfo.text = " Ability Info: " + abilityDescriptions[abilityIndexTemp];
+                string abilityNameTemp = hit.collider.GetComponent<MobCard>().GetAbilityName();
+                abilityInfo.text = abilityNameTemp + ": " + abilityDescriptions[abilityIndexTemp];
             }
             
         }

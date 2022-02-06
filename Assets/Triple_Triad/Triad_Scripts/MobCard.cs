@@ -18,10 +18,11 @@ public class MobCard : MonoBehaviour
     private int mobSpriteIndex; //will pull to figure out what sprite to place on the networkMobCard since i can't do it on the server.
     private int attributeSpriteIndex;
     private string mobName;
+    private string mobAbilityName;
     
     public void CreateMobCard(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, Sprite mobSprite, int mobSprteIndex, bool isOwnedByPlayer1, bool initIsMob,
         Sprite leftStatSprite, Sprite rightStatSprite, Sprite topStatSprite, Sprite bottomStatSprite, Sprite hitPointTensSprite, Sprite hitPointOnesSprite, Sprite attributeSprite, int attrSpriteIndex,
-        int initAbilityIndex, int initAbilityRankMod, string initMobName)
+        int initAbilityIndex, int initAbilityRankMod, string initMobName, string initMobAbilityName)
     {
         topStat = initTopStat;
         bottomStat = initBottomStat;
@@ -49,6 +50,7 @@ public class MobCard : MonoBehaviour
         abilityIndex = initAbilityIndex;
         abilityRankMod = initAbilityRankMod;
         mobName = initMobName;
+        mobAbilityName = initMobAbilityName;
 
     }
 
@@ -100,5 +102,9 @@ public class MobCard : MonoBehaviour
     public string GetMobName()
     {
         return mobName;
+    }
+    public string GetAbilityName()
+    {
+        return mobAbilityName;
     }
 }

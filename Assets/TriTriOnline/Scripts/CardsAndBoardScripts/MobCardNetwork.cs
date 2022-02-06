@@ -13,6 +13,7 @@ public class MobCardNetwork : NetworkBehaviour
         leftStatDebuff, rightStatDebuff, topStatDebuff, bottomStatDebuff, curHitPoints, hitPoints, abilityRankMod;
     private NetworkVariable<int> abilityIndex = new NetworkVariable<int>();
     private NetworkVariable<FixedString64Bytes> mobName = new NetworkVariable<FixedString64Bytes>();
+    private NetworkVariable<FixedString64Bytes> abilityName = new NetworkVariable<FixedString64Bytes>();
     private Color player1mobBackgroundColor = new Color(.6f, .3f, .3f);
     private Color player2mobBackgroundColor = new Color(.3f, .3f, .6f);
     [SerializeField]private GameObject mobSpriteRenderer;
@@ -220,7 +221,7 @@ public class MobCardNetwork : NetworkBehaviour
     //will be ran when the card is drawn/instantiated
     [ServerRpc]
     public void CreateMobCardServerRpc(int initLeftStat, int initRightStat, int initTopStat, int initBottomStat, int initHitPoints, int playerOwnrIndex, bool initIsMob, int mobSpriteIndexReference,
-        int attributeSpriteIndexReference, int cBoardIndex, int initAbilityIndex, int initAbilityRankMod, string initMobName )
+        int attributeSpriteIndexReference, int cBoardIndex, int initAbilityIndex, int initAbilityRankMod, string initMobName, string initAbilityName )
     {
         if (!IsServer) { return; }
         
@@ -252,6 +253,7 @@ public class MobCardNetwork : NetworkBehaviour
         leftStatSpriteIndex.Value = initLeftStat;
         rightStatSpriteIndex.Value = initRightStat;
         mobName.Value = initMobName;
+        abilityName.Value = initAbilityName;
         isMob.Value = initIsMob;
         if (!initIsMob) { this.tag = "AbilityCard"; }
         //Debug.Log(this.tag);
@@ -276,7 +278,7 @@ public class MobCardNetwork : NetworkBehaviour
         //attack if we are a mob, not an ability card
         if (isMob.Value)
         {
-            AttackServerRpc();
+            AbilityAttackServerRpc();//just testing to see how this works out
         }
         //we will play a card every turn so we want to go through each mob on the board and update their status effect counters if they are ours that is
         //we are delaying so that there is hopefully no issues with other animations and damage or buff/debuff calculations etc
@@ -317,7 +319,7 @@ public class MobCardNetwork : NetworkBehaviour
 
     public bool[] GetStatusEffectStates()
     {
-        Debug.Log(myStatusEffectBools[2] + " " + myStatusEffectBools[5]);
+        //Debug.Log(myStatusEffectBools[2] + " " + myStatusEffectBools[5]);
         return myStatusEffectBools;
     }
 
@@ -325,11 +327,16 @@ public class MobCardNetwork : NetworkBehaviour
     {
         return abilityIndex.Value;
     }
+
+    public string GetAbilityName()
+    {
+        return abilityName.Value.ToString();
+    }
     
     public string GetCardName()
     {
 
-        Debug.Log(mobName);
+        //Debug.Log(mobName.Value.ToString());
         return mobName.Value.ToString();
     }
 
@@ -418,7 +425,7 @@ public class MobCardNetwork : NetworkBehaviour
     }
 
     [ServerRpc (RequireOwnership = false)]
-    public void abilityAttackServerRpc()
+    public void AbilityAttackServerRpc()
     {
         if (!IsServer) { return; }
         int fieldSize = cardBoardIndexManager.GetFieldSizeCount();
@@ -490,7 +497,7 @@ public class MobCardNetwork : NetworkBehaviour
 
                         //create an int for extraConditions 0 means attack, 1 is regen, 2 is buff, 3 is debuff, 4 is charm
                         int extraCondition = 0;
-                        //make sure this isn't a regen ability
+                        //check to see if we are a non damage related status effect
                         int[][] statusEffectAbilityIndexesLists = new int[][] { regenAbilityIndexes, buffedAbilityIndexes, weakenedAbilityIndexes, charmAbilityIndexes };
                         for (int i2 = 0; i2 < statusEffectAbilityIndexesLists.Length; i2++)
                         {

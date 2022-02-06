@@ -119,15 +119,16 @@ public class CardsControllerNetwork : NetworkBehaviour
             int tempAbilityIndex = 0;
             int tempAbilityRankMod = 0;
             string tempName = "";
+            string tempAbilityName = "";
             mobDeckNetwork.setUpCardOnDraw(ref tempMobSprite, ref tempStatList, ref tempMobSpriteIndex,ref tempAttackAndHpValueSpritesList, ref tempAttributeSprite, ref tempAttributeSpriteIndex, ref isMob,
-                ref tempAbilityIndex, ref tempAbilityRankMod, ref tempName);
+                ref tempAbilityIndex, ref tempAbilityRankMod, ref tempName, ref tempAbilityName);
             //Debug.Log("Prev cards in hand: " + prevCardsInHandCount);
             //Debug.Log("cards to draw: " + cardsToDraw);
             //Debug.Log("we are drawing our cards, card number being drawn: " + (cardsDrawn+1));
             GameObject myMobCardInstance = Instantiate(mobCardOffServer);
             myMobCardInstance.GetComponent<MobCard>().CreateMobCard(tempStatList[0], tempStatList[1], tempStatList[2], tempStatList[3], tempStatList[4], tempMobSprite,tempMobSpriteIndex, isPlayer1, isMob,
                 tempAttackAndHpValueSpritesList[0], tempAttackAndHpValueSpritesList[1], tempAttackAndHpValueSpritesList[2],tempAttackAndHpValueSpritesList[3], tempAttackAndHpValueSpritesList[4],
-                tempAttackAndHpValueSpritesList[5], tempAttributeSprite, tempAttributeSpriteIndex, tempAbilityIndex, tempAbilityRankMod, tempName);
+                tempAttackAndHpValueSpritesList[5], tempAttributeSprite, tempAttributeSpriteIndex, tempAbilityIndex, tempAbilityRankMod, tempName, tempAbilityName);
 
             cardsInHand.Add(myMobCardInstance);
             //special exception to formula when only 1 card because otherwise it shows up in a weird place, so we center here
@@ -184,7 +185,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         if (hit.collider && hit.collider.tag == "AbilityCard" )
         {
             
-            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().abilityAttackServerRpc();
+            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AbilityAttackServerRpc();
             //destroy the card afterwards
             hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
             return true;
@@ -238,9 +239,10 @@ public class CardsControllerNetwork : NetworkBehaviour
             int tempAbilityIndex = selectedCard.GetComponent<MobCard>().GetAbilityIndex();
             int tempAbilityRankMod = selectedCard.GetComponent<MobCard>().GetAbilityRankMod();
             string tempName = selectedCard.GetComponent<MobCard>().GetMobName();
+            string tempAbilityName = selectedCard.GetComponent<MobCard>().GetAbilityName();
             selectedCard.GetComponent<MobCard>().isInHand = false;
             SpawnMobCardOnBoardServerRpc(cardPlacementPosition, cardPlacementBoardIndex, tempStats, tempIsPlayer1, tempIsMob, tempMobSpriteIndexRef, tempAttributeSpriteIndexRef,
-                tempAbilityIndex, tempAbilityRankMod, tempName);
+                tempAbilityIndex, tempAbilityRankMod, tempName, tempAbilityName);
 
             //update cards in hand list
             List<GameObject> tempList = new List<GameObject>();
@@ -267,7 +269,7 @@ public class CardsControllerNetwork : NetworkBehaviour
 
     [ServerRpc (RequireOwnership = false)]
     private void SpawnMobCardOnBoardServerRpc(Vector3 spawnPos,int cardPlacementBoardIndex, int[] tempStats, bool isPlayer1, bool tempIsMob, int mobSpriteIndexRef, int attributeSpriteIndexRef,
-        int tempAbilityIndex, int tempAbilityRankMod, string tempName)
+        int tempAbilityIndex, int tempAbilityRankMod, string tempName, string tempAbilityName)
     {
         //we can't do this if we aren't the server
         //if (!IsServer) { Debug.Log(" we got stuck in the not server if statement"); return; }
@@ -279,7 +281,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         int playerOwnerIndex = isPlayer1 ? 1 : 2;
 
         myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex, tempIsMob, mobSpriteIndexRef,
-            attributeSpriteIndexRef, cardPlacementBoardIndex, tempAbilityIndex, tempAbilityRankMod, tempName);
+            attributeSpriteIndexRef, cardPlacementBoardIndex, tempAbilityIndex, tempAbilityRankMod, tempName, tempAbilityName);
 
         
        
