@@ -153,7 +153,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
 
-        if (hit.collider && hit.collider.tag == "MobCard" && hit.collider.GetComponent<MobCard>().isInHand)
+        if (hit.collider && hit.collider.tag == "MobCard" && hit.collider.GetComponent<MobCard>() && hit.collider.GetComponent<MobCard>().isInHand)
         {
             if (selectedCard)
             {
@@ -277,19 +277,21 @@ public class CardsControllerNetwork : NetworkBehaviour
         NetworkObject myMobCardInstance = Instantiate(mobCard,spawnPos , new Quaternion(0,0,0,0));
 
         myMobCardInstance.SpawnWithOwnership(OwnerClientId);
-
+        
         int playerOwnerIndex = isPlayer1 ? 1 : 2;
 
         myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex, tempIsMob, mobSpriteIndexRef,
             attributeSpriteIndexRef, cardPlacementBoardIndex, tempAbilityIndex, tempAbilityRankMod, tempName, tempAbilityName);
-
         
-       
-        int[] tempMobStats = myMobCardInstance.GetComponent<MobCardNetwork>().GrabStats();
+        myMobCardInstance.GetComponent<NetworkObject>().gameObject.SetActive(false);
+        myMobCardInstance.GetComponent<NetworkObject>().gameObject.SetActive(true);
+
+
+
 
         //Debug.Log("Network mob card stats: " + tempMobStats[0] + " " + tempMobStats[1] + " " + tempMobStats[4]);
         //spawn our mob card with ownership
-        
+
     }
 
     // Update is called once per frame
