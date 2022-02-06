@@ -1,16 +1,32 @@
+
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class MobDeckNetwork : MonoBehaviour
 {
-    private int deckCardInitialCount = 30;
+    public TextAsset mobJsonData;
+    [System.Serializable]
+    public class MobData
+    {
+        public string[] Names;
+        public string[] Lineages;
+        public string[] Abilities;
+        public string[] AbilityValues;
+        
+    }
+
+    
+
+        private int deckCardInitialCount = 30;
     //the index of the current card or technically next card to be drawn (so if we haven't drawn our current/next card index will be 0, then 1 if we draw, 2 ,3, 4 and so on
     private int currentDeckCardIndex = 0;
     private int typesOfMobs = 9;
     // Start is called before the first frame update
     //try to keep mobs first and magic stuff after
-    private string[] mobNames = new string[] { "Cerberus of the black flame", "Core Kraken", "Headless Chicken", "PutridPuddle", "Murkblood Hydra", "Seaweed Hermit", "Conspiring Sorceror", "Wandering Knight", "OtherRealm Tammy",
+    private string[] mobNames = new string[] { /*"Cerberus of the black flame", "Core Kraken", "Headless Chicken", "PutridPuddle", "Murkblood Hydra", "Seaweed Hermit", "Conspiring Sorceror", "Wandering Knight", "OtherRealm Tammy",*/
         /*start ability cards here*/ "Dark Orb", "Flame Ball", "Holy", "Aqua Blast", "Tempest Whirl", "Rock Slide", "Temptation" };
 
     private int[,] mobStats = new int[,] { {/*Cerberus of the Black Flame */ 6, 6, 9, 6, 16 }, {/*Core Kraken */ 7, 7, 4, 8, 17 }, {/*Headless Chicken */ 3, 3, 9, 5, 2 }, {/*Putrid Puddle */ 5, 5, 2, 4, 11 },
@@ -26,7 +42,7 @@ public class MobDeckNetwork : MonoBehaviour
     /*start ability cards here*/ 1,1,1,1,1,1,3};
     private int[] deckCardMobIndexReferences = new int[30];
     //Lineages include Giant, Celestial, Construct, beast, humanoid, ooze, Aberration, Spectre, Monstrosity, Demon,Elemental, Plant, Dragon
-    private string[] mobLineages = new string[] {"Beast", "Giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid",
+    private string[] mobLineages = new string[] {"beast", "giant", "Beast", "Ooze", "Dragon", "Beast", "Humanoid", "Humanoid", "Humanoid",
     /*start ability cards here*/ "Spectre", "Elemental", "Celestial", "Elemental", "Elemental", "Elemental", "Demon"};
     //will include sprites for ability cards to keep things simple, mobs first then abilities
     [SerializeField]private List<Sprite> mobSprites = new List<Sprite>();
@@ -35,6 +51,109 @@ public class MobDeckNetwork : MonoBehaviour
     [SerializeField] private List<Sprite> attributeSprites = new List<Sprite>();
     void Start()
     {
+        MobData mobDataList = new MobData();
+        mobDataList = JsonUtility.FromJson<MobData>(mobJsonData.text);
+        //handle names
+        string[] mobNamesTemp = mobDataList.Names;
+        string[] spellNamesTemp = new string[] { "Dark Orb", "Flame Ball", "Holy", "Aqua Blast", "Tempest Whirl", "Rock Slide", "Temptation" };
+        mobNamesTemp = mobNamesTemp.Concat(spellNamesTemp).ToArray();
+        mobNames = mobNamesTemp;
+        //foreach(var e in mobNames) { Debug.Log(e); }
+        //handle mobLineages
+        string[] mobLineagesTemp = mobDataList.Lineages;
+        string[] spellLineagesTemp = new string[] { "spectre", "elemental", "celestial", "elemental", "elemental", "elemental", "demon" };
+        mobLineagesTemp = mobLineagesTemp.Concat(spellLineagesTemp).ToArray();
+        mobLineages = mobLineagesTemp;
+        //foreach (var e in mobLineages) { Debug.Log(e); }
+        //handle abilityRankMods
+        string[] abilityRanksTemp = mobDataList.AbilityValues;
+        string[] abilityRanksSpellsTemp = new string[] { "3", "3", "3", "3", "3", "3", "3" };
+        abilityRanksTemp = abilityRanksTemp.Concat(abilityRanksSpellsTemp).ToArray();
+        List<int> tempAbilityRanksList = new List<int>();
+        foreach(var e in abilityRanksTemp)
+        {
+            int temp = int.Parse(e);
+            tempAbilityRanksList.Add(temp);
+        }
+        abilityRankMods = tempAbilityRanksList.ToArray();
+        //foreach (var e in abilityRankMods) { Debug.Log(e); }
+        //handle for loop for abilityIndexes, isMob bool
+        List<int> tempAbilityIndexes = new List<int>();
+        List<bool> tempIsMobBools = new List<bool>();
+        for(int i = 0; i < 553; i++)
+        {
+            if(i < 546)
+            {
+                tempAbilityIndexes.Add(0);
+                tempIsMobBools.Add(true);
+            }
+            else
+            {
+                tempAbilityIndexes.Add(i - 545);
+                tempIsMobBools.Add(false);
+            }
+        }
+        abilityIndexes = tempAbilityIndexes.ToArray();
+        isMob = tempIsMobBools.ToArray();
+        //foreach(var e in isMob) { Debug.Log(e); }
+        //handle stat assignment
+        ArrayList stats = new();
+        int[,] stats2DArray = new int[553,5];
+        int leftTemp;
+        int rightTemp;
+        int topTemp;
+        int bottomTemp;
+        int hpTemp;
+        int hpMod;
+        int rank;
+        int totalStats;//12 base points for rank 1 and add 3 each rank up so 15,18,21,24,27,30
+        for(int i = 0; i < abilityRankMods.Length; i++)
+        {
+            rank = abilityRankMods[i];
+            leftTemp = Random.Range(rank - 1, 9);
+            rightTemp = Random.Range(rank - 1, 9);
+            topTemp = Random.Range(rank - 1, 9);
+            bottomTemp = Random.Range(rank - 1, 9);
+            totalStats = leftTemp + rightTemp + bottomTemp + topTemp;
+            while(totalStats > 9 + 3 * rank)
+            {
+                int targetValueIndex = Random.Range(0, 3);
+                switch (targetValueIndex){
+                    case 0:
+                        if(leftTemp > 0) { leftTemp -= 1; totalStats -= 1; }
+                        break;
+                    case 1:
+                        if (rightTemp > 0) { rightTemp -= 1; totalStats -= 1; }
+                        break;
+                    case 2:
+                        if (topTemp > 0) { topTemp -= 1; totalStats -= 1; }
+                        break;
+                    case 3:
+                        if (bottomTemp > 0) { bottomTemp -= 1; totalStats -= 1; }
+                        break;
+                }
+            }
+            hpMod = 8 + rank;
+            hpTemp = Random.Range(hpMod,hpMod+rank);
+            //assign to 2Darray
+            stats2DArray[i, 0] = leftTemp;
+            stats2DArray[i, 1] = rightTemp;
+            stats2DArray[i, 2] = topTemp;
+            stats2DArray[i, 3] = bottomTemp;
+            stats2DArray[i, 4] = hpTemp;
+            //Debug.Log(stats2DArray[i, 0] + " " + stats2DArray[i, 1] + " " + stats2DArray[i, 2] + " " + stats2DArray[i, 3] + " " + stats2DArray[i, 4]);
+        }
+        mobStats = stats2DArray;
+        //handle setting up all the sprites
+        string targetDir;
+        for (int i = 0; i < mobNames.Length; i++) 
+        {
+            targetDir = "ApiPulledSprites/" + mobNames[i] ;
+            if (i >= 546) { targetDir = "ElementIcons/" + mobNames[i]; }
+            mobSprites[i] = Resources.Load<Sprite>(targetDir);
+            //Debug.Log(mobSprites[i]);
+        }
+        //Debug.Log(mobStats[552, 0] + " " + mobStats[552, 1] + " " + mobStats[552, 2] + " " + mobStats[552, 3] + " " + mobStats[552, 4]);
         CreateDeck();
     }
 
@@ -45,9 +164,31 @@ public class MobDeckNetwork : MonoBehaviour
         {
             //get a reference index for the card to be used to create it on draw later;
             //deckCardMobIndexReferences[i] = 9;//just for testing to make sure the ability cards are functioning properly
-            deckCardMobIndexReferences[i] = Random.Range(0, mobNames.Length);
+           
+            deckCardMobIndexReferences[i] = i<20 ? Random.Range(0, mobNames.Length) : Random.Range(546,mobNames.Length);
+            Debug.Log(deckCardMobIndexReferences[i]);
         }
-        //Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
+        RandomizeArray(ref deckCardMobIndexReferences, 150);
+        Debug.Log("randomized below");
+        foreach(int e in deckCardMobIndexReferences) { Debug.Log(e); }
+        Debug.Log("we created our deck so to speak and the length is: " + deckCardMobIndexReferences.Length);
+    }
+
+    private void RandomizeArray(ref int[] targetList, int loopsTotal)
+    {
+        int randIndex;
+        int randIndex2;
+        int tempVal;
+        int tempVal2;
+        for(int i = 0; i < loopsTotal; i++)
+        {
+            randIndex = Random.Range(0, 29);
+            tempVal = targetList[randIndex];
+            randIndex2 = Random.Range(0, 29);
+            tempVal2 = targetList[randIndex2];
+            targetList[randIndex2] = tempVal;
+            targetList[randIndex] = tempVal2;
+        }
     }
 
     public Sprite getSprite(int mobSpriteindex)
@@ -106,45 +247,46 @@ public class MobDeckNetwork : MonoBehaviour
     {
         switch (lineage)
         {
-            case "Aberration":
+            case "aberration":
                 return 0;
                 
-            case "Beast":
+            case "beast":
                 return 1;
                 
-            case "Celestial":
+            case "celestial":
                 return 2;
                 
-            case "Construct":
+            case "construct":
                 return 3;
                 
-            case "Demon":
+            case "demon":
                 return 4;
                 
-            case "Dragon":
+            case "dragon":
                 return 5;
                 
-            case "Elemental":
+            case "elemental":
                 return 6;
                 
-            case "Giant":
+            case "giant":
                 return 7;
                 
-            case "Humanoid":
+            case "humanoid":
                 return 8;
                 
-            case "Monstrosity":
+            case "monstrosity":
                 return 9;
                
-            case "Ooze":
+            case "ooze":
                 return 10;
                 
-            case "Plant":
+            case "plant":
                 return 11;
                 
-            case "Spectre":
+            case "spectre":
                 return 12;
             default:
+                Debug.Log("We didn't find the lineage, the lineage passed was " + lineage);
                 return -1;//should never happen
         }
         
