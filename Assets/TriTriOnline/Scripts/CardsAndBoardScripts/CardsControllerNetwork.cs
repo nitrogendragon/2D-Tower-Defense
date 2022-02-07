@@ -283,8 +283,8 @@ public class CardsControllerNetwork : NetworkBehaviour
         myMobCardInstance.GetComponent<MobCardNetwork>().CreateMobCardServerRpc(tempStats[0],tempStats[1],tempStats[2],tempStats[3],tempStats[4],playerOwnerIndex, tempIsMob, mobSpriteIndexRef,
             attributeSpriteIndexRef, cardPlacementBoardIndex, tempAbilityIndex, tempAbilityRankMod, tempName, tempAbilityName);
         
-        myMobCardInstance.GetComponent<NetworkObject>().gameObject.SetActive(false);
-        myMobCardInstance.GetComponent<NetworkObject>().gameObject.SetActive(true);
+        //myMobCardInstance.GetComponent<NetworkObject>().gameObject.SetActive(false);
+        //myMobCardInstance.GetComponent<NetworkObject>().gameObject.SetActive(true);
 
 
 

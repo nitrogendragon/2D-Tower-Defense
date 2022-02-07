@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class SpritesLists : MonoBehaviour
 {
-    [SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
+    //[SerializeField] private List<Sprite> mobSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> attackValueSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> hpValueSprites = new List<Sprite>();
     [SerializeField] private List<Sprite> attributeSprites = new List<Sprite>();
     // Start is called before the first frame update
-    public Sprite GetMobSprite(int index)
-    {
+    //public Sprite GetMobSprite(int index)
+    //{
         
-        return mobSprites[index];
-    }
+    //    return mobSprites[index];
+    //}
 
     public Sprite GetAttackValueSprite(int index)
     {

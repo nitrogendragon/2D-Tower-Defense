@@ -180,7 +180,7 @@ public class MobDeckNetwork : MonoBehaviour
             {
                 deckCardMobIndexReferences[i] = i < 20 ? Random.Range(0, mobNames.Length) : Random.Range(546, mobNames.Length);
             }
-            Debug.Log("we got the mob reference index for card: " + i);
+            //Debug.Log("we got the mob reference index for card: " + i);
             //Debug.Log(deckCardMobIndexReferences[i]);
         }
         RandomizeArray(ref deckCardMobIndexReferences, 150);
@@ -206,7 +206,7 @@ public class MobDeckNetwork : MonoBehaviour
         }
     }
 
-    public Sprite getSprite(int mobSpriteindex)
+    public Sprite GetSprite(int mobSpriteindex)
     {
         Sprite tempSprite = mobSprites[mobSpriteindex];
         return tempSprite;

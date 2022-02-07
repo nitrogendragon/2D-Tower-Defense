@@ -120,7 +120,8 @@ public class MobCardNetwork : NetworkBehaviour
     {
         if (!IsClient) { return; }
         //mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = mobSprites[newIndex];//old version
-        mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = spritesReferenceHolder.GetMobSprite(newIndex);
+        mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = GameObject.Find("UI_Main").GetComponent<NetworkObject>().GetComponent<MobDeckNetwork>().GetSprite(newIndex); ;
+        //mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite = spritesReferenceHolder.GetMobSprite(newIndex);
 
     }
 
@@ -278,7 +279,8 @@ public class MobCardNetwork : NetworkBehaviour
         //attack if we are a mob, not an ability card
         if (isMob.Value)
         {
-            AbilityAttackServerRpc();//just testing to see how this works out
+            AttackServerRpc();
+            //AbilityAttackServerRpc();//just testing to see how this works out
         }
         //we will play a card every turn so we want to go through each mob on the board and update their status effect counters if they are ours that is
         //we are delaying so that there is hopefully no issues with other animations and damage or buff/debuff calculations etc
