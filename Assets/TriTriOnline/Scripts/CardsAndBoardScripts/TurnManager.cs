@@ -118,11 +118,11 @@ public class TurnManager : NetworkBehaviour
             case 2:
                 if (isPlayer1Turn.Value)
                 {
-                    turnInfoText.text = "Player 1 End Phase";
+                    turnInfoText.text = "Player 1 Ability/End Phase";
                 }
                 else
                 {
-                    turnInfoText.text = "Player 2 End Phase";
+                    turnInfoText.text = "Player 2 Ability/End Phase";
                 }
                 break;
 

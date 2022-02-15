@@ -279,7 +279,8 @@ public class MobCardNetwork : NetworkBehaviour
         //attack if we are a mob, not an ability card
         if (isMob.Value)
         {
-            AttackServerRpc();
+            StartCoroutine(DelayedAttack());
+            //AttackServerRpc();
             //AbilityAttackServerRpc();//just testing to see how this works out
         }
         //we will play a card every turn so we want to go through each mob on the board and update their status effect counters if they are ours that is
@@ -290,12 +291,20 @@ public class MobCardNetwork : NetworkBehaviour
 
     private IEnumerator DelayStatusEffectChecks(int playerOwnrIndex)
     {
-        //run statuseffect update ater 1 seconds
+        //run statuseffect update ater x seconds
         yield return new WaitForSeconds(.5f);
         //Debug.Log("we waited .5 seconds and will now check status effects and update them");
         cardBoardIndexManager.UpdateMyCardsStatusEffects(playerOwnrIndex);
     }
-   
+
+    private IEnumerator DelayedAttack()
+    {
+        yield return new WaitForSeconds(.1f);
+        AttackServerRpc();
+    }
+
+
+
 
     public int[] GrabStats()
     {
@@ -450,14 +459,16 @@ public class MobCardNetwork : NetworkBehaviour
         int[] defenseSideIndexes = new int[] {2, 1, 4, 3, 5, 6, 7, 8 };//gets the appropriate index for the take damage function to figure out which stat side the target uses for defense
         int[] myAttackSideStats = new int[] {curLeftStat, curRightStat, curTopStat, curBottomStat, (curLeftStat + curBottomStat) / 2, (curRightStat + curBottomStat) / 2,
         (curLeftStat + curTopStat) / 2, (curRightStat + curTopStat) / 2};
-        int range = abilityRankMod < 3 ? 1 : abilityRankMod < 5 ? 2 : 3; //below 3 only go 1 in 4 basic directions, otw add 1 tile in all directions and then again add one more once abilityRankMod hits 6 
+        int range = abilityRankMod < 4 ? 1 : abilityRankMod < 6 ? 2 : 3; //below 3 only go 1 in 4 basic directions, otw add 1 tile in all directions and then again add one more once abilityRankMod hits 6 
         //we will go through each 'side' of the card and handle the abilities for the respective indexes, there are 8 angles of attack thus we go until i is 8 
+        bool moveToNextSide=false;
         for(int i = 0; i < 8; i++)
         {
             // we will increase cards to check for by 1 at rank 3 and 5, note that they start at zero
             for(int y = 0; y < range; y++)
             {
-                if(i > 3 && y == 0) { }//do nothing
+                moveToNextSide = false;//make sure it gets reset if we hit an exception on the last side
+                if((i > 3 && y == 0) || moveToNextSide) { }//do nothing
                 else
                 {
                     //to simplify the logic below, we will store the target in this attackTargetBoardIndex integer variable
@@ -482,10 +493,10 @@ public class MobCardNetwork : NetworkBehaviour
                         
                         //handle left, lower left and upper left edge target exceptions
                         if ( (i == 0 || i == 4 || i == 6)  && ( (attackTargetBoardIndex) % topBottomAttackIndexMod == 5 || attackTargetBoardIndex  < 0) ) { 
-                            Debug.Log("We reached an exception on the left side, index is: " + attackTargetBoardIndex + "i is: " + i); break; }
+                            Debug.Log("We reached an exception on the left side, index is: " + attackTargetBoardIndex + "i is: " + i); moveToNextSide = true; break; }
                         //handle right, lower right and upper right edge target exceptions
                         if ( (i == 1 || i == 5 || i == 7) && ((attackTargetBoardIndex) % topBottomAttackIndexMod == 0 ) || attackTargetBoardIndex >= fieldSize) { 
-                            Debug.Log("We reached an exception on the right side, index is: " + attackTargetBoardIndex + "i is: " + i); break; }
+                            Debug.Log("We reached an exception on the right side, index is: " + attackTargetBoardIndex + "i is: " + i); moveToNextSide = true;  break; }
                         ////handle lower left edge target exceptions
                         //if(i == 4 && (attackTargetBoardIndex  % topBottomAttackIndexMod == 5 || attackTargetBoardIndex + 1 == 0)) { break; }
                         ////handle lower right edge target exceptions
@@ -513,11 +524,9 @@ public class MobCardNetwork : NetworkBehaviour
                             }
                             
                         }
-                        
+
                         //Debug.Log("the extra condition on ability cards is: " + extraCondition);
-
-
-                        //Debug.Log("There is a card below");
+                        
                         //make sure we don't own the card we are targeting and we are attacking
                         if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 0)
                         {
@@ -527,24 +536,28 @@ public class MobCardNetwork : NetworkBehaviour
                             //if(i > 4 && y > 0) { Debug.Log("We're getting to the end from time to time at the very least"); }
                             cardBoardIndexManager.RunTargetCardsDamageCalculations(myAttackSideStats[i], abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
+
                         //in case we are activating a healing ability we want to target our cards and heal them
                         else if(cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 1)
                         {
                             Debug.Log("we activated a regen ability card on an ally");
                             cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
+
                         //in case we are activating a buff ability we want to target our cards and buff them
                         else if(cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 2)
                         {
                             Debug.Log("we activated a buff ability card on an ally card");
                             cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
+
                         //in case we are activating a debuff ability we want to target our opponents cards and debuff them
                         else if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 3)
                         {
                             Debug.Log("we activated a debuff ability card on an enemy card");
                             cardBoardIndexManager.RunTargetCardsDamageCalculations(0, abilityIndex.Value, abilityRankMod, attackTargetBoardIndex, defenseSideIndexes[i], extraCondition);
                         }
+
                         //in case we are activating a debuff ability we want to target our opponents cards and debuff them
                         else if (!cardBoardIndexManager.CheckIfCardAtIndexIsOwnedByMe(playerOwnerIndex.Value, attackTargetBoardIndex) && extraCondition == 4)
                         {
@@ -644,7 +657,16 @@ public class MobCardNetwork : NetworkBehaviour
             }
         }
         UpdateHpSpritesServerRpc(curHitPoints);
+        ResetActiveState();
     }
+
+    IEnumerator ResetActiveState()
+    {
+        yield return new WaitForSeconds(1f);
+        this.gameObject.SetActive(false);
+        this.gameObject.SetActive(true);
+    }
+
     //handle adjusting stats when buffs or debuffs wear off
     [ServerRpc(RequireOwnership = false)]
     private void UndoBuffOrDebuffServerRpc(bool isBuff)

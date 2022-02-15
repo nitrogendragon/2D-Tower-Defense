@@ -6,7 +6,7 @@ using Unity.Netcode;
 public class CardBoardIndexManager : NetworkBehaviour
 {
     public BoardManagerNetwork boardManagerNetwork;
-    
+    //example only
     //for now we have 9 board tiles so size of 9. the index will relate to position on field
     /**
      * 6 7 8
@@ -25,7 +25,7 @@ public class CardBoardIndexManager : NetworkBehaviour
 
     }
 
-    
+   
 
     public void SetCardIndex(NetworkObject Card, int cardBoardTilePositionIndex)
     {
@@ -73,6 +73,7 @@ public class CardBoardIndexManager : NetworkBehaviour
     {
         foreach (NetworkObject card in cardsOnField)
         {
+            
             //if there isn't a card or it doesn't have the same playerOwnerIndex as us, do nothing
             if (card == null || myPlayerOwnerIndex != card.GetComponent<MobCardNetwork>().GetPlayerOwner()) {  }//check next card
             else
@@ -81,5 +82,7 @@ public class CardBoardIndexManager : NetworkBehaviour
                 card.GetComponent<MobCardNetwork>().CheckStatusEffectsAndUpdateServerRpc();
             }
         }
+        
     }
+    
 }

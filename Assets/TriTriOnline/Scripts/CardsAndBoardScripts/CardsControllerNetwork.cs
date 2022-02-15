@@ -20,7 +20,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     private float widthOfCardsContainer;
     private float mobCardsWidth;
     
-    [SerializeField]private bool canPlaceCard = false;
+    [SerializeField]private bool abilityCardAtTile = false;
     [SerializeField] MobDeckNetwork mobDeckNetwork;//on our DeckCardBack GameObject
     [SerializeField] private int cardsInDeck = 30;
     [SerializeField] TurnManager turnManager;//handles everything related to managing whose turn it is and what phase someone is in
@@ -185,21 +185,43 @@ public class CardsControllerNetwork : NetworkBehaviour
         if (hit.collider && hit.collider.tag == "AbilityCard" )
         {
             
-            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AbilityAttackServerRpc();
-            //destroy the card afterwards
-            hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
+           hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AbilityAttackServerRpc();
+            
+           //destroy the ability card
+           hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
             return true;
         }
         return false;
-        
+    }
+
+
+    private void CheckForMobCardOnBoardAndRunAbility()
+    {
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
+
+        if (hit.collider && hit.collider.tag == "MobCard")
+        {
+            if (IsHost && hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetPlayerOwner() == 1 ||
+                !IsHost && hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetPlayerOwner() == 2)
+            {
+                hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AbilityAttackServerRpc();
+
+                //destroy the ability card
+                //hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
+                StartCoroutine(turnManager.WaitToEndPhase());
+            }
+        }
         
     }
 
-    private IEnumerator WaitAfterAbilityCardCheck()
+
+    private IEnumerator WaitAfterAbilityCardCheck(RaycastHit2D abilityCard)
     {
         Debug.Log("started post ability waiter");
         yield return new WaitForSeconds(.1f);
         
+
     }
 
     private bool CheckForTile()
@@ -294,6 +316,17 @@ public class CardsControllerNetwork : NetworkBehaviour
 
     }
 
+    IEnumerator WaitToPlaceAfterActivatingAbilityCard()
+    {
+        yield return new WaitForSeconds(.1f);
+        if (PlaceSelectedCard())
+        {
+            //handle turn updates to move to next phase since we successfully placed our card
+            abilityCardAtTile = false;
+            StartCoroutine(turnManager.WaitToEndPhase());
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -326,9 +359,9 @@ public class CardsControllerNetwork : NetworkBehaviour
         //lastly see if we can place the card selected on the field and also if we have
         else if (Input.GetMouseButtonDown(1) && selectedCard )
         {
-            canPlaceCard = CheckForAbilityCard();
+            abilityCardAtTile = CheckForAbilityCard();
             //if false we can place the card normally
-            if (!canPlaceCard)
+            if (!abilityCardAtTile)
             {
                 if (PlaceSelectedCard())
                 {
@@ -340,14 +373,21 @@ public class CardsControllerNetwork : NetworkBehaviour
             
         }
         //if we had an ability card in the spot last frame we will run the place card this frame2
-        else if (canPlaceCard)
+        else if (abilityCardAtTile)
         {
+            //StartCoroutine(WaitToPlaceAfterActivatingAbilityCard());
             if (PlaceSelectedCard())
             {
                 //handle turn updates to move to next phase since we successfully placed our card
-                canPlaceCard = false;
+                abilityCardAtTile = false;
                 StartCoroutine(turnManager.WaitToEndPhase());
             }
+        }
+        //if we are in the ability/end phase and we right click and its our turn
+        else if ( turnManager.GetTurnActionIndex() == 2 && Input.GetMouseButtonDown(1) && (turnManager.GetIsPlayer1Turn() == true && IsHost || turnManager.GetIsPlayer1Turn() == false && !IsHost))
+        {
+            CheckForMobCardOnBoardAndRunAbility();
+            //StartCoroutine(turnManager.WaitToEndPhase());
         }
         
 
