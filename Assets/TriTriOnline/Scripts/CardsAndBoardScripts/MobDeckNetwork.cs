@@ -212,6 +212,18 @@ public class MobDeckNetwork : MonoBehaviour
         return tempSprite;
     }
 
+    public int GetNameIndexAndReturnAbilityRank(string targetName)
+    {
+        for(int i = 0; i < mobNames.Length; i++)
+        {
+            if (mobNames[i] == targetName)
+            {
+                return abilityRankMods[i];
+            }
+        }
+        return 20;//won't let us use it since we don't get up to 20 ability crystals
+    }
+
     public void setUpCardOnDraw(ref Sprite mobSprite, ref int[] mobStatsList, ref int mobSpritesListSpriteIndex, ref Sprite[] attackAndHpValueSprites, ref Sprite attributeSprite,
         ref int attributeSpriteIndex, ref bool isAMob, ref int abilityIndex, ref int abilityRankMod, ref string mobName, ref string abilityName)
     {

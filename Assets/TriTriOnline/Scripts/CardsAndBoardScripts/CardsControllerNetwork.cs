@@ -16,6 +16,7 @@ public class CardsControllerNetwork : NetworkBehaviour
     private int cardsInHandCount = 0;
     public GameObject cardsContainer;
     public GameObject mobCardOffServer;//not to be instantiated on the server
+    public AbilityManaManager amManager;//reference to our abilitymanamanager for updating manaclusters on ability use and turn end
     private List<GameObject> cardsInHand = new List<GameObject>();
     private float widthOfCardsContainer;
     private float mobCardsWidth;
@@ -205,11 +206,27 @@ public class CardsControllerNetwork : NetworkBehaviour
             if (IsHost && hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetPlayerOwner() == 1 ||
                 !IsHost && hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetPlayerOwner() == 2)
             {
-                hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AbilityAttackServerRpc();
+                int manaConsumption = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetAbilityRankMod();
+                if(manaConsumption == 0) 
+                {
+                    //try getting proper rank by grabbing name and going into base array of ranks
+                    string name = hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().GetCardName();
+                    manaConsumption = mobDeckNetwork.GetNameIndexAndReturnAbilityRank(name);
+                }
+                Debug.Log("mana cost is: " + manaConsumption);
+                bool isPlayer1 = IsHost ? true : false;
+                //make sure we have enough mana and then update our available mana and activate the ability
+                if ( manaConsumption <= amManager.GetComponent<AbilityManaManager>().GetManaAvailable(isPlayer1))
+                {
+                    
+                    amManager.UseManaServerRpc(isPlayer1, manaConsumption);
 
-                //destroy the ability card
-                //hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
-                StartCoroutine(turnManager.WaitToEndPhase());
+                    hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AbilityAttackServerRpc();
+
+                    //destroy the ability card
+                    //hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
+                    //StartCoroutine(turnManager.WaitToEndPhase());
+                }
             }
         }
         
@@ -387,7 +404,7 @@ public class CardsControllerNetwork : NetworkBehaviour
         else if ( turnManager.GetTurnActionIndex() == 2 && Input.GetMouseButtonDown(1) && (turnManager.GetIsPlayer1Turn() == true && IsHost || turnManager.GetIsPlayer1Turn() == false && !IsHost))
         {
             CheckForMobCardOnBoardAndRunAbility();
-            //StartCoroutine(turnManager.WaitToEndPhase());
+            
         }
         
 

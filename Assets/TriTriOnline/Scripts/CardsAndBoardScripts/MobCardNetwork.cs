@@ -356,6 +356,11 @@ public class MobCardNetwork : NetworkBehaviour
         return mobSpriteRenderer.GetComponent<SpriteRenderer>().sprite;
     }
 
+    public int GetAbilityRankMod()
+    {
+        return abilityRankMod;
+    }
+
     //handles attacks for all four directions, mobs run this, we will never run a heal ability or anything but attack through here
     [ServerRpc(RequireOwnership =false)]
     public void AttackServerRpc()

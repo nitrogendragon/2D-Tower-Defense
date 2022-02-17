@@ -17,7 +17,9 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
     [SerializeField] private GameObject cardsControllerNetwork;//on our UI_Main gameobject now
     [SerializeField] private GameObject cardsContainer;//empty container to hold our card and deck related objects
     [SerializeField] private GameObject endTurnButton;
+    [SerializeField] private GameObject manaClusters;
     private Color initialButtonNormalColor;
+    public AbilityManaManager amManager;
    
     
     private string[] readyUpTexts = new string[] { "ready up", "ready" };
@@ -179,6 +181,9 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
             //}
             messageScreen.SetActive(false);
             endTurnButton.SetActive(true);
+            manaClusters.GetComponent<SpriteRenderer>().enabled = true;
+            SpriteRenderer[] sRenderers = manaClusters.GetComponentsInChildren<SpriteRenderer>();
+            foreach(SpriteRenderer spriteRenderer in sRenderers) { spriteRenderer.enabled = true; }
             loadingAndWaitingTextObject.text = "";
             SetUpField();
             //we are no longer ready so subtracting

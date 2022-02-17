@@ -5,7 +5,7 @@ using Unity.Netcode;
 using TMPro;
 using UnityEngine.UI;
 public class TurnManager : NetworkBehaviour
-{
+{   
     //will be used to determine what a player should be doing, drawing, placing a mob card, placing an ability card / activating abilities/spells/traps/field cards, ending turn
     private NetworkVariable<int> turnActionIndex = new NetworkVariable<int>(0);
     //Network Specific variables below
@@ -21,8 +21,8 @@ public class TurnManager : NetworkBehaviour
     [SerializeField] private TMP_Text turnInfoText;
 
     [SerializeField] private Button endTurnButton;
+    public AbilityManaManager amManager;//reference to our abilitymanamanager for updating manaclusters on ability use and turn end
 
-    
 
     //this will handle all the logic for determining whose turn it is and what phase of their turn they are in, plan is to have draw phase, play mob phase, play ability card phase(magic,trap,field, whatever), and then end phase/just switch whose turn it is
     [ServerRpc(RequireOwnership =false)]
@@ -171,6 +171,9 @@ public class TurnManager : NetworkBehaviour
         if(IsHost && isPlayer1Turn.Value && turnActionIndex.Value == 2 ||
             !IsHost && IsClient && !isPlayer1Turn.Value && turnActionIndex.Value == 2)
         {
+            //check which player we are again and the update their mana limit and available mana at turn end
+            bool isPlayer1 = IsHost ? true : false;
+            amManager.IncreaseManaLimitServerRpc(isPlayer1);
             UpdateTurnManagerServerRpc();
         }
         else { Debug.Log("you can't end your turn right now"); }
