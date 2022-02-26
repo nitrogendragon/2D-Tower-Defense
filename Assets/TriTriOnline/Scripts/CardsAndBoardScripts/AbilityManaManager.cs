@@ -29,7 +29,7 @@ public class AbilityManaManager : NetworkBehaviour
                 Debug.Log(manaClustersP1[i]);
                 i++;
             }
-            i = 0;
+            
             
 
         
@@ -102,6 +102,7 @@ public class AbilityManaManager : NetworkBehaviour
         //increase player 1's mana limit and reset available mana
         if(!isPlayer1 && IsClient)
         {
+            SetupAbilityMana();
             Debug.Log("increased player 2's manaLimit to " + (p2AbilityManaLimit.Value + 1));
             p2AbilityManaAvailable.Value = p2AbilityManaLimit.Value < 9 ? p2AbilityManaLimit.Value + 1 : p2AbilityManaLimit.Value;
             p2AbilityManaLimit.Value = p2AbilityManaLimit.Value < 9 ? p2AbilityManaLimit.Value + 1 : p2AbilityManaLimit.Value;
@@ -109,6 +110,7 @@ public class AbilityManaManager : NetworkBehaviour
         //increase player 2's mana limit and reset available mana
         else if (isPlayer1 && IsHost)
         {
+            SetupAbilityMana();
             Debug.Log("increased player 1's manaLimit " + (abilityManaAvailable.Value + 1));
             abilityManaAvailable.Value = abilityManaLimit.Value < 9 ? abilityManaLimit.Value + 1 : abilityManaLimit.Value;
             abilityManaLimit.Value = abilityManaLimit.Value < 9 ? abilityManaLimit.Value + 1 : abilityManaLimit.Value;
