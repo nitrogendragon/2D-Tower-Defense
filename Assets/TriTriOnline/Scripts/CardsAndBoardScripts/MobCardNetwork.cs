@@ -11,6 +11,7 @@ public class MobCardNetwork : NetworkBehaviour
     //all the impoortant stats for the mob to display and use for interactions
     private int topStat, bottomStat, leftStat, rightStat, curTopStat, curBottomStat, curLeftStat, curRightStat, leftStatBuff, rightStatBuff, topStatBuff, bottomStatBuff,
         leftStatDebuff, rightStatDebuff, topStatDebuff, bottomStatDebuff, curHitPoints, hitPoints, abilityRankMod;
+    private bool isAbilityAvailable = true;
     private NetworkVariable<int> abilityIndex = new NetworkVariable<int>();
     private NetworkVariable<FixedString64Bytes> mobName = new NetworkVariable<FixedString64Bytes>();
     private NetworkVariable<FixedString64Bytes> abilityName = new NetworkVariable<FixedString64Bytes>();
@@ -361,6 +362,11 @@ public class MobCardNetwork : NetworkBehaviour
         return abilityRankMod;
     }
 
+    public bool GetIsAbilityAvailable()
+    {
+        return isAbilityAvailable;
+    }
+
     //handles attacks for all four directions, mobs run this, we will never run a heal ability or anything but attack through here
     [ServerRpc(RequireOwnership =false)]
     public void AttackServerRpc()
@@ -440,10 +446,20 @@ public class MobCardNetwork : NetworkBehaviour
 
     }
 
+    [ClientRpc]
+    private void DeactivateAbilityClientRpc()
+    {
+        isAbilityAvailable = false;
+    }
+
     [ServerRpc (RequireOwnership = false)]
     public void AbilityAttackServerRpc()
     {
+        //make sure we can use the ability
+        if (!isAbilityAvailable) { return; }
+        //set it so we can not use the ability anymore
         if (!IsServer) { return; }
+        DeactivateAbilityClientRpc();
         int fieldSize = cardBoardIndexManager.GetFieldSizeCount();
         //the value we need to adjust our cardBoardPosIndex by to get the top and bottom attack target board positions
         int topBottomAttackIndexMod = (int)Mathf.Sqrt(fieldSize);

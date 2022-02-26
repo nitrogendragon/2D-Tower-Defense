@@ -216,7 +216,7 @@ public class CardsControllerNetwork : NetworkBehaviour
                 Debug.Log("mana cost is: " + manaConsumption);
                 bool isPlayer1 = IsHost ? true : false;
                 //make sure we have enough mana and then update our available mana and activate the ability
-                if ( manaConsumption <= amManager.GetComponent<AbilityManaManager>().GetManaAvailable(isPlayer1))
+                if ( manaConsumption <= amManager.GetComponent<AbilityManaManager>().GetManaAvailable(isPlayer1) && hit.collider.GetComponent<MobCardNetwork>().GetIsAbilityAvailable() == true)
                 {
                     
                     amManager.UseManaServerRpc(isPlayer1, manaConsumption);
