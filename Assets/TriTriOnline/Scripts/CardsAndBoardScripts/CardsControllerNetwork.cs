@@ -189,7 +189,7 @@ public class CardsControllerNetwork : NetworkBehaviour
            hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().AbilityAttackServerRpc();
             
            //destroy the ability card
-           hit.collider.GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
+           hit.collider.GetComponent<NetworkObject>().GetComponent<MobCardNetwork>().DestroyNetworkObjectServerRpc();
             return true;
         }
         return false;

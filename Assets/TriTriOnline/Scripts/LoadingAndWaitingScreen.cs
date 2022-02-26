@@ -17,7 +17,8 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
     [SerializeField] private GameObject cardsControllerNetwork;//on our UI_Main gameobject now
     [SerializeField] private GameObject cardsContainer;//empty container to hold our card and deck related objects
     [SerializeField] private GameObject endTurnButton;
-    [SerializeField] private GameObject manaClusters;
+    [SerializeField] private GameObject manaClustersP1;
+    [SerializeField] private GameObject manaClustersP2;
     private Color initialButtonNormalColor;
     public AbilityManaManager amManager;
    
@@ -181,9 +182,13 @@ public class LoadingAndWaitingScreen : NetworkBehaviour
             //}
             messageScreen.SetActive(false);
             endTurnButton.SetActive(true);
-            manaClusters.GetComponent<SpriteRenderer>().enabled = true;
-            SpriteRenderer[] sRenderers = manaClusters.GetComponentsInChildren<SpriteRenderer>();
+            manaClustersP1.GetComponent<SpriteRenderer>().enabled = true;
+            SpriteRenderer[] sRenderers = manaClustersP1.GetComponentsInChildren<SpriteRenderer>();
             foreach(SpriteRenderer spriteRenderer in sRenderers) { spriteRenderer.enabled = true; }
+            //may still use if i decide to change mana system 
+            //manaClustersP2.GetComponent<SpriteRenderer>().enabled = true;
+            //sRenderers = manaClustersP2.GetComponentsInChildren<SpriteRenderer>();
+            //foreach (SpriteRenderer spriteRenderer in sRenderers) { spriteRenderer.enabled = true; }
             loadingAndWaitingTextObject.text = "";
             SetUpField();
             //we are no longer ready so subtracting
